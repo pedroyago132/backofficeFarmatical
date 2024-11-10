@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { backgroundMenu, textMenu } from '../../Globals/globals';
+import AppBar from '@mui/material/AppBar';
 
 export const ContainerMenu = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 7vh;
   flex-direction: row;
   display:flex;
@@ -23,4 +24,9 @@ font-weight:500;
     text-decoration-color: ${textMenu}; 
   }
 `
+
+export const AppTopBar = styled(AppBar)`
+
+`
+
 

@@ -11,6 +11,7 @@ export const Container = styled.div`
   align-items:center;
   justify-content:center;
   background-color:${backgroundColor};
+  gap:50px;
 `;
 
 export const ContainerButton = styled.div`
@@ -20,7 +21,7 @@ export const ContainerButton = styled.div`
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:15px;
+  gap:45px;
 `;
 
 export const Button = styled.button`
@@ -40,13 +41,39 @@ font-size:18px;
 font-weight:bold;
 `
 export const Title = styled.a`
-color:grey;
+color:black;
 font-size:35px;
 font-weight:bold;
 `
 
 export const SubTitle = styled.a`
-color: white;
+color: #d9ded8;
 font-size: 14px;
 font-weight: 400;
 `
+
+export const Input = styled.input`
+color: #d9ded8;
+font-size: 14px;
+font-weight: 400;
+width:280px;
+height:47px;
+border-color:#d9ded8;
+border-radius:17px;
+padding:7px;
+background-color:${backgroundColor};
+font-weight:bold;
+border: 2px solid #d9ded8;
+&::placeholder {
+    font-weight: bold;
+    color:#d9ded8; /* ajuste a cor conforme necessário */
+  }
+`
+export const Logo = styled.img`
+width:100px;
+height:100px;
+border-radius:17px;
+padding:7px;
+border: 2px solid #d9ded8;
+`
+
