@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Input, Title, Logo, SubTitle } from './styles';
+import { Container, Input, Title, Logo, SubTitle,Body,Container1,ImageBackground } from './styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -18,10 +18,11 @@ const Home = () => {
 
     return (
         <>
+        <Body>
             <Container>
                 <Logo src='/Logo.png' alt='id' />
                 <SubTitle>
-                    Project virtual items to reality in real proportions
+                    Sitema agendamentos de Rodrigo Santos
                 </SubTitle>
                 <FormControl variant='standard' color='primary' sx={{gap:3}} >
                     <Input
@@ -49,7 +50,10 @@ const Home = () => {
                     </FormControl>
               
             </Container>
-
+            <Container1>
+                <ImageBackground id='logoa' src='/medical.png'  />
+            </Container1>
+            </Body>
         </>
     );
 }

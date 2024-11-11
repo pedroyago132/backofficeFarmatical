@@ -3,16 +3,49 @@ import React from 'react';
 import styled from 'styled-components';
 import { colorButton,colorTitleButton,backgroundColor } from '../../Globals/globals';
 
+export const Body = styled.div`
+  width: 100%;
+  height: 100%;
+  flex-direction:row;
+  display:flex;
+  background-color:#818d9c;
+  display:flex;
+   @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    flex-direction:column
+  }
+`;
+
 export const Container = styled.div`
-  width: 100vw;
+  width: 50vw;
   height: 100vh;
   flex-direction: column;
   display:flex;
   align-items:center;
   justify-content:center;
-  background-color:${backgroundColor};
-  gap:50px;
+  background-color:#dae3da;
+  gap:20px;
 `;
+
+export const Container1 = styled.div`
+  width: 50vw;
+  height: 100vh;
+  @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    width:0%;
+    height:0%;
+  }
+`;
+
+export const ImageBackground = styled.img`
+width:100%;
+height:100%;
+@media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    width:0%;
+    height:0%;
+    display:none;
+  }
+`
+
+
 
 export const ContainerButton = styled.div`
   width: 70vw;
@@ -47,13 +80,13 @@ font-weight:bold;
 `
 
 export const SubTitle = styled.a`
-color: #d9ded8;
-font-size: 14px;
+color: black;
+font-size: 17px;
 font-weight: 400;
 `
 
 export const Input = styled.input`
-color: #d9ded8;
+color: black;
 font-size: 14px;
 font-weight: 400;
 width:280px;
@@ -61,12 +94,12 @@ height:47px;
 border-color:#d9ded8;
 border-radius:17px;
 padding:7px;
-background-color:${backgroundColor};
+background-color:#96d196;
 font-weight:bold;
-border: 2px solid #d9ded8;
+border: 2px solid #018d03;
 &::placeholder {
-    font-weight: bold;
-    color:#d9ded8; /* ajuste a cor conforme necessário */
+    font-weight: 500;
+    color:#4f614f; /* ajuste a cor conforme necessário */
   }
 `
 export const Logo = styled.img`
