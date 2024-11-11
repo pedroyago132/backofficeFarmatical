@@ -24,6 +24,10 @@ export const Container = styled.div`
   justify-content:center;
   background-color:#dae3da;
   gap:20px;
+  @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    width:100%;
+    height:100%;
+  }
 `;
 
 export const Container1 = styled.div`
