@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Body, ContainerRules,ContainerRules1 ,ContainerDisplay, Container1, Container2, ContainerEditAccordion } from './styles';
+import { Body, ContainerRules, ContainerRules1, ContainerDisplay, Container1, Container2, ContainerEditAccordion } from './styles';
 import { backgroundMenu } from '../../Globals/globals'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -17,6 +17,9 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import { setNewClient } from '../../services';
 import base64 from 'base-64';
+import { getDatabase, ref, set, get, child, onValue } from "firebase/database";
+import { database } from '../../App';
+import "firebase/database";
 
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -36,7 +39,7 @@ const style = {
 };
 
 const styleModalRegister = {
-    height: '75%',
+    height: '80%',
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -60,13 +63,17 @@ const styleModalRegister = {
 const Measurement = () => {
     const [open, setOpen] = React.useState(false);
     const [openRegister, setOpenRegister] = React.useState(false);
-    const [datarow, setDataRow] = React.useState(false);
-    const [nomeInput, setNomeInput] = React.useState(false);
-    const [wppInput, setWppInput] = React.useState(false);
-    const [remedioInput, setRemedioInput] = React.useState(false);
-    const [cpfInput, setCpfInput] = React.useState(false);
-    const [usoContinuo, setUsoContinuo] = React.useState(false);
-    const [receita, setReceita] = React.useState(false);
+    const [datarow, setDataRow] = React.useState('');
+    const [nomeInput, setNomeInput] = React.useState('');
+    const [wppInput, setWppInput] = React.useState('');
+    const [remedioInput, setRemedioInput] = React.useState('');
+    const [cpfInput, setCpfInput] = React.useState('');
+    const [usoContinuo, setUsoContinuo] = React.useState('');
+    const [receita, setReceita] = React.useState('');
+    const [farmaceutico, setFarmaceutico] = React.useState('');
+    const [dataClientes, setDataClientes] = React.useState([]);
+    const [time, setTime] = React.useState('');
+    const [formattedTime, setFormattedTime] = React.useState('');
 
 
     const handleOpen = () => setOpen(true);
@@ -97,14 +104,68 @@ const Measurement = () => {
 
     ];
 
-    function sendFormCliente() {
-        if (!wppInput || !cpfInput || !nomeInput) {
 
+    React.useEffect(() => {
+        const dbRef = ref(database, 'clientes'); // Referência para a coleção 'clientes'
+
+        // Escuta mudanças em tempo real
+        const unsubscribe = onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const dataList = Object.keys(data).map((key) => ({
+                    id: key,
+                    nome: data[key].nome,
+                    cpf: data[key].cpf,
+                    whatsapp: data[key].whatsapp,
+                    remedio: data[key].remedio,
+                    receita: data[key].receita,
+                    usoContinuo: data[key].usoContinuo,
+                    farmaceutico: data[key].farmaceutico,
+                    horario:data[key].horario
+                }));
+                setDataClientes(dataList);
+            } else {
+                setDataClientes([]); // Define uma lista vazia caso não haja dados
+            }
+        });
+
+        // Limpeza do listener ao desmontar o componente
+        return () => unsubscribe();
+    }, [])
+
+    console.log('aaaaaaaaaa::::::', dataClientes)
+
+    function setNewClient() {
+        const database = getDatabase()
+        if (wppInput == '' || nomeInput == '' || cpfInput == '' || remedioInput == '' || farmaceutico == '') {
+            window.alert('Complete os campos')
+        } else {
+            set(ref(database, `clientes/${encodePhone}`), {
+                nome: nomeInput,
+                whatsapp: wppInput,
+                remedio: remedioInput,
+                cpf: cpfInput,
+                receita: receita,
+                usoContinuo: usoContinuo,
+                farmaceutico: farmaceutico,
+                horario:time
+            });
         }
+
+
     }
 
 
-
+    const handleChange = (event) => {
+        const value = event.target.value;
+        // Aplica a regex para garantir que a entrada esteja no formato correto de hora
+        if (value.length <= 5) {
+            // Aplica a formatação, separando a hora e os minutos
+            const formatted = value.replace(/^(\d{2})(\d{2})$/, '$1:$2');
+            setTime(value);
+            setFormattedTime(formatted);
+          }
+      };
     return (
         <>
             <Header />
@@ -115,9 +176,9 @@ const Measurement = () => {
                 <ContainerDisplay>
 
                     <Container1>
-                     <ContainerRules1>   <Typography style={{ alignSelf: 'flex-start', fontWeight: 'bold', color: '#da4103', fontSize: '22px' }} >Estabelecimento: Drogasil</Typography>
-                          
-                            </ContainerRules1>   
+                        <ContainerRules1>   <Typography style={{ alignSelf: 'flex-start', fontWeight: 'bold', color: '#da4103', fontSize: '22px' }} >Estabelecimento: Drogasil</Typography>
+
+                        </ContainerRules1>
 
 
 
@@ -126,57 +187,71 @@ const Measurement = () => {
                             <Button style={{ alignSelf: 'flex-end' }} onClick={handleOpenRegister} variant="outlined">Cadastrar</Button>
                         </div>
 
-                        <Accordion defaultExpanded style={{ alignSelf: 'flex-start', width: 450 }} >
-                            <AccordionSummary
-                                expandIcon={<ArrowDownwardIcon />}
-                                aria-controls="panel1-content"
-                                id="panel1-header"
-                            >
-                                <Typography>Pedro Yago</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails  >
 
-                                <Typography style={{ fontWeight: 'bold' }} >
-                                    Medicações:
-                                </Typography>
-                                <Typography style={{ marginTop: 12 }} >
-                                    Reuquinol 15mg , Aprazolan 20mg <br />
-                                </Typography>
 
-                                <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
-                                <Typography >
-                                    Reuquinol 15mg (9:00 - 18:00 - 22:00) <br /> Aprazolan 20mg (9:00 - 18:00 - 22:00)
-                                </Typography>
 
-                                <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                    Contato:
-                                </Typography>
-                                <Typography>
-                                    61-999273537 <br />
-                                </Typography>
 
-                                <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                    Data do registro:
-                                </Typography>
-                                <Typography>
-                                    06/11/2024 <br />
-                                </Typography>
+                        {
+                            dataClientes.length > 0 ? (dataClientes.map((item) => {
+                                if (item.nome) {
+                                    return <Accordion defaultExpanded style={{ alignSelf: 'flex-start', width: 450 }} >
+                                        <AccordionSummary
+                                            expandIcon={<ArrowDownwardIcon />}
+                                            aria-controls="panel1-content"
+                                            id="panel1-header"
+                                        >
+                                            <Typography>{item.nome}</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails  >
 
-                                <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                    Cadastrado por:
-                                </Typography>
-                                <Typography>
-                                    Rodrigo Santos<br />
-                                </Typography>
-                                <ContainerEditAccordion>
-                                    <Typography style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
-                                        Editar
-                                    </Typography>
-                                </ContainerEditAccordion>
+                                            <Typography style={{ fontWeight: 'bold' }} >
+                                                Medicações:
+                                            </Typography>
+                                            <Typography style={{ marginTop: 12 }} >
+                                                {item.remedio} <br />
+                                            </Typography>
 
-                            </AccordionDetails>
-                        </Accordion>
+                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
+                                            <Typography >
+                                                {item.remedio} ({item.horario}) <br /> 
+                                            </Typography>
 
+                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
+                                                Contato:
+                                            </Typography>
+                                            <Typography>
+                                                {item.whatsapp} <br />
+                                            </Typography>
+
+                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
+                                                Data do registro:
+                                            </Typography>
+                                            <Typography>
+                                                06/11/2024 <br />
+                                            </Typography>
+
+                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
+                                                Cadastrado por:
+                                            </Typography>
+                                            <Typography>
+                                                {item.farmaceutico}<br />
+                                            </Typography>
+                                            <ContainerEditAccordion>
+                                                <Typography style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
+                                                    Editar
+                                                </Typography>
+                                            </ContainerEditAccordion>
+
+                                        </AccordionDetails>
+                                    </Accordion>
+                                } else {
+                                    return null
+                                }
+                            })) : (
+                                <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} > Nenhum usuário cadastrado </Typography>
+
+                            )
+                        }
 
 
 
@@ -255,30 +330,31 @@ const Measurement = () => {
                     <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: 'bold', fontSize: 18 }} >
                         Dados para cadastro do Cliente/Paciente
                     </Typography>
-                    <TextField id="outlined-basic" label="Nome" onChange={text => setNomeInput(text.target.value)} fullWidth variant="outlined" />
-                    <TextField id="outlined-basic" label="Whatsapp" onChange={text => setWppInput(text.target.value)} fullWidth variant="outlined" />
-                    <TextField id="outlined-basic" label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
-                    <TextField id="outlined-basic" label="Nome do remédio" fullWidth onChange={text => setRemedioInput(text.target.value)} variant="outlined" />
-                    <TextField id="outlined-basic" label="Doses" fullWidth variant="outlined" />
+                    <TextField id="outlined-basic-nome" label="Nome" onChange={text => setNomeInput(text.target.value)} fullWidth variant="outlined" />
+                    <TextField id="outlined-basic-wpp" label="Whatsapp" onChange={text => setWppInput(text.target.value)} fullWidth variant="outlined" />
+                    <TextField id="outlined-basic-cpf" label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
+                    <TextField id="outlined-basic-remedio" label="Nome do remédio" fullWidth onChange={text => setRemedioInput(text.target.value)} variant="outlined" />
+                    <TextField id="outlined-basic-doses" label="Doses" fullWidth variant="outlined" />
+                    <TextField id="outlined-basic-horario"  label="Horário" fullWidth variant="outlined" onChange={handleChange} value={formattedTime} />
 
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
                         <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '500', fontSize: 14 }} >
                             Uso contínuo
                         </Typography>
-                        <Checkbox {...label} onChange={setUsoContinuo} />
+                        <Checkbox {...label} id='checkcontinuo' onChange={value => setUsoContinuo(value.target.value)} />
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
                         <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '500', fontSize: 14 }} >
                             Precisa de receita
                         </Typography>
-                        <Checkbox {...label} onChange={setReceita} />
+                        <Checkbox {...label} id='checkreceita' onChange={value => setReceita(value.target.value)} />
                     </div>
 
 
-                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient(encodePhone, nomeInput, cpfInput, remedioInput, receita, usoContinuo, wppInput)}>Enviar</Button>
+                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient()}>Enviar</Button>
 
-                    <TextField id="filled" label="Farmacêutico responsável" style={{ marginTop: 7 }} fullWidth variant="filled" />
+                    <TextField id="filled" label="Farmacêutico responsavél pelo cadastro" onChange={text => setFarmaceutico(text.target.value)} style={{ marginTop: 7 }} fullWidth variant="filled" />
 
 
                 </Box>
