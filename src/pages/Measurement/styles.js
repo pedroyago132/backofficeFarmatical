@@ -75,7 +75,7 @@ export const ContainerRules = styled(Box)`
 display: flex;
   align-items: flex-start;
   flex-direction: column;
-  width: 45%;
+  width: 80%;
   gap: 10px;
   padding: 18px;
    @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */

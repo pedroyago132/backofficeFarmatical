@@ -94,7 +94,8 @@ const Measurement = () => {
     const [open, setOpen] = React.useState(false);
     const [openRegister, setOpenRegister] = React.useState(false);
     const [openList, setOpenList] = React.useState(false);
-    const [datarow, setDataRow] = React.useState('');
+    const [datarow, setDataRow] = React.useState(false);
+    const [datarowSelection, setDataRowSelection] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
     const [remedioInput, setRemedioInput] = React.useState([{ horario: '', remedio: '' }]);
@@ -103,6 +104,7 @@ const Measurement = () => {
     const [receita, setReceita] = React.useState('');
     const [farmaceutico, setFarmaceutico] = React.useState('');
     const [dataClientes, setDataClientes] = React.useState([]);
+    const [dataClientesSelecionados, setDataClientesSelecionados] = React.useState([]);
     const [time, setTime] = React.useState('');
     const [formattedTime, setFormattedTime] = React.useState('');
     const [date, setDate] = React.useState('');
@@ -139,9 +141,16 @@ const Measurement = () => {
 
     ];
 
+    function setSelectionItem() {
+        // Mapeia e filtra os dados e os achata em um único array
+        const selectedData = datarow.map((_, indexS) => {
+            return rows.filter((_, index) => index === indexS);
+        }).flat(); // Achata o array para evitar arrays aninhados
+        setDataClientesSelecionados(selectedData)
+    }
 
     React.useEffect(() => {
-
+       
         const dbRef = ref(database, 'clientes'); // Referência para a coleção 'clientes'
 
         // Escuta mudanças em tempo real
@@ -207,17 +216,6 @@ const Measurement = () => {
     };
 
 
-    const handleChange = (event) => {
-        const value = event.target.value;
-        // Aplica a regex para garantir que a entrada esteja no formato correto de hora
-        if (value.length <= 5) {
-            // Aplica a formatação, separando a hora e os minutos
-            const formatted = value.replace(/^(\d{2})(\d{2})$/, '$1:$2');
-            setTime(value);
-            setFormattedTime(formatted);
-        }
-    };
-
     const handleChangeMenu = (event) => {
         if (event = 'Cadastrar Cliente') {
             handleOpenRegister()
@@ -237,6 +235,7 @@ const Measurement = () => {
 
     const handleInputChangehorario = (remedioInput1, newValue) => {
         setRemedioInput(remedioInput.map(input => {
+
             if (newValue.length <= 5) {
                 // Aplica a formatação, separando a hora e os minutos
                 const formatted = newValue.replace(/^(\d{2})(\d{2})$/, '$1:$2');
@@ -282,12 +281,17 @@ const Measurement = () => {
                                 pageSizeOptions={[10]}
                                 checkboxSelection
                                 sx={{ border: 0 }}
+                                rowSelection={(newsdata) => setDataRowSelection(newsdata)}
                                 onRowSelectionModelChange={(newsData) => setDataRow(newsData)}
                                 {...rows}
                             />
                         </Paper>
-                        <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='contained' onClick={handleOpen}>Enviar Mensagem</Button>
-                    </div>
+                        {
+                            datarow ? ( <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='contained' onClick={() => setSelectionItem()}>Enviar Mensagem</Button>
+                   
+                       ) : <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='outlined' onClick={() => null}>Enviar Mensagem</Button>
+                    }
+                        </div>
 
                     <SpeedDial
                         ariaLabel="SpeedDial basic example"
@@ -332,11 +336,11 @@ const Measurement = () => {
                         remedioInput.map((response, index) => <>
                             <div style={{ width: "100%", display: 'flex' }} >
                                 <div style={{ width: "50%" }} >
-                                    <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '400', margin:5,alignSelf: 'flex-start', fontSize: 12 }} >
+                                    <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '400', margin: 5, alignSelf: 'flex-start', fontSize: 12 }} >
                                         Medicação:
                                     </Typography>
                                 </div>
-                                <div style={{ width: "50%",display:'flex',alignItems:'center',justifyContent:"flex-end",margin:5 }} >
+                                <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: "flex-end", margin: 5 }} >
                                     <a onClick={() => removeTask(index)} style={{ fontSize: 13, color: 'red', cursor: 'pointer', alignSelf: 'flex-end', padding: 5, border: '1px solid red' }} >Excluir</a>
 
                                 </div>
