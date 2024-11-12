@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import { setNewClient } from '../../services';
+import { sendMessageAll, setNewClient } from '../../services';
 import base64 from 'base-64';
 import { getDatabase, ref, set, get, child, onValue } from "firebase/database";
 import { database } from '../../App';
@@ -96,6 +96,7 @@ const Measurement = () => {
     const [openList, setOpenList] = React.useState(false);
     const [datarow, setDataRow] = React.useState(false);
     const [datarowSelection, setDataRowSelection] = React.useState('');
+    const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
     const [remedioInput, setRemedioInput] = React.useState([{ horario: '', remedio: '' }]);
@@ -108,6 +109,7 @@ const Measurement = () => {
     const [time, setTime] = React.useState('');
     const [formattedTime, setFormattedTime] = React.useState('');
     const [date, setDate] = React.useState('');
+
 
 
     const handleOpen = () => setOpen(true);
@@ -134,19 +136,24 @@ const Measurement = () => {
 
     const rows = [
         { id: 1, remedio: 'Buscopan', firstName: 'Pedro', contato: 61999273537, registro: '06/11/2024', doses: 5 },
-        { id: 2, remedio: 'Reuquinol', firstName: 'Thiagoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', contato: 61999273537, registro: '04/11/2024', doses: 32 },
+        { id: 2, remedio: 'Reuquinol', firstName: 'Thiago', contato: 61999273537, registro: '04/11/2024', doses: 32 },
         { id: 3, remedio: 'Risperidona', firstName: 'João', contato: 61999273537, registro: '02/11/2024', doses: 20 },
         { id: 4, remedio: 'Aprazolan', firstName: 'Lorena', contato: 61999273537, registro: '01/11/2024', doses: 15 },
         { id: 5, remedio: 'Rivotril', firstName: 'Luana', contato: 61999273537, registro: '09/11/2024', doses: 11 },
 
     ];
 
+
+
     function setSelectionItem() {
         handleOpen();
         // Mapeia e filtra os dados e os achata em um único array
-        const selectedData = datarow.map((_, indexS) => {
-            return rows.filter((_, index) => index === indexS);
+        const selectedData = datarow.map((value, indexS) => {
+            let newIndex = value - 1;
+            return rows.filter((_, index) => newIndex === index);
         }).flat(); // Achata o array para evitar arrays aninhados
+
+        console.log('AAAAAAAA;;;;;;;',selectedData)
         setDataClientesSelecionados(selectedData)
 
     }
@@ -191,7 +198,7 @@ const Measurement = () => {
     }, [])
 
 
-    console.log('aaaaaaaaaa::::::', dataClientes)
+    console.log('aaaaaaaaaa::::::', dataClientesSelecionados)
 
     function setNewClient() {
         const database = getDatabase()
@@ -254,8 +261,25 @@ const Measurement = () => {
         setRemedioInput(newsInputs);
     };
 
+    async function sendAll() {
+        const body = {
+            message: messageAll,
+            phone: '5512981166911',
+            delayMessage: 10
+        }
+    
+            const promisses = dataClientesSelecionados.map(item => {
+                 sendMessageAll(body)
+            })
 
+           await  Promise.all(promisses)
+                .then(response => console.log('Sucessooo',response)) // ["Concluída em 1000", "Rejeitada em 2000", "Concluída em 3000"]
+                .catch(error => console.log(`Erro ao executar ${error}`))
+      
 
+    }
+
+    console.log(dataClientesSelecionados)
 
     return (
         <>
@@ -391,19 +415,19 @@ const Measurement = () => {
                         </Typography>
                         {
                             dataClientesSelecionados.map((response) => (
-                              
-                                <Typography id="modal-modal-title"  style={{ fontWeight: '500', fontSize: 18, color: "" }} >
+
+                                <Typography id="modal-modal-title" style={{ fontWeight: '500', fontSize: 18, color: "" }} >
                                     {response.firstName},
                                 </Typography>
-                                
+
                             ))
-               
+
 
                         }
                     </div>
-                    <TextField id="outlined-basic-cpf" style={{marginTop:15}} label="Enviar para todos" placeholder='Mensagem' fullWidth variant="outlined" />
+                    <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={messageAll} label="Enviar para todos" onChange={text => setMessageAll(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
 
-                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient()}>Enviar</Button>
+                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => sendAll()}>Enviar</Button>
 
 
                 </Box>
