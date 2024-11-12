@@ -142,15 +142,17 @@ const Measurement = () => {
     ];
 
     function setSelectionItem() {
+        handleOpen();
         // Mapeia e filtra os dados e os achata em um único array
         const selectedData = datarow.map((_, indexS) => {
             return rows.filter((_, index) => index === indexS);
         }).flat(); // Achata o array para evitar arrays aninhados
         setDataClientesSelecionados(selectedData)
+
     }
 
     React.useEffect(() => {
-       
+
         const dbRef = ref(database, 'clientes'); // Referência para a coleção 'clientes'
 
         // Escuta mudanças em tempo real
@@ -287,11 +289,11 @@ const Measurement = () => {
                             />
                         </Paper>
                         {
-                            datarow ? ( <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='contained' onClick={() => setSelectionItem()}>Enviar Mensagem</Button>
-                   
-                       ) : <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='outlined' onClick={() => null}>Enviar Mensagem</Button>
-                    }
-                        </div>
+                            datarow ? (<Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='contained' onClick={() => setSelectionItem()}>Enviar Mensagem</Button>
+
+                            ) : <Button style={{ alignSelf: 'flex-end', marginTop: 10 }} variant='outlined' onClick={() => null}>Enviar Mensagem</Button>
+                        }
+                    </div>
 
                     <SpeedDial
                         ariaLabel="SpeedDial basic example"
@@ -371,6 +373,38 @@ const Measurement = () => {
 
 
                     <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient()}>Enviar</Button>
+
+                </Box>
+            </Modal>
+
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: 7 }} >
+                        <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: 'bold', fontSize: 16 }} >
+                            Enviar para:
+                        </Typography>
+                        {
+                            dataClientesSelecionados.map((response) => (
+                              
+                                <Typography id="modal-modal-title"  style={{ fontWeight: '500', fontSize: 18, color: "" }} >
+                                    {response.firstName},
+                                </Typography>
+                                
+                            ))
+               
+
+                        }
+                    </div>
+                    <TextField id="outlined-basic-cpf" style={{marginTop:15}} label="Enviar para todos" placeholder='Mensagem' fullWidth variant="outlined" />
+
+                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient()}>Enviar</Button>
+
 
                 </Box>
             </Modal>
