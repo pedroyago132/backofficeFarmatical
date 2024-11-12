@@ -3,16 +3,34 @@ import { Container, Input, Title, Logo, SubTitle,Body,Container1,ImageBackground
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import Snackbar from '@mui/material/Snackbar';
 
 const Home = () => {
     const [emailInput, setEmailInput] = React.useState(false);
     const [senhaInput, setSenha] = React.useState(false);
+    const [state, setState] = React.useState({
+        open: false,
+        vertical: 'right',
+        horizontal: 'center',
+      });
+
+      const { vertical, horizontal, open } = state;
+
     const navigate = useNavigate();
+
+    const handleClick = (newState) => () => {
+        setState({ ...newState, open: true });
+      };
+    
+      const handleClose = () => {
+        setState({ ...state, open: false });
+      };
+
     const goMeansure = () => {
         if(emailInput == 'rodrigofarmaciashd9@gmail.com' && senhaInput == 'senha123'){
             navigate('/measure');
         }else {
-            window.alert('Verifique seu usuário ou Senha')
+            handleClick({ vertical: 'top', horizontal: 'right' })
         }
     };
 
@@ -53,6 +71,13 @@ const Home = () => {
             <Container1>
                 <ImageBackground id='logoa' src='/medical.png'  />
             </Container1>
+            <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            onClose={handleClose}
+            message="Erro ao efetuar Login"
+            key={vertical + horizontal}
+          />
             </Body>
         </>
     );

@@ -57,7 +57,7 @@ gap:10px;
 
 `
 export const Container2 = styled(Box)`
-width: 80%;
+width: 100%;
 display:flex;
 height:100%;
 align-items:center;
