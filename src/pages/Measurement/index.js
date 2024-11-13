@@ -204,8 +204,15 @@ const Measurement = () => {
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
+           
+            const body = {
+                message: 'Olá vejo que acabou de se registrar na Drogasil, gostaria de receber mensagens lembrando do horário das suas medicações? digite SIM para prosseguir',
+                phone: `55${wppInput}`,
+                delayMessage: 10
+            }
             remedioInput.map((response) => {
                 set(ref(database, `clientes/${nomeInput}${response.remedio}`), {
+                  
                     nome: nomeInput,
                     contato: wppInput,
                     remedio: response.remedio,
@@ -215,7 +222,7 @@ const Measurement = () => {
                     farmaceutico: farmaceutico,
                     horario: time,
                     dataCadastro: date
-                });
+                }).then(response => sendMessageAll(body) )
             })
 
         }
@@ -267,7 +274,7 @@ const Measurement = () => {
     async function sendAll() {
         try {
 
-            dataClientesSelecionados.map(item => {
+            filteredData.map(item => {
                 const body = {
                     message: messageAll,
                     phone: `55${item.contato}`,
@@ -275,7 +282,7 @@ const Measurement = () => {
                 }
 
                 const response = sendMessageAll(body)
-                console.log('LOG', response)
+                return response
             })
         } catch (error) {
             console.log('ERROR TRYCATCH::::::::')
