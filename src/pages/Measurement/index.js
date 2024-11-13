@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Body, ContainerRules, ContainerRules1, ContainerDisplay, Container1, Container2, ContainerEditAccordion } from './styles';
+import { Body, ContainerRules, Input, Container2, ContainerEditAccordion } from './styles';
 import { backgroundMenu } from '../../Globals/globals'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -109,6 +109,9 @@ const Measurement = () => {
     const [time, setTime] = React.useState('');
     const [formattedTime, setFormattedTime] = React.useState('');
     const [date, setDate] = React.useState('');
+    const [filteredData, setFilteredData] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
+
 
 
 
@@ -122,11 +125,12 @@ const Measurement = () => {
     const handleCloseList = () => setOpenList(false);
     const columns = [
 
-        { field: 'firstName', headerName: 'Nome', width: 130 },
+        { field: 'nome', headerName: 'Nome', width: 130 },
         { field: 'remedio', headerName: 'Remédio', width: 150 },
         { field: 'contato', headerName: 'Contato', width: 130 },
-        { field: 'registro', headerName: 'Registrado em', width: 130 },
+        { field: 'dataCadastro', headerName: 'Registrado em', width: 150 },
         { field: 'doses', headerName: 'Doses restantes', width: 130 },
+        { field: 'acaba', headerName: 'Acaba em:', width: 130 },
 
     ];
 
@@ -134,27 +138,19 @@ const Measurement = () => {
 
     const paginationModel = { page: 0, pageSize: 5 };
 
-    const rows = [
-        { id: 1, remedio: 'Buscopan', firstName: 'Pedro', contato: 61999273537, registro: '06/11/2024', doses: 5 },
-        { id: 2, remedio: 'Reuquinol', firstName: 'Thiago', contato: 61999273537, registro: '04/11/2024', doses: 32 },
-        { id: 3, remedio: 'Risperidona', firstName: 'João', contato: 61999273537, registro: '02/11/2024', doses: 20 },
-        { id: 4, remedio: 'Aprazolan', firstName: 'Lorena', contato: 61999273537, registro: '01/11/2024', doses: 15 },
-        { id: 5, remedio: 'Rivotril', firstName: 'Luana', contato: 61999273537, registro: '09/11/2024', doses: 11 },
-
-    ];
-
 
 
     function setSelectionItem() {
         handleOpen();
         // Mapeia e filtra os dados e os achata em um único array
         const selectedData = datarow.map((value, indexS) => {
-            let newIndex = value - 1;
-            return rows.filter((_, index) => newIndex === index);
+      
+            return filteredData.filter((_, index) => _.nome+_.remedio == value);
+          
         }).flat(); // Achata o array para evitar arrays aninhados
 
-        console.log('AAAAAAAA;;;;;;;',selectedData)
-        setDataClientesSelecionados(selectedData)
+        console.log('AAAAAAAA;;;;;;;',datarow,"::::", selectedData)
+        setFilteredData(selectedData)
 
     }
 
@@ -170,7 +166,7 @@ const Measurement = () => {
                     id: key,
                     nome: data[key].nome,
                     cpf: data[key].cpf,
-                    whatsapp: data[key].whatsapp,
+                    contato: data[key].contato,
                     remedio: data[key].remedio,
                     receita: data[key].receita,
                     usoContinuo: data[key].usoContinuo,
@@ -179,6 +175,7 @@ const Measurement = () => {
                     dataCadastro: data[key].dataCadastro
                 }));
                 setDataClientes(dataList);
+                setFilteredData(dataList);
             } else {
                 setDataClientes([]); // Define uma lista vazia caso não haja dados
             }
@@ -194,27 +191,33 @@ const Measurement = () => {
         const month = today.getMonth() + 1;
         const year = today.getFullYear();
         const date = today.getDate();
-        setDate(`${month}/${date}/${year}`);
-    }, [])
+        const hours = today.getHours();
+        const minutes = today.getMinutes().toString().padStart(2, '0'); // Pads single digit minutes with a zero
+        setDate(`${month}/${date}/${year} ${hours}:${minutes}`);
+    }, []);
 
 
     console.log('aaaaaaaaaa::::::', dataClientesSelecionados)
 
     function setNewClient() {
         const database = getDatabase()
-        if (wppInput == '' || nomeInput == '' || cpfInput == '' || farmaceutico == '') {
+        if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
-            set(ref(database, `clientes/${encodePhone}`), {
-                nome: nomeInput,
-                whatsapp: wppInput,
-                cpf: cpfInput,
-                receita: receita,
-                usoContinuo: usoContinuo,
-                farmaceutico: farmaceutico,
-                horario: time,
-                dataCadastro: date
-            });
+            remedioInput.map((response) => {
+                set(ref(database, `clientes/${nomeInput}${response.remedio}`), {
+                    nome: nomeInput,
+                    contato: wppInput,
+                    remedio: response.remedio,
+                    cpf: cpfInput,
+                    receita: receita,
+                    usoContinuo: usoContinuo,
+                    farmaceutico: farmaceutico,
+                    horario: time,
+                    dataCadastro: date
+                });
+            })
+
         }
 
 
@@ -262,24 +265,38 @@ const Measurement = () => {
     };
 
     async function sendAll() {
-        const body = {
-            message: messageAll,
-            phone: '5512981166911',
-            delayMessage: 10
-        }
-    
-            const promisses = dataClientesSelecionados.map(item => {
-                 sendMessageAll(body)
-            })
+        try {
 
-           await  Promise.all(promisses)
-                .then(response => console.log('Sucessooo',response)) // ["Concluída em 1000", "Rejeitada em 2000", "Concluída em 3000"]
-                .catch(error => console.log(`Erro ao executar ${error}`))
-      
+            dataClientesSelecionados.map(item => {
+                const body = {
+                    message: messageAll,
+                    phone: `55${item.contato}`,
+                    delayMessage: 10
+                }
+
+                const response = sendMessageAll(body)
+                console.log('LOG', response)
+            })
+        } catch (error) {
+            console.log('ERROR TRYCATCH::::::::')
+        }
+
 
     }
 
-    console.log(dataClientesSelecionados)
+    const handleFilterChange = (e) => {
+        const value = e.target.value.toLowerCase(); // Converte o valor do filtro para minúsculas
+        setFilterValue(value); // Atualiza o valor do filtro
+
+        const filtered = dataClientes.filter((item) =>
+            item.nome.toLowerCase().includes(value) ||
+            item.dataCadastro.toLowerCase().includes(value) ||
+            item.remedio.toLowerCase().includes(value)
+        );
+
+        setFilteredData(filtered); // Atualiza os dados filtrados
+    };
+    console.log('FILTERED:::::',)
 
     return (
         <>
@@ -297,19 +314,18 @@ const Measurement = () => {
                     </ContainerRules>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '80%' }} >
                         <Typography style={{ fontWeight: 'bold', color: 'white', fontSize: '22px', alignSelf: 'flex-start' }} >Controle de medicações:</Typography>
-
+                        <Input placeholder='Pesquisar...' value={filterValue} onChange={e => handleFilterChange(e)} />
                         <Paper sx={{ height: 400, width: '100%', alignSelf: 'flex-start' }}>
                             <DataGrid
 
-                                rows={rows}
+                                rows={filteredData}
                                 columns={columns}
                                 initialState={{ pagination: { paginationModel } }}
                                 pageSizeOptions={[10]}
                                 checkboxSelection
                                 sx={{ border: 0 }}
-                                rowSelection={(newsdata) => setDataRowSelection(newsdata)}
-                                onRowSelectionModelChange={(newsData) => setDataRow(newsData)}
-                                {...rows}
+                                 onRowSelectionModelChange={(newsData) => setDataRow(newsData)}
+                                {...filteredData}
                             />
                         </Paper>
                         {
@@ -414,10 +430,10 @@ const Measurement = () => {
                             Enviar para:
                         </Typography>
                         {
-                            dataClientesSelecionados.map((response) => (
+                            filteredData.map((response) => (
 
                                 <Typography id="modal-modal-title" style={{ fontWeight: '500', fontSize: 18, color: "" }} >
-                                    {response.firstName},
+                                    {response.nome},
                                 </Typography>
 
                             ))

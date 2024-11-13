@@ -71,6 +71,25 @@ align-items:flex-end;
 justify-content:flex-end;
 `
 
+export const Input = styled.input`
+color: black;
+font-size: 14px;
+font-weight: 400;
+width:35%;
+height:40px;
+border-color:#d9ded8;
+border-radius:10px;
+padding:7px;
+background-color:white;
+font-weight:bold;
+border: 2px solid black;
+margin:5px;
+&::placeholder {
+    font-weight: 500;
+    color:#4f614f; /* ajuste a cor conforme necessário */
+  }
+`
+
 export const ContainerRules = styled(Box)`
 display: flex;
   align-items: flex-start;
