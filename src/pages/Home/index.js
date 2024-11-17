@@ -27,7 +27,7 @@ const Home = () => {
       };
 
     const goMeansure = () => {
-        if(emailInput == 'rodrigofarmaciashd9@gmail.com' && senhaInput == 'senha123'){
+        if(emailInput == 'rodrigofarmaciashd9@gmail.com'  || emailInput == 'kevingeraldo2011@gmail.com'  && senhaInput == 'senha123' || senhaInput == 'kevin123456' ){
             navigate('/measure');
         }else {
             handleClick({ vertical: 'top', horizontal: 'right' })
