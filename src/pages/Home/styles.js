@@ -8,11 +8,12 @@ export const Body = styled.div`
   height: 100%;
   flex-direction:row;
  
-  background-color:#f3f3f3;
+  background-color:#f9f9f9;
   display:flex;
    @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     flex-direction:column;
-    height:100vh
+    height:100vh;
+    background-color:#f9f9f9;
   }
 `;
 
@@ -24,7 +25,7 @@ export const Container = styled.div`
    padding:10px;
   align-items:center;
   justify-content:center;
-  background-color:#dae3da;
+ background-color:#f9f9f9;
   gap:20px;
   @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     width:100%;
