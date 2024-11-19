@@ -7,7 +7,7 @@ export const Body = styled.div`
   width: 100%;
   height: 100%;
   flex-direction:row;
-
+ 
   background-color:#818d9c;
   display:flex;
    @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
@@ -21,6 +21,7 @@ export const Container = styled.div`
   height: 100vh;
   flex-direction: column;
   display:flex;
+   padding:10px;
   align-items:center;
   justify-content:center;
   background-color:#dae3da;
@@ -88,6 +89,7 @@ export const SubTitle = styled.a`
 color: black;
 font-size: 17px;
 font-weight: 400;
+cursor:pointer;
 `
 
 export const Input = styled.input`

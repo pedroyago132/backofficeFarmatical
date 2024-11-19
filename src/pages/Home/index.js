@@ -82,7 +82,7 @@ const Home = () => {
                         <Button style={{ alignSelf: 'center' }} onClick={() => goMeansure()} variant="contained">Entrar</Button>
 
                     </FormControl>
-                    <SubTitle onClick={() => navigate('/registro')} >
+                    <SubTitle  onClick={() => navigate('/registro')} >
                         Ainda não tem uma conta? Clique aqui
                     </SubTitle>
 

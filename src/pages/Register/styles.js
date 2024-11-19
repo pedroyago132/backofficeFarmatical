@@ -11,7 +11,7 @@ export const Body = styled.div`
   align-items:center;
   justify-content:center;
   gap:15px;
-  padding:15px;
+  padding:20px;
   background-color:#e8f0e8
 `;
 

@@ -58,7 +58,7 @@ const Register = () => {
                 Crie agora sua conta em nossa plataforma
             </Title>
             <SubTitle>
-                Você esta há 1 passo para a fidelização dos seus clientes, aproveite já o poder da nossa ferramenta
+                Você esta há 1 passo para a fidelização dos seus clientes
             </SubTitle>
 
             <Input
