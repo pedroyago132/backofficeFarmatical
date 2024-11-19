@@ -12,7 +12,7 @@ export const Body = styled.div`
   justify-content:center;
   gap:15px;
   padding:20px;
-  background-color:#e8f0e8
+  background-color:#f3f3f3
 `;
 
 export const Container = styled.div`

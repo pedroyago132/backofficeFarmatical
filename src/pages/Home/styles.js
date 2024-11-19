@@ -8,7 +8,7 @@ export const Body = styled.div`
   height: 100%;
   flex-direction:row;
  
-  background-color:#818d9c;
+  background-color:#f3f3f3;
   display:flex;
    @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     flex-direction:column;
