@@ -1,19 +1,18 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { colorButton,colorTitleButton,backgroundColor } from '../../Globals/globals';
+import { colorButton, colorTitleButton, backgroundColor } from '../../Globals/globals';
 
 export const Body = styled.div`
   width: 100%;
-  height: 100%;
-  flex-direction:row;
-
-  background-color:#818d9c;
+  height: 100vh;
+  flex-direction:column;
   display:flex;
-   @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
-    flex-direction:column;
-    height:100vh
-  }
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  padding:15px;
+  background-color:#e8f0e8
 `;
 
 export const Container = styled.div`
@@ -107,7 +106,6 @@ border: 2px solid grey;
     color:#4f614f; /* ajuste a cor conforme necessário */
   }
 `
-
 export const Logo = styled.img`
 width:100px;
 height:100px;

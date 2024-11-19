@@ -25,6 +25,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SaveIcon from '@mui/icons-material/Save';
 import ListAltOutlined from '@mui/icons-material/ListAltOutlined';
 import AccountBoxOutlined from '@mui/icons-material/AccountBoxOutlined';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "firebase/database";
 
 
@@ -46,12 +47,12 @@ const style = {
 };
 
 const styleModalRegister = {
-    height: '86%',
+    height: '97%',
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '40%',
+    width: '95%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -99,7 +100,7 @@ const Measurement = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ horario: '', remedio: '' }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [{ hora: '10:00' }] }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -111,6 +112,8 @@ const Measurement = () => {
     const [date, setDate] = React.useState('');
     const [filteredData, setFilteredData] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
+    const [user, setUser] = React.useState({email:'alo'});
+    const listaRef = React.useRef(null);
 
 
 
@@ -144,19 +147,19 @@ const Measurement = () => {
         handleOpen();
         // Mapeia e filtra os dados e os achata em um único array
         const selectedData = datarow.map((value, indexS) => {
-      
-            return filteredData.filter((_, index) => _.nome+_.remedio == value);
-          
+
+            return filteredData.filter((_, index) => _.nome + _.remedio == value);
+
         }).flat(); // Achata o array para evitar arrays aninhados
 
-        console.log('AAAAAAAA;;;;;;;',datarow,"::::", selectedData)
+        console.log('AAAAAAAA;;;;;;;', datarow, "::::", selectedData)
         setFilteredData(selectedData)
 
     }
 
     React.useEffect(() => {
 
-        const dbRef = ref(database, 'clientes'); // Referência para a coleção 'clientes'
+        const dbRef = ref(database, `${base64.encode(user.email)}/clientes`); // Referência para a coleção 'clientes'
 
         // Escuta mudanças em tempo real
         const unsubscribe = onValue(dbRef, (snapshot) => {
@@ -183,8 +186,14 @@ const Measurement = () => {
 
         // Limpeza do listener ao desmontar o componente
         return () => unsubscribe();
-    }, [])
+    }, [filteredData])
 
+    console.log('DATACLIENT:::::',filteredData)
+    React.useEffect(() => {
+        if (listaRef.current) {
+            listaRef.current.scrollTop = listaRef.current.scrollHeight;
+        }
+    }, [remedioInput]); // Atualiza sempre que 'items' mudar
 
     React.useEffect(() => {
         const today = new Date();
@@ -193,26 +202,43 @@ const Measurement = () => {
         const date = today.getDate();
         const hours = today.getHours();
         const minutes = today.getMinutes().toString().padStart(2, '0'); // Pads single digit minutes with a zero
-        setDate(`${month}/${date}/${year} ${hours}:${minutes}`);
+        setDate(`${date}/${month}/${year} ${hours}:${minutes}`);
     }, []);
 
+    React.useEffect(() => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/auth.user
+                setUser(user)
+                // ...
+            } else {
+                // User is signed out
+                // ...
+            }
+        });
+    }, [])
 
-    console.log('aaaaaaaaaa::::::', dataClientesSelecionados)
+  console.log('USER::::::',user)
+
+
+   
 
     function setNewClient() {
         const database = getDatabase()
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
-           
+
             const body = {
                 message: 'Olá vejo que acabou de se registrar na Drogasil, gostaria de receber mensagens lembrando do horário das suas medicações? digite SIM para prosseguir',
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
             remedioInput.map((response) => {
-                set(ref(database, `clientes/${nomeInput}${response.remedio}`), {
-                  
+                set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}`), {
+
                     nome: nomeInput,
                     contato: wppInput,
                     remedio: response.remedio,
@@ -222,7 +248,15 @@ const Measurement = () => {
                     farmaceutico: farmaceutico,
                     horario: time,
                     dataCadastro: date
-                }).then(response => sendMessageAll(body) )
+                }).then(responses => {
+                    handleCloseRegister()
+                    response.horario.map(e => {
+                        set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e.hora}`), {
+                            hora: e.hora
+                        }).then(i => sendMessageAll(body))
+                    })
+
+                })
             })
 
         }
@@ -231,9 +265,18 @@ const Measurement = () => {
     }
 
     const addMedicacao = () => {
-        setRemedioInput([...remedioInput, { horario: '', remedio: '' }]);
+        setRemedioInput([...remedioInput, { horario: [{ hora: '10:00' }], remedio: '' }]);
     };
 
+    const addHorario = (index) => {
+        setRemedioInput((prevState) =>
+            prevState.map((item, i) =>
+                i === index
+                    ? { ...item, horario: [...item.horario, { hora: '', dose: 0 }] }
+                    : item
+            )
+        );
+    };
 
     const handleChangeMenu = (event) => {
         if (event = 'Cadastrar Cliente') {
@@ -252,17 +295,23 @@ const Measurement = () => {
         }));
     };
 
-    const handleInputChangehorario = (remedioInput1, newValue) => {
-        setRemedioInput(remedioInput.map(input => {
-
-            if (newValue.length <= 5) {
-                // Aplica a formatação, separando a hora e os minutos
-                const formatted = newValue.replace(/^(\d{2})(\d{2})$/, '$1:$2');
+    const handleInputChangehorario = (remedioInput1, indexHorario, newValue) => {
+        setRemedioInput((prevState) =>
+            prevState.map((input) => {
                 if (input.remedio === remedioInput1) {
-                    return { ...input, horario: formatted }
-                } else return input
-            }
-        }));
+                    const updatedHorario = input.horario.map((horario, i) =>
+                        i === indexHorario
+                            ? newValue.length <= 5
+                                ? newValue.replace(/^(\d{2})(\d{2})$/, '$1:$2')
+                                : horario
+                            : horario
+                    );
+
+                    return { ...input, horario: updatedHorario };
+                }
+                return input;
+            })
+        );
     };
 
 
@@ -305,6 +354,7 @@ const Measurement = () => {
     };
     console.log('FILTERED:::::',)
 
+ 
     return (
         <>
             <Header />
@@ -331,7 +381,7 @@ const Measurement = () => {
                                 pageSizeOptions={[10]}
                                 checkboxSelection
                                 sx={{ border: 0 }}
-                                 onRowSelectionModelChange={(newsData) => setDataRow(newsData)}
+                                onRowSelectionModelChange={(newsData) => setDataRow(newsData)}
                                 {...filteredData}
                             />
                         </Paper>
@@ -373,7 +423,20 @@ const Measurement = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={styleModalRegister}>
+                <Box sx={styleModalRegister} ref={listaRef} >
+                    <a
+                        onClick={() => handleCloseRegister()}
+                        style={{
+                            fontSize: 19,
+                            color: 'red',
+                            cursor: 'pointer',
+                            alignSelf: 'flex-end',
+                            padding: 5,
+                            border: '1px dotted red',
+                        }}
+                    >
+                        X
+                    </a>
                     <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: 'bold', fontSize: 18 }} >
                         Dados para cadastro do Cliente/Paciente
                     </Typography>
@@ -382,23 +445,84 @@ const Measurement = () => {
                     <TextField id="outlined-basic-cpf" label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
 
                     {
-                        remedioInput.map((response, index) => <>
-                            <div style={{ width: "100%", display: 'flex' }} >
-                                <div style={{ width: "50%" }} >
-                                    <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '400', margin: 5, alignSelf: 'flex-start', fontSize: 12 }} >
-                                        Medicação:
-                                    </Typography>
+                        remedioInput.map((response, remedioIndex) => (
+                            <div key={remedioIndex}>
+                                <div style={{ width: "100%", display: 'flex' }}>
+                                    <div style={{ width: "50%" }}>
+                                        <Typography
+                                            id="modal-modal-title"
+                                            variant="h6"
+                                            style={{
+                                                fontWeight: '400',
+                                                margin: 5,
+                                                alignSelf: 'flex-start',
+                                                fontSize: 12,
+                                            }}
+                                        >
+                                            Remédio {remedioIndex + 1}:
+                                        </Typography>
+                                    </div>
+                                    <div
+                                        style={{
+                                            width: "50%",
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: "flex-end",
+                                            margin: 5,
+                                        }}
+                                    >
+                                        <a
+                                            onClick={() => removeTask(remedioIndex)}
+                                            style={{
+                                                fontSize: 13,
+                                                color: 'red',
+                                                cursor: 'pointer',
+                                                alignSelf: 'flex-end',
+                                                padding: 5,
+                                                border: '1px solid red',
+                                            }}
+                                        >
+                                            Excluir Remédio
+                                        </a>
+                                    </div>
                                 </div>
-                                <div style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: "flex-end", margin: 5 }} >
-                                    <a onClick={() => removeTask(index)} style={{ fontSize: 13, color: 'red', cursor: 'pointer', alignSelf: 'flex-end', padding: 5, border: '1px solid red' }} >Excluir</a>
-
-                                </div>
-
+                                <TextField
+                                    id="outlined-basic-remedio"
+                                    label="Nome do remédio"
+                                    style={{ width: '100%' }}
+                                    onChange={(text) =>
+                                        handleInputChangeRemedio(response.remedio, text.target.value)
+                                    }
+                                    value={response.remedio}
+                                    variant="outlined"
+                                />
+                                {response.horario.map((horario, horarioIndex) => (
+                                    <TextField
+                                        key={horarioIndex}
+                                        id={`outlined-basic-horario-${horarioIndex}`}
+                                        label={`Horário ${horarioIndex + 1}`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={(text) =>
+                                            handleInputChangehorario(
+                                                response.remedio,
+                                                horarioIndex,
+                                                text.target.value
+                                            )
+                                        }
+                                        value={horario.hora}
+                                    />
+                                ))}
+                                <Button
+                                    style={{ marginTop: 10, alignSelf: 'flex-start' }}
+                                    variant="outlined"
+                                    onClick={() => addHorario(remedioIndex)}
+                                >
+                                    Adicionar Horário
+                                </Button>
+                                <div style={{ width: '97%', border: '1px dotted grey' }} />
                             </div>
-                            <TextField id="outlined-basic-remedio" label="Nome do remédio" fullWidth onChange={text => handleInputChangeRemedio(response.remedio, text.target.value)} value={response.remedio} variant="outlined" />
-                            <TextField id="outlined-basic-horario" label="Horário" fullWidth variant="outlined" onChange={text => handleInputChangehorario(response.remedio, text.target.value)} value={response.horario} />
-                        </>
-                        )
+                        ))
                     }
                     <Button style={{ marginTop: 10, }} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</Button>
 
