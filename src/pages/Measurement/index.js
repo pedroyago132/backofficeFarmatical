@@ -100,7 +100,7 @@ const Measurement = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [{ hora: '10:00' }] }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [{ hora: '10:00' }], doses: 0 }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -112,8 +112,9 @@ const Measurement = () => {
     const [date, setDate] = React.useState('');
     const [filteredData, setFilteredData] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
-    const [user, setUser] = React.useState({email:'alo'});
+    const [user, setUser] = React.useState({ email: 'alo' });
     const listaRef = React.useRef(null);
+    const [novaData, setNovaData] = React.useState(null);
 
 
 
@@ -133,11 +134,9 @@ const Measurement = () => {
         { field: 'contato', headerName: 'Contato', width: 130 },
         { field: 'dataCadastro', headerName: 'Registrado em', width: 150 },
         { field: 'doses', headerName: 'Doses restantes', width: 130 },
-        { field: 'acaba', headerName: 'Acaba em:', width: 130 },
+        { field: 'acabaEm', headerName: 'Acaba em:', width: 130 },
 
     ];
-
-    const encodePhone = base64.encode(wppInput)
 
     const paginationModel = { page: 0, pageSize: 5 };
 
@@ -157,38 +156,10 @@ const Measurement = () => {
 
     }
 
-    React.useEffect(() => {
 
-        const dbRef = ref(database, `${base64.encode(user.email)}/clientes`); // Referência para a coleção 'clientes'
 
-        // Escuta mudanças em tempo real
-        const unsubscribe = onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const dataList = Object.keys(data).map((key) => ({
-                    id: key,
-                    nome: data[key].nome,
-                    cpf: data[key].cpf,
-                    contato: data[key].contato,
-                    remedio: data[key].remedio,
-                    receita: data[key].receita,
-                    usoContinuo: data[key].usoContinuo,
-                    farmaceutico: data[key].farmaceutico,
-                    horario: data[key].horario,
-                    dataCadastro: data[key].dataCadastro
-                }));
-                setDataClientes(dataList);
-                setFilteredData(dataList);
-            } else {
-                setDataClientes([]); // Define uma lista vazia caso não haja dados
-            }
-        });
 
-        // Limpeza do listener ao desmontar o componente
-        return () => unsubscribe();
-    }, [filteredData])
 
-    console.log('DATACLIENT:::::',filteredData)
     React.useEffect(() => {
         if (listaRef.current) {
             listaRef.current.scrollTop = listaRef.current.scrollHeight;
@@ -220,10 +191,43 @@ const Measurement = () => {
         });
     }, [])
 
-  console.log('USER::::::',user)
+    React.useEffect(() => {
+        if (user) {
+            const dbRef = ref(database, `${base64.encode(user.email)}/clientes`); // Referência para a coleção 'clientes'
+
+            // Escuta mudanças em tempo real
+            const unsubscribe = onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const dataList = Object.keys(data).map((key) => ({
+                        id: key,
+                        nome: data[key].nome,
+                        acabaEm: data[key].acabaEm,
+                        cpf: data[key].cpf,
+                        contato: data[key].contato,
+                        doses: data[key].doses,
+                        remedio: data[key].remedio,
+                        receita: data[key].receita,
+                        usoContinuo: data[key].usoContinuo,
+                        farmaceutico: data[key].farmaceutico,
+                        horario: data[key].horario,
+                        dataCadastro: data[key].dataCadastro
+                    }));
+                    setFilteredData(dataList);
+                    setDataClientes(dataList);
+
+                } else {
+                    return null // Define uma lista vazia caso não haja dados
+                }
+            });
+        } else {
+            return null
+        }
+
+    }, [user])
 
 
-   
+
 
     function setNewClient() {
         const database = getDatabase()
@@ -237,11 +241,22 @@ const Measurement = () => {
                 delayMessage: 10
             }
             remedioInput.map((response) => {
+                const horariosCount = response.horario.length
+                const dosesCount = response.doses
+                const acabaEmDias = dosesCount / horariosCount
+                const hoje = new Date(); // Data atual
+                const novaData = new Date(hoje); // Clona a data atual
+                novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
+
+                // Adiciona a data ao objeto response
+                response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
                 set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}`), {
 
+                    acabaEm: response.acabaEm,
                     nome: nomeInput,
                     contato: wppInput,
                     remedio: response.remedio,
+                    doses: response.doses,
                     cpf: cpfInput,
                     receita: receita,
                     usoContinuo: usoContinuo,
@@ -272,7 +287,7 @@ const Measurement = () => {
         setRemedioInput((prevState) =>
             prevState.map((item, i) =>
                 i === index
-                    ? { ...item, horario: [...item.horario, { hora: '', dose: 0 }] }
+                    ? { ...item, horario: [...item.horario, { hora: '' }] }
                     : item
             )
         );
@@ -291,6 +306,14 @@ const Measurement = () => {
         setRemedioInput(remedioInput.map(input => {
             if (input.remedio === remedioInput1) {
                 return { ...input, remedio: newValue }
+            } else return input
+        }));
+    };
+
+    const handleInputChangeDoses = (remedioInput1, newValue) => {
+        setRemedioInput(remedioInput.map(input => {
+            if (input.remedio === remedioInput1) {
+                return { ...input, doses: newValue }
             } else return input
         }));
     };
@@ -354,7 +377,7 @@ const Measurement = () => {
     };
     console.log('FILTERED:::::',)
 
- 
+
     return (
         <>
             <Header />
@@ -494,6 +517,16 @@ const Measurement = () => {
                                         handleInputChangeRemedio(response.remedio, text.target.value)
                                     }
                                     value={response.remedio}
+                                    variant="outlined"
+                                />
+                                <TextField
+                                    id="outlined-basic-remedio"
+                                    label="Doses"
+                                    style={{ width: '100%' }}
+                                    onChange={(text) =>
+                                        handleInputChangeDoses(response.remedio, text.target.value)
+                                    }
+                                    value={response.doses}
                                     variant="outlined"
                                 />
                                 {response.horario.map((horario, horarioIndex) => (
