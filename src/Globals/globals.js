@@ -8,4 +8,4 @@ export const textMenu = '#bfbcbc'
 
 export const backgroundColor = '#201c17'
 
-export const Globalurl = 'https://api.z-api.io/instances/3D83507E5D5C204E446BB2D4EBC7E202/token/C4BDDB7825B5BA6C61A9C2DF/send-text';
+export const Globalurl = 'https://api.z-api.io/instances/3D8A4B0A4A1EC04F1914FE67851B620D/token/47FC40BB67B360B384A02475/send-text';

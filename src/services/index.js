@@ -18,7 +18,7 @@ export function sendMessageAll(body) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json', // Define que o conteúdo do corpo é JSON
-       'Client-Token': 'F8fb573818c8a48c48397e42afa579584S'
+       'Client-Token': 'F2537c84d9f544f31a71feb4dea374264S'
     },
     body: JSON.stringify(body)
   })

@@ -12,7 +12,7 @@ export const Body = styled.div`
   justify-content:center;
   gap:15px;
   padding:20px;
-  background-color:#f3f3f3
+  background-color:#f9f9f9;
 `;
 
 export const Container = styled.div`
@@ -22,7 +22,7 @@ export const Container = styled.div`
   display:flex;
   align-items:center;
   justify-content:center;
-  background-color:#dae3da;
+  background-color:#f9f9f9;
   gap:20px;
   @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     width:100%;
