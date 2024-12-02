@@ -1,15 +1,14 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { colorButton,colorTitleButton,backgroundColor } from '../../Globals/globals';
+import { colorButton, colorTitleButton, backgroundColor } from '../../Globals/globals';
 
 export const Body = styled.div`
   width: 100%;
   height: 100%;
   flex-direction:row;
- 
-  background-color:#f9f9f9;
   display:flex;
+  align-items:center;
    @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     flex-direction:column;
     height:100vh;
@@ -18,18 +17,36 @@ export const Body = styled.div`
 `;
 
 export const Container = styled.div`
-  width: 50vw;
+  width: 50%;
   height: 100vh;
   flex-direction: column;
   display:flex;
-   padding:10px;
-  align-items:center;
-  justify-content:center;
- background-color:#f9f9f9;
+  padding:10px;
+ background-color:#f0f0f0;
+ align-items:center;
+ justify-content:center;
   gap:20px;
   @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
     width:100%;
     height:100%;
+  }
+`;
+
+export const FormControl = styled.div`
+  width: 80%;
+  min-height: 70%;
+  flex-direction: column;
+  display:flex;
+  padding:10px;
+  align-items:center;
+  justify-content:center;
+  border-radius:25px;
+  border: 1px solid black;
+ background-color:#f9f9f9;
+  gap:20px;
+  @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    width:85%;
+    height:90%;
   }
 `;
 
@@ -82,7 +99,7 @@ font-weight:bold;
 `
 export const Title = styled.a`
 color:black;
-font-size:35px;
+font-size:18px;
 font-weight:bold;
 `
 
@@ -90,7 +107,6 @@ export const SubTitle = styled.a`
 color: black;
 font-size: 17px;
 font-weight: 400;
-cursor:pointer;
 `
 
 export const Input = styled.input`

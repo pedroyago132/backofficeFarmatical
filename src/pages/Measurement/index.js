@@ -115,6 +115,8 @@ const Measurement = () => {
     const [user, setUser] = React.useState({ email: 'alo' });
     const listaRef = React.useRef(null);
     const [novaData, setNovaData] = React.useState(null);
+    const [clientForTime, setClientforTime] = React.useState([{ clientes: [] }]);
+    const [checkForTime, setCheckforTime] = React.useState([{}]);
 
 
 
@@ -227,6 +229,88 @@ const Measurement = () => {
     }, [user])
 
 
+    React.useEffect(() => {
+        const dbRef = ref(database, `/`); // Referência para a coleção 'clientes'
+
+    
+
+            const intervalo = setInterval(() => {
+                const unsubscribe = onValue(dbRef, (snapshot) => {
+                    const data = snapshot.val();
+                    console.log('ITEM1::::::::',data)
+                    if (data) {
+                        const dataList = Object.keys(data).map((key) => ({
+                            id: key,
+                            clientes:data[key].clientes
+                        }));
+                        setClientforTime(dataList);
+
+                  
+                    
+    
+                    }else {
+                        return null // Define uma lista vazia caso não haja dados
+                    }
+                    console.log(clientForTime)
+
+                });
+                return unsubscribe;
+              }, 27000); 
+              return () => clearInterval(intervalo);
+
+          
+
+         
+    }, [])
+
+    async function checkTime(hour, minute) {
+        try {
+            // Obtém a hora e minuto atual
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+    
+            // Verifica se os horários são iguais
+            if (currentHour === hour && currentMinute === minute) {
+                executeAction(); // Chama a função se coincidir
+            } else {
+                console.log("Os horários não coincidem. Verifique novamente mais tarde.");
+            }
+        } catch (error) {
+            console.error("Erro ao verificar o horário:", error);
+        }
+    }
+
+    React.useEffect(() => {
+        if (clientForTime) {
+            clientForTime.forEach(client => {
+                if (client.clientes) {
+                    Object.values(client.clientes).forEach(cliente => {
+                        Object.values(cliente.horario).forEach(clienteT => {
+                            const agora = new Date();
+                            const horas = String(agora.getHours()).padStart(2, "0");
+                            const minutos = String(agora.getMinutes()).padStart(2, "0");
+                            if(clienteT.hora == `${horas}:${minutos}`){
+                              
+                                    const body = {
+                                        message: `Olá Está no horário da sua medicação ${cliente.remedio}, lembre-se, Medicações devem seguir o horário a risca`,
+                                        phone: `55${cliente.contato}`,
+                                        delayMessage: 10
+                                    }
+                                    console.log('ENVIARMENSAGEM::::',cliente.contato)
+                                     sendMessageAll(body)
+                                
+                                }
+
+
+                            
+                       });
+                    });
+                }
+            });
+        }
+    }, [clientForTime]);
+
 
 
     function setNewClient() {
@@ -236,7 +320,7 @@ const Measurement = () => {
         } else {
 
             const body = {
-                message: 'Olá vejo que acabou de se registrar na Drogasil, gostaria de receber mensagens lembrando do horário das suas medicações? digite SIM para prosseguir',
+                message: 'Olá vimos que acabou de fazer registro para receber horários das suas medicações,no horário extao você será lembrado',
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
@@ -266,8 +350,9 @@ const Measurement = () => {
                 }).then(responses => {
                     handleCloseRegister()
                     response.horario.map(e => {
-                        set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e.hora}`), {
-                            hora: e.hora
+                        console.log('EEEEEEEEE:::::::::',e)
+                        set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e}`), {
+                            hora: e
                         }).then(i => sendMessageAll(body))
                     })
 
@@ -324,20 +409,32 @@ const Measurement = () => {
                 if (input.remedio === remedioInput1) {
                     const updatedHorario = input.horario.map((horario, i) =>
                         i === indexHorario
-                            ? newValue.length <= 5
-                                ? newValue.replace(/^(\d{2})(\d{2})$/, '$1:$2')
-                                : horario
+                            ? formatarHorario(newValue) // Formatar a hora antes de atualizar
                             : horario
                     );
-
+    
                     return { ...input, horario: updatedHorario };
                 }
                 return input;
             })
         );
     };
-
-
+    
+    // Função para formatar o horário
+    const formatarHorario = (newValue) => {
+        // Remove qualquer caractere não numérico
+        const valoresNumericos = newValue.replace(/\D/g, "");
+        
+        // Se tiver 4 ou mais números, formate como hora:minuto
+        if (valoresNumericos.length >= 4) {
+            // Formata no estilo "HH:MM"
+            return `${valoresNumericos.slice(0, 2)}:${valoresNumericos.slice(2, 4)}`;
+        }
+        
+        // Se o valor for menor que 4 caracteres, apenas retorna o que foi digitado
+        return valoresNumericos;
+    };
+    
     const removeTask = (index) => {
         const newsInputs = remedioInput.filter((_, i) => i !== index);
         setRemedioInput(newsInputs);

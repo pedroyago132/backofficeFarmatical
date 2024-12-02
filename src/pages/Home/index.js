@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Container, Input, Title, Logo, SubTitle, Body, Container1, ImageBackground } from './styles';
+import { Container, Input, Title,FormControl, Logo, SubTitle, Body, Container1, ImageBackground } from './styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
 import Snackbar from '@mui/material/Snackbar';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import TextField from '@mui/material/TextField';
 
 const Home = () => {
     const [emailInput, setEmailInput] = React.useState(false);
@@ -54,24 +54,27 @@ const Home = () => {
         <>
             <Body>
                 <Container>
+                  
+                    <FormControl  color='primary'  >
                     <Logo src='/Logo.png' alt='id' />
-                    <SubTitle>
+                    <Title>
                         Sistema para agendamentos de Rodrigo Santos
-                    </SubTitle>
-                    <FormControl variant='standard' color='primary' sx={{ gap: 3 }} >
-                        <Input
+                    </Title>
+                        <TextField
                             id="outlined-multiline-flexible"
-                            label="Multiline"
+                            label="Email"
                             multiline
+                            fullWidth
                             maxRows={4}
                             variant='outlined'
                             placeholder='Insira seu Email'
                             onChange={text => setEmailInput(text.target.value)}
                         />
 
-                        <Input
+                        <TextField
                             id="outlined-multiline-flexibl1"
-                            label="Multiline"
+                            label="Senha"
+                            fullWidth
                             multiline
                             maxRows={4}
                             variant='outlined'
@@ -80,11 +83,17 @@ const Home = () => {
 
                         />
                         <Button style={{ alignSelf: 'center' }} onClick={() => goMeansure()} variant="contained">Entrar</Button>
-
-                    </FormControl>
-                    <SubTitle  onClick={() => navigate('/registro')} >
-                        Ainda não tem uma conta? Clique aqui
+                       
+                    <div style={{display:'flex',gap:7}} >
+                    <SubTitle   >
+                        Ainda não tem uma conta? 
                     </SubTitle>
+                    <a  style={{fontWeight:'bold', fontSize:16, cursor:'pointer'}} onClick={() => navigate('/registro')} >
+                     Clique Aqui
+                    </a>
+                    </div>
+                    </FormControl>
+                
 
                 </Container>
                 <Container1>

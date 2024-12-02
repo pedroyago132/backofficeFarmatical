@@ -12,7 +12,10 @@ export const Body = styled.div`
   justify-content:center;
   gap:15px;
   padding:20px;
-  background-color:#f9f9f9;
+  background-color:#f0f0f0;
+   background-image: url('/backgroundp.png');
+   background-size: cover;
+  background-position: center;
 `;
 
 export const Container = styled.div`
@@ -84,10 +87,28 @@ font-weight:bold;
 `
 
 export const SubTitle = styled.a`
-color: black;
+color: #15d70c;
 font-size: 17px;
 font-weight: 400;
 `
+
+export const FormControl = styled.div`
+  width: 50%;
+  min-height: 70%;
+  flex-direction: column;
+  display:flex;
+  padding:10px;
+  align-items:center;
+  justify-content:center;
+  border-radius:25px;
+  border:1px solid black;
+ background-color:white;
+  gap:20px;
+  @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+    width:85%;
+    height:90%;
+  }
+`;
 
 export const Input = styled.input`
 color: black;
