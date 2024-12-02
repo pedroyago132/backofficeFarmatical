@@ -100,7 +100,7 @@ const Measurement = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [{ hora: '10:00' }], doses: 0 }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0 }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
