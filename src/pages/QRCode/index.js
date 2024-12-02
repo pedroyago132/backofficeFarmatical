@@ -91,8 +91,10 @@ const QRCodePage = () => {
 
                 <Title>Gere seu QRCode WhatsApp</Title>
                 <Title>Para registro do seu número</Title>
+                <Title>Você terá 20 segundos para ler seu QRCode</Title>
+                
                 <RenderQR />
-                <Button id='Button-id' fullWidth variant='outlined' onClick={() => GerarQRCode()}>Gerar QRCode</Button>
+                <Button id='Button-id' fullWidth variant='outlined' onClick={() => GerarQRCode()}>Gerar QRCode ( gerar de novo )</Button>
 
             </FormContainer>
         </PageContainer>
