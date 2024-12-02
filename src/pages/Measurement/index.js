@@ -293,13 +293,15 @@ const Measurement = () => {
                             if(clienteT.hora == `${horas}:${minutos}`){
                               
                                     const body = {
-                                        message: `Olá Está no horário da sua medicação ${cliente.remedio}, lembre-se, Medicações devem seguir o horário a risca`,
+                                        message: `Olá Está no horário da sua medicação ${cliente.remedio},agora as ${horas}:${minutos} lembre-se, Medicações devem seguir o horário a risca`,
                                         phone: `55${cliente.contato}`,
                                         delayMessage: 10
                                     }
                                     console.log('ENVIARMENSAGEM::::',cliente.contato)
                                      sendMessageAll(body)
                                 
+                                } else{
+                                    return null
                                 }
 
 
