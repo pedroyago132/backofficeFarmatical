@@ -56,13 +56,7 @@ const Register = () => {
 
         set(ref(database, `${encodeEmail}/clientes`), {
 
-        }).then(log => {
-          const response = createInstance(body)
-          if (response) {
-            console.log(response)
-            navigate('/qrcode')
-          }
-        }).catch(log => console.log('ERRORCREAINSTANCE::::', log))
+        })
       }
     } catch (error) {
       window.alert('ERRO:', error)
