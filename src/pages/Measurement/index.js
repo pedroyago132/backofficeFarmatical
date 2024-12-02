@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Body, ContainerRules, Input, Container2, ContainerEditAccordion } from './styles';
+import { Body, ContainerRules, Input, Container2, ContainerEditAccordion,GreenBox, RedBox } from './styles';
 import { backgroundMenu } from '../../Globals/globals'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -509,6 +509,18 @@ const Measurement = () => {
     };
     console.log('FILTERED:::::',)
 
+    const RenderConnected = () => {
+        if(connectednumber){
+            return (
+                <GreenBox>Conectado</GreenBox>
+            )
+        } else {
+            return (
+                <RedBox>Desconectado</RedBox>
+            )
+        }
+    }
+
 
     return (
         <>
@@ -518,6 +530,7 @@ const Measurement = () => {
 
 
                 <Container2>
+                    <RenderConnected />
                     <ContainerRules>
                         <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} >1. Ao adicionar novos usuários a plataforma eles apareceram ao controle </Typography>
                         <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} >2. Avisar da recompra do medicamento, basta clicar em enviar mensagem</Typography>
