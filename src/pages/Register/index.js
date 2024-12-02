@@ -7,6 +7,7 @@ import { getDatabase, ref, set, get, child, onValue } from "firebase/database";
 import "firebase/database";
 import base64 from 'base-64'
 import { createInstance } from '../../services';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Register = () => {
   const [cnpjInput, setCnpjInput] = React.useState('');
@@ -15,42 +16,48 @@ const Register = () => {
   const [senhaInput, setSenhaInput] = React.useState('');
   const [confirmarSenhaInput, setConfirmarSenhaInput] = React.useState('');
   const [contatoInput, setContato] = React.useState('');
+  const [progressive, setProgressive] = React.useState(false);
 
   const navigate = useNavigate();
 
 
+  const RenderProgressive = () => {
+     if(progressive){
+       return (
+       <CircularProgress size={37} />
+       )
+     } else {
+       return (
+        <Button style={{ marginTop: 10 }} variant='contained' onClick={() => register()}>Cadastrar</Button>
+       )
+     }
+  }
 
   async function register() {
-
+   
     try {
       if (!emailInput || !razaoSocial || !cnpjInput && senhaInput != confirmarSenhaInput) {
         window.alert('Complete os campos')
       } else {
-        const body = {
-          name: "Instancia Z-API - 9292812",
-          sessionName: "Tests tests",
-          deliveryCallbackUrl: "https://meuwebhook.com.br/delivery",
-          receivedCallbackUrl: "https://meuwebhook.com.br/receive",
-          disconnectedCallbackUrl: "https://meuwebhook.com.br/disconnected",
-          connectedCallbackUrl: "https://meuwebhook.com.br/connected",
-          messageStatusCallbackUrl: "https://meuwebhook.com.br/status",
-          isDevice: false,
-          businessDevice: true
-        };
+        setProgressive(true)
         const auth = getAuth();
         const database = getDatabase()
         const encodeEmail = base64.encode(emailInput)
+       
         createUserWithEmailAndPassword(auth, emailInput, senhaInput)
           .then((userCredential) => {
             // Signed up 
             const user = userCredential.user;
             window.alert('Usuário criado com sucesso')
             navigate('/qrcode')
+            setProgressive(false)
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            window.alert('Falha, seguinte error', errorMessage)
+            console.log(errorCode,errorMessage)
+            window.alert('Falha, seguinte error - Usuário já cadastrado', errorMessage)
+            setProgressive(false)
             // ..
           });
 
@@ -145,7 +152,7 @@ const Register = () => {
         onChange={text => setConfirmarSenhaInput(text.target.value)}
       />
 
-      <Button style={{ marginTop: 10 }} variant='contained' onClick={() => register()}>Cadastrar</Button>
+     <RenderProgressive />
       </FormControl>
     </Body>
 
