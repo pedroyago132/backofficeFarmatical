@@ -14,13 +14,16 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { setItem } from '../../storage/serviceState';
 import { backgroundMenu } from '../../Globals/globals';
+import { useNavigate } from 'react-router-dom';
 
-const pages = ['Dashboard', 'Chat'];
+const pages = ['Dashboard', 'Validar QRCode'];
 const settings = ['Perfil','Sair'];
+
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const navigate = useNavigate()
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -37,8 +40,15 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
-    const selectItemMenu = (item) => {
-        setItem('itemMenu',item)
+    const selectItemMenu = (page) => {
+   
+        if(page == 'Validar QRCode'){
+          navigate('/qrcode')
+        } else if (page == 'Dashboard' ){
+            navigate('/measure')
+        }
+
+       
     }
 
     /* 
@@ -98,7 +108,7 @@ const Header = () => {
                         sx={{ display: { xs: 'block', md: 'none' } }}
                     >
                         {pages.map((page) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu}>
+                            <MenuItem key={page} onClick={() => selectItemMenu(page)}>
                                 <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                             </MenuItem>
                         ))}
@@ -127,7 +137,7 @@ const Header = () => {
                     {pages.map((page) => (
                         <Button
                             key={page}
-                            onClick={handleCloseNavMenu}
+                            onClick={() => selectItemMenu(page)}
                             sx={{ my: 2, color: 'white', display: 'block' }}
                         >
                             {page}
@@ -157,7 +167,7 @@ const Header = () => {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <MenuItem key={setting} onClick={() => selectItemMenu(page)}>
                                 <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                             </MenuItem>
                         ))}
