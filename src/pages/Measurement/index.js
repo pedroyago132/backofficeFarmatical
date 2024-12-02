@@ -117,6 +117,7 @@ const Measurement = () => {
     const [novaData, setNovaData] = React.useState(null);
     const [clientForTime, setClientforTime] = React.useState([{ clientes: [] }]);
     const [checkForTime, setCheckforTime] = React.useState([{}]);
+    const [connectednumber, setConnectedNumber] = React.useState(false);
 
 
 
@@ -313,6 +314,33 @@ const Measurement = () => {
         }
     }, [clientForTime]);
 
+    async function dataInstanceValue() {
+        const idi = '3D826867ABEC00CA23EBB2D4EBC7E202';
+        const tokeni = '9A63F56F86E49E2446ED34DD';
+
+        try {
+            const response = await dataInstance(idi,tokeni); // Aguarda a função retornar o resultado
+            if(response.connected){
+                setConnectedNumber(true)
+             }else{
+                setConnectedNumber(false)
+             }
+        } catch (error) {
+            console.error('TRYCAYCHERROR:::::QRCODE:::', error); // Lida com erros
+        }
+    }
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            console.log("Função executada!");
+            dataInstanceValue();
+          }, 3000); // Executa a cada 3 segundos
+      
+          // Limpa o intervalo quando o componente for desmontado
+          return () => clearInterval(interval);
+       
+    },[])
+
 
 
     function setNewClient() {
@@ -381,12 +409,17 @@ const Measurement = () => {
     };
 
     const handleChangeMenu = (event) => {
-        if (event = 'Cadastrar Cliente') {
-            handleOpenRegister()
-            console.log('ok')
+        if(connectednumber){
+            if (event = 'Cadastrar Cliente') {
+                handleOpenRegister()
+                console.log('ok')
+            } else {
+                return null
+            }
         } else {
-            return null
+            window.alert('Necessário Conectar Número de celular.')
         }
+       
     };
 
     const handleInputChangeRemedio = (remedioInput1, newValue) => {
