@@ -68,6 +68,8 @@ const QRCodePage = () => {
             if(response.connected){
                 window.alert('Verificado Com Sucesso!')
                 navigate('/')
+            }else{
+                return null
             }
         } catch (error) {
             console.error('TRYCAYCHERROR:::::QRCODE:::', error); // Lida com erros

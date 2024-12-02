@@ -63,9 +63,6 @@ export async function lerQRCode(idi, tokeni) {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`Erro: ${response.status} - ${response.statusText}`);
-    }
 
     const result = await response.json();
     return result; // Retorna o resultado da chamada para quem chamou a função

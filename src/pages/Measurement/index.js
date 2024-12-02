@@ -27,6 +27,7 @@ import ListAltOutlined from '@mui/icons-material/ListAltOutlined';
 import AccountBoxOutlined from '@mui/icons-material/AccountBoxOutlined';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "firebase/database";
+import { dataInstance } from '../../services';
 
 
 
@@ -320,6 +321,7 @@ const Measurement = () => {
 
         try {
             const response = await dataInstance(idi,tokeni); // Aguarda a função retornar o resultado
+            console.log('DATAAQUI:::::::',response)
             if(response.connected){
                 setConnectedNumber(true)
              }else{
@@ -331,13 +333,7 @@ const Measurement = () => {
     }
 
     React.useEffect(() => {
-        const interval = setInterval(() => {
-            console.log("Função executada!");
-            dataInstanceValue();
-          }, 3000); // Executa a cada 3 segundos
-      
-          // Limpa o intervalo quando o componente for desmontado
-          return () => clearInterval(interval);
+        dataInstanceValue();
        
     },[])
 
