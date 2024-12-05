@@ -1,0 +1,412 @@
+[debug] [2024-12-04T22:19:44.836Z] ----------------------------------------------------------------------
+[debug] [2024-12-04T22:19:44.840Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions:scheduleMessages
+[debug] [2024-12-04T22:19:44.840Z] CLI Version:   13.27.0
+[debug] [2024-12-04T22:19:44.841Z] Platform:      win32
+[debug] [2024-12-04T22:19:44.841Z] Node Version:  v18.20.5
+[debug] [2024-12-04T22:19:44.842Z] Time:          Wed Dec 04 2024 19:19:44 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2024-12-04T22:19:44.843Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-04T22:19:44.960Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-04T22:19:44.961Z] > authorizing via signed-in user (pedroyago132@gmail.com)
+[debug] [2024-12-04T22:19:44.961Z] [iam] checking project dosagem-79271 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2024-12-04T22:19:44.964Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:44.964Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:44.966Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions [none]
+[debug] [2024-12-04T22:19:44.966Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:44.966Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-12-04T22:19:45.942Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions 200
+[debug] [2024-12-04T22:19:45.942Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-12-04T22:19:45.943Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:45.943Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:45.943Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/dosagem-79271/serviceAccounts/dosagem-79271@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2024-12-04T22:19:45.943Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/dosagem-79271/serviceAccounts/dosagem-79271@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-12-04T22:19:46.817Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/dosagem-79271/serviceAccounts/dosagem-79271@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2024-12-04T22:19:46.817Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/dosagem-79271/serviceAccounts/dosagem-79271@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'dosagem-79271'...
+[info] 
+[info] i  deploying functions 
+[debug] [2024-12-04T22:19:46.829Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:46.829Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:46.830Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 [none]
+[debug] [2024-12-04T22:19:47.741Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 200
+[debug] [2024-12-04T22:19:47.741Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 {"projectNumber":"258455838256","projectId":"dosagem-79271","lifecycleState":"ACTIVE","name":"dosagem correta ","labels":{"firebase":"enabled"},"createTime":"2024-11-21T18:25:43.750365Z"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:47.747Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.747Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.747Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.748Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:47.749Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.750Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:47.751Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.751Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:47.752Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-12-04T22:19:47.752Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:47.755Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-12-04T22:19:47.755Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:47.758Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudbuild.googleapis.com [none]
+[debug] [2024-12-04T22:19:47.758Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudbuild.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:47.761Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/artifactregistry.googleapis.com [none]
+[debug] [2024-12-04T22:19:47.762Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/artifactregistry.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:48.268Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/artifactregistry.googleapis.com 200
+[debug] [2024-12-04T22:19:48.269Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/artifactregistry.googleapis.com [omitted]
+[info] +  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:48.798Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudbuild.googleapis.com 200
+[debug] [2024-12-04T22:19:48.798Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:48.849Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudfunctions.googleapis.com 200
+[debug] [2024-12-04T22:19:48.849Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:48.940Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/runtimeconfig.googleapis.com 200
+[debug] [2024-12-04T22:19:48.940Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-12-04T22:19:48.941Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:48.941Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:48.941Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dosagem-79271/adminSdkConfig [none]
+[debug] [2024-12-04T22:19:49.394Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dosagem-79271/adminSdkConfig 200
+[debug] [2024-12-04T22:19:49.394Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dosagem-79271/adminSdkConfig {"projectId":"dosagem-79271","databaseURL":"https://dosagem-79271-default-rtdb.firebaseio.com","storageBucket":"dosagem-79271.firebasestorage.app"}
+[debug] [2024-12-04T22:19:49.395Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:49.396Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:49.396Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dosagem-79271/configs [none]
+[debug] [2024-12-04T22:19:49.836Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dosagem-79271/configs 200
+[debug] [2024-12-04T22:19:49.837Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dosagem-79271/configs {}
+[debug] [2024-12-04T22:19:49.841Z] Validating nodejs source
+[debug] [2024-12-04T22:19:51.277Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-12-04T22:19:51.277Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2024-12-04T22:19:51.279Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-12-04T22:19:51.292Z] Found firebase-functions binary at 'C:\Users\Admin\Desktop\visionhub\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8581
+
+[debug] [2024-12-04T22:19:51.758Z] Got response from /__/functions.yaml {"endpoints":{"scheduleMessages":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"scheduleTrigger":{"schedule":"*/1 * * * *","retryConfig":{"retryCount":null,"maxDoublings":null,"maxRetrySeconds":null,"minBackoffSeconds":null,"maxBackoffSeconds":null},"timeZone":null},"entryPoint":"scheduleMessages"}},"specVersion":"v1alpha1","requiredAPIs":[{"api":"cloudscheduler.googleapis.com","reason":"Needed for scheduled functions."}],"extensions":{}}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:51.802Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:51.802Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:51.802Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/firebaseextensions.googleapis.com [none]
+[debug] [2024-12-04T22:19:51.802Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/firebaseextensions.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:52.877Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/firebaseextensions.googleapis.com 200
+[debug] [2024-12-04T22:19:52.877Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/firebaseextensions.googleapis.com [omitted]
+[info] +  extensions: required API firebaseextensions.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:52.878Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-04T22:19:52.878Z] > authorizing via signed-in user (pedroyago132@gmail.com)
+[debug] [2024-12-04T22:19:52.879Z] [iam] checking project dosagem-79271 for permissions ["firebase.projects.get","firebaseextensions.instances.list"]
+[debug] [2024-12-04T22:19:52.879Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:52.879Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:52.880Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions [none]
+[debug] [2024-12-04T22:19:52.880Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:52.880Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2024-12-04T22:19:53.746Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions 200
+[debug] [2024-12-04T22:19:53.746Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2024-12-04T22:19:53.747Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:53.747Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:53.749Z] >>> [apiv2][query] GET https://firebaseextensions.googleapis.com/v1beta/projects/dosagem-79271/instances pageSize=100&pageToken=
+[debug] [2024-12-04T22:19:54.819Z] <<< [apiv2][status] GET https://firebaseextensions.googleapis.com/v1beta/projects/dosagem-79271/instances 200
+[debug] [2024-12-04T22:19:54.820Z] <<< [apiv2][body] GET https://firebaseextensions.googleapis.com/v1beta/projects/dosagem-79271/instances {}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged C:\Users\Admin\Desktop\visionhub\functions (71.12 KB) for uploading 
+[debug] [2024-12-04T22:19:54.906Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:54.906Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:54.906Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/dosagem-79271/locations/-/functions [none]
+[debug] [2024-12-04T22:19:55.956Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/dosagem-79271/locations/-/functions 200
+[debug] [2024-12-04T22:19:55.956Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/dosagem-79271/locations/-/functions {}
+[debug] [2024-12-04T22:19:55.957Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:55.957Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:55.958Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2024-12-04T22:19:57.289Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/-/functions 200
+[debug] [2024-12-04T22:19:57.289Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/-/functions {}
+[info] i  functions: ensuring required API cloudscheduler.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:57.295Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:57.295Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:57.296Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudscheduler.googleapis.com [none]
+[debug] [2024-12-04T22:19:57.296Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudscheduler.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:58.354Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudscheduler.googleapis.com 200
+[debug] [2024-12-04T22:19:58.355Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/cloudscheduler.googleapis.com [omitted]
+[info] +  functions: required API cloudscheduler.googleapis.com is enabled 
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:58.358Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:58.359Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:58.359Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:58.360Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:58.360Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:58.361Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[debug] [2024-12-04T22:19:58.361Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:58.362Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:58.362Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/run.googleapis.com [none]
+[debug] [2024-12-04T22:19:58.362Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/run.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:58.366Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/eventarc.googleapis.com [none]
+[debug] [2024-12-04T22:19:58.366Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/eventarc.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:58.369Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/pubsub.googleapis.com [none]
+[debug] [2024-12-04T22:19:58.370Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/pubsub.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:58.373Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/storage.googleapis.com [none]
+[debug] [2024-12-04T22:19:58.373Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/storage.googleapis.com x-goog-quota-user=projects/dosagem-79271
+[debug] [2024-12-04T22:19:59.590Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/eventarc.googleapis.com 200
+[debug] [2024-12-04T22:19:59.590Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/eventarc.googleapis.com [omitted]
+[info] +  functions: required API eventarc.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:59.594Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/pubsub.googleapis.com 200
+[debug] [2024-12-04T22:19:59.594Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/pubsub.googleapis.com [omitted]
+[info] +  functions: required API pubsub.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:59.596Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/run.googleapis.com 200
+[debug] [2024-12-04T22:19:59.596Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/run.googleapis.com [omitted]
+[info] +  functions: required API run.googleapis.com is enabled 
+[debug] [2024-12-04T22:19:59.607Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/storage.googleapis.com 200
+[debug] [2024-12-04T22:19:59.607Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dosagem-79271/services/storage.googleapis.com [omitted]
+[info] +  functions: required API storage.googleapis.com is enabled 
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[debug] [2024-12-04T22:19:59.609Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:59.609Z] Checked if tokens are valid: true, expires at: 1733352922649
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2024-12-04T22:19:59.610Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:59.610Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:19:59.610Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-12-04T22:19:59.614Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-12-04T22:20:00.671Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2024-12-04T22:20:00.672Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-258455838256@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"109122746208131363501"}}
+[debug] [2024-12-04T22:20:00.879Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2024-12-04T22:20:00.879Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/258455838256/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-258455838256@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"111092502178798497694"}}
+[debug] [2024-12-04T22:20:00.884Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:00.884Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:00.885Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 [none]
+[debug] [2024-12-04T22:20:01.948Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 200
+[debug] [2024-12-04T22:20:01.949Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/dosagem-79271 {"projectNumber":"258455838256","projectId":"dosagem-79271","lifecycleState":"ACTIVE","name":"dosagem correta ","labels":{"firebase":"enabled"},"createTime":"2024-11-21T18:25:43.750365Z"}
+[debug] [2024-12-04T22:20:01.950Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:01.950Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:01.951Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/dosagem-79271/billingInfo [none]
+[debug] [2024-12-04T22:20:02.552Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/dosagem-79271/billingInfo 200
+[debug] [2024-12-04T22:20:02.552Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/dosagem-79271/billingInfo {"name":"projects/dosagem-79271/billingInfo","projectId":"dosagem-79271","billingAccountName":"billingAccounts/0173E0-9E1DEC-4FFE3D","billingEnabled":true}
+[debug] [2024-12-04T22:20:02.556Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:02.556Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:02.557Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2024-12-04T22:20:03.684Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2024-12-04T22:20:03.685Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com/3283693b-56e5-48f8-98be-3a049dd01a42.zip?GoogleAccessId=service-258455838256@gcf-admin-robot.iam.gserviceaccount.com&Expires=1733352603&Signature=ZVkxLpCIzDM4f%2FtKYhrhOXy7X8UQNfO16EAM1m51Flu32hZqaWSbU0xDCziog9VTOtYCgf1UNBA6C%2FOqBdjP4bwwt2censQcsqeNnhhMsV%2FVOyCO9KujWc%2BCZcJU5TfpB8fU91UCxqvn8syOVrpyZ5yvfFMlf92SwZCxbyIOY6AvDb%2BVWVTlO5oMiCWsZhwfc5mN51pTnT7ev%2FUh87PJkXjP%2FaXlhIsF5U6zVFZSv6TEi3ZMGpM5mR4xuJOfybNQMwEY9r7neQ3hTIwFCOE6gVzHSl7OEdS6qxBYl6COlh2IIqc9JzON5r7qCbXDw%2B7l8Ls5jVao%2FXioNfuIjyZCVQ%3D%3D","storageSource":{"bucket":"gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com","object":"3283693b-56e5-48f8-98be-3a049dd01a42.zip"}}
+[debug] [2024-12-04T22:20:03.688Z] >>> [apiv2][query] PUT https://storage.googleapis.com/gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com/3283693b-56e5-48f8-98be-3a049dd01a42.zip GoogleAccessId=service-258455838256%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1733352603&Signature=ZVkxLpCIzDM4f%2FtKYhrhOXy7X8UQNfO16EAM1m51Flu32hZqaWSbU0xDCziog9VTOtYCgf1UNBA6C%2FOqBdjP4bwwt2censQcsqeNnhhMsV%2FVOyCO9KujWc%2BCZcJU5TfpB8fU91UCxqvn8syOVrpyZ5yvfFMlf92SwZCxbyIOY6AvDb%2BVWVTlO5oMiCWsZhwfc5mN51pTnT7ev%2FUh87PJkXjP%2FaXlhIsF5U6zVFZSv6TEi3ZMGpM5mR4xuJOfybNQMwEY9r7neQ3hTIwFCOE6gVzHSl7OEdS6qxBYl6COlh2IIqc9JzON5r7qCbXDw%2B7l8Ls5jVao%2FXioNfuIjyZCVQ%3D%3D
+[debug] [2024-12-04T22:20:03.688Z] >>> [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com/3283693b-56e5-48f8-98be-3a049dd01a42.zip [stream]
+[debug] [2024-12-04T22:20:04.421Z] <<< [apiv2][status] PUT https://storage.googleapis.com/gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com/3283693b-56e5-48f8-98be-3a049dd01a42.zip 200
+[debug] [2024-12-04T22:20:04.421Z] <<< [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com/3283693b-56e5-48f8-98be-3a049dd01a42.zip [omitted]
+[info] +  functions: functions folder uploaded successfully 
+[info] i  functions: creating Node.js 18 (2nd Gen) function scheduleMessages(us-central1)... 
+[debug] [2024-12-04T22:20:04.428Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:04.428Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:04.429Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions functionId=scheduleMessages
+[debug] [2024-12-04T22:20:04.429Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions {"name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-uploads-258455838256.us-central1.cloudfunctions.appspot.com","object":"3283693b-56e5-48f8-98be-3a049dd01a42.zip"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""}},"serviceConfig":{"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages"},"ingressSettings":null,"timeoutSeconds":null,"serviceAccountEmail":null,"availableMemory":"256Mi","minInstanceCount":null,"maxInstanceCount":null,"maxInstanceRequestConcurrency":80,"availableCpu":"1","vpcConnector":null,"vpcConnectorEgressSettings":null},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"}}
+[debug] [2024-12-04T22:20:06.092Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions 200
+[debug] [2024-12-04T22:20:06.092Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/functions {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2"},"done":false}
+[debug] [2024-12-04T22:20:06.093Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:06.094Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:06.094Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:07.133Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:07.134Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:07.642Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:07.642Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:07.642Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:07.643Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:08.837Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:08.838Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:09.848Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:09.849Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:09.849Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:09.849Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:10.906Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:10.906Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:12.916Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:12.916Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:12.916Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:12.917Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:14.106Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:14.107Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:18.109Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:18.109Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:18.109Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:18.110Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:19.302Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:19.303Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:27.315Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:27.315Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:27.315Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:27.316Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:28.461Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:28.461Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:38.470Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:38.471Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:38.471Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:38.472Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:39.533Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:39.534Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:20:49.538Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:20:49.539Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:49.539Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:20:49.539Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:20:50.567Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:20:50.567Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build in progress","state":"IN_PROGRESS","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:21:00.576Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:21:00.576Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:00.576Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:00.577Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:21:01.652Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:21:01.653Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build finished","state":"COMPLETE","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","message":"Creating Cloud Run service","state":"IN_PROGRESS","resource":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","resourceUri":"https://console.cloud.google.com/run/detail/us-central1/schedulemessages?project=dosagem-79271"}],"sourceToken":"Cldwcm9qZWN0cy8yNTg0NTU4MzgyNTYvbG9jYXRpb25zL3VzLWNlbnRyYWwxL2J1aWxkcy84NzRjYjZmOS00ZWZjLTRjYWEtODk2ZC0xZjc5N2Q3OWUwZjAScHVzLWNlbnRyYWwxLWRvY2tlci5wa2cuZGV2L2Rvc2FnZW0tNzkyNzEvZ2NmLWFydGlmYWN0cy9kb3NhZ2VtLS03OTI3MV9fdXMtLWNlbnRyYWwxX19zY2hlZHVsZV9tZXNzYWdlczp2ZXJzaW9uXzEYsLys6cIHIkdwcm9qZWN0cy9kb3NhZ2VtLTc5MjcxL2xvY2F0aW9ucy91cy1jZW50cmFsMS9mdW5jdGlvbnMvc2NoZWR1bGVNZXNzYWdlcyoMCMSrw7oGEODlhawDMghub2RlanMxODp2CiNnY3IuaW8vZ2FlLXJ1bnRpbWVzL25vZGVqczE4OnN0YWJsZRJPdXMtY2VudHJhbDEtZG9ja2VyLnBrZy5kZXYvc2VydmVybGVzcy1ydW50aW1lcy9nb29nbGUtMjItZnVsbC9ydW50aW1lcy9ub2RlanMxOEAB","operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":false}
+[debug] [2024-12-04T22:21:01.653Z] Got source token Cldwcm9qZWN0cy8yNTg0NTU4MzgyNTYvbG9jYXRpb25zL3VzLWNlbnRyYWwxL2J1aWxkcy84NzRjYjZmOS00ZWZjLTRjYWEtODk2ZC0xZjc5N2Q3OWUwZjAScHVzLWNlbnRyYWwxLWRvY2tlci5wa2cuZGV2L2Rvc2FnZW0tNzkyNzEvZ2NmLWFydGlmYWN0cy9kb3NhZ2VtLS03OTI3MV9fdXMtLWNlbnRyYWwxX19zY2hlZHVsZV9tZXNzYWdlczp2ZXJzaW9uXzEYsLys6cIHIkdwcm9qZWN0cy9kb3NhZ2VtLTc5MjcxL2xvY2F0aW9ucy91cy1jZW50cmFsMS9mdW5jdGlvbnMvc2NoZWR1bGVNZXNzYWdlcyoMCMSrw7oGEODlhawDMghub2RlanMxODp2CiNnY3IuaW8vZ2FlLXJ1bnRpbWVzL25vZGVqczE4OnN0YWJsZRJPdXMtY2VudHJhbDEtZG9ja2VyLnBrZy5kZXYvc2VydmVybGVzcy1ydW50aW1lcy9nb29nbGUtMjItZnVsbC9ydW50aW1lcy9ub2RlanMxOEAB for region us-central1
+[debug] [2024-12-04T22:21:11.659Z] [create-default-us-central1-scheduleMessages] Retrying task index 0
+[debug] [2024-12-04T22:21:11.660Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:11.660Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:11.661Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 [none]
+[debug] [2024-12-04T22:21:12.692Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 200
+[debug] [2024-12-04T22:21:12.692Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547 {"name":"projects/dosagem-79271/locations/us-central1/operations/operation-1733350805282-628792f051fda-59bf0546-adff9547","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-12-04T22:20:05.874492096Z","endTime":"2024-12-04T22:21:05.756860496Z","target":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","verb":"create","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2"},"stages":[{"name":"BUILD","message":"Build finished","state":"COMPLETE","resource":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/874cb6f9-4efc-4caa-896d-1f797d79e0f0?project=258455838256"},{"name":"SERVICE","message":"Creating Cloud Run service","state":"COMPLETE","resource":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","resourceUri":"https://console.cloud.google.com/run/detail/us-central1/schedulemessages?project=dosagem-79271"}],"sourceToken":"Cldwcm9qZWN0cy8yNTg0NTU4MzgyNTYvbG9jYXRpb25zL3VzLWNlbnRyYWwxL2J1aWxkcy84NzRjYjZmOS00ZWZjLTRjYWEtODk2ZC0xZjc5N2Q3OWUwZjAScHVzLWNlbnRyYWwxLWRvY2tlci5wa2cuZGV2L2Rvc2FnZW0tNzkyNzEvZ2NmLWFydGlmYWN0cy9kb3NhZ2VtLS03OTI3MV9fdXMtLWNlbnRyYWwxX19zY2hlZHVsZV9tZXNzYWdlczp2ZXJzaW9uXzEYsLys6cIHIkdwcm9qZWN0cy9kb3NhZ2VtLTc5MjcxL2xvY2F0aW9ucy91cy1jZW50cmFsMS9mdW5jdGlvbnMvc2NoZWR1bGVNZXNzYWdlcyoMCMSrw7oGEODlhawDMghub2RlanMxODp2CiNnY3IuaW8vZ2FlLXJ1bnRpbWVzL25vZGVqczE4OnN0YWJsZRJPdXMtY2VudHJhbDEtZG9ja2VyLnBrZy5kZXYvc2VydmVybGVzcy1ydW50aW1lcy9nb29nbGUtMjItZnVsbC9ydW50aW1lcy9ub2RlanMxOEAB","operationType":"CREATE_FUNCTION","buildName":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0"},"done":true,"response":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/dosagem-79271/locations/us-central1/functions/scheduleMessages","buildConfig":{"build":"projects/258455838256/locations/us-central1/builds/874cb6f9-4efc-4caa-896d-1f797d79e0f0","runtime":"nodejs18","entryPoint":"scheduleMessages","source":{"storageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/dosagem-79271/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-258455838256-us-central1","object":"scheduleMessages/function-source.zip","generation":"1733350805562377"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/dosagem-79271/serviceAccounts/258455838256-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/dosagem-79271/locations/us-central1/services/schedulemessages","timeoutSeconds":60,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}","GCLOUD_PROJECT":"dosagem-79271","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dosagem-79271/locations/us-central1/services/scheduleMessages","FUNCTION_TARGET":"scheduleMessages","LOG_EXECUTION_ID":"true"},"maxInstanceCount":100,"ingressSettings":"ALLOW_ALL","uri":"https://schedulemessages-r4xza6amja-uc.a.run.app","serviceAccountEmail":"258455838256-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"schedulemessages-00001-bum","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2024-12-04T22:20:05.869553347Z","labels":{"deployment-tool":"cli-firebase","deployment-scheduled":"true","firebase-functions-hash":"b106de46791a79fab631c95090645c83853b1f1e"},"environment":"GEN_2","url":"https://us-central1-dosagem-79271.cloudfunctions.net/scheduleMessages","createTime":"2024-12-04T22:20:05.869553347Z"}}
+[debug] [2024-12-04T22:21:12.693Z] Got source token Cldwcm9qZWN0cy8yNTg0NTU4MzgyNTYvbG9jYXRpb25zL3VzLWNlbnRyYWwxL2J1aWxkcy84NzRjYjZmOS00ZWZjLTRjYWEtODk2ZC0xZjc5N2Q3OWUwZjAScHVzLWNlbnRyYWwxLWRvY2tlci5wa2cuZGV2L2Rvc2FnZW0tNzkyNzEvZ2NmLWFydGlmYWN0cy9kb3NhZ2VtLS03OTI3MV9fdXMtLWNlbnRyYWwxX19zY2hlZHVsZV9tZXNzYWdlczp2ZXJzaW9uXzEYsLys6cIHIkdwcm9qZWN0cy9kb3NhZ2VtLTc5MjcxL2xvY2F0aW9ucy91cy1jZW50cmFsMS9mdW5jdGlvbnMvc2NoZWR1bGVNZXNzYWdlcyoMCMSrw7oGEODlhawDMghub2RlanMxODp2CiNnY3IuaW8vZ2FlLXJ1bnRpbWVzL25vZGVqczE4OnN0YWJsZRJPdXMtY2VudHJhbDEtZG9ja2VyLnBrZy5kZXYvc2VydmVybGVzcy1ydW50aW1lcy9nb29nbGUtMjItZnVsbC9ydW50aW1lcy9ub2RlanMxOEAB for region us-central1
+[debug] [2024-12-04T22:21:12.696Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:12.696Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:12.696Z] >>> [apiv2][query] POST https://run.googleapis.com/v1/projects/dosagem-79271/locations/us-central1/services/schedulemessages:setIamPolicy [none]
+[debug] [2024-12-04T22:21:12.696Z] >>> [apiv2][body] POST https://run.googleapis.com/v1/projects/dosagem-79271/locations/us-central1/services/schedulemessages:setIamPolicy {"policy":{"bindings":[{"role":"roles/run.invoker","members":["serviceAccount:258455838256-compute@developer.gserviceaccount.com"]}],"etag":"","version":3},"updateMask":"bindings,etag,version"}
+[debug] [2024-12-04T22:21:13.785Z] <<< [apiv2][status] POST https://run.googleapis.com/v1/projects/dosagem-79271/locations/us-central1/services/schedulemessages:setIamPolicy 403
+[debug] [2024-12-04T22:21:13.785Z] <<< [apiv2][body] POST https://run.googleapis.com/v1/projects/dosagem-79271/locations/us-central1/services/schedulemessages:setIamPolicy {"error":{"code":403,"message":"Permission 'run.services.setIamPolicy' denied on resource 'projects/dosagem-79271/locations/us-central1/services/schedulemessages' (or resource may not exist).","status":"PERMISSION_DENIED"}}
+[error] Failed to set the IAM Policy on the Service projects/dosagem-79271/locations/us-central1/services/schedulemessages
+[debug] [2024-12-04T22:21:13.800Z] Total Function Deployment time: 69363
+[debug] [2024-12-04T22:21:13.801Z] 1 Functions Deployed
+[debug] [2024-12-04T22:21:13.801Z] 1 Functions Errored
+[debug] [2024-12-04T22:21:13.801Z] 0 Function Deployments Aborted
+[debug] [2024-12-04T22:21:13.801Z] Average Function Deployment time: 69362
+[info] 
+[info] Functions deploy had errors with the following functions:
+	scheduleMessages(us-central1)
+[info] 
+[info] Unable to set the invoker for the IAM policy on the following functions:
+	scheduleMessages(us-central1)
+[info] 
+[info] Some common causes of this:
+[info] 
+[info] - You may not have the roles/functions.admin IAM role. Note that roles/functions.developer does not allow you to change IAM policies.
+[info] 
+[info] - An organization policy that restricts Network Access on your project.
+[info] i  functions: cleaning up build files... 
+[debug] [2024-12-04T22:21:14.036Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:14.037Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:14.039Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:14.039Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:14.039Z] >>> [apiv2][query] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dosagem-79271/locations/us-central1/repositories/gcf-artifacts/packages/schedule_messages [none]
+[debug] [2024-12-04T22:21:14.041Z] >>> [apiv2][query] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list [none]
+[debug] [2024-12-04T22:21:15.085Z] <<< [apiv2][status] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dosagem-79271/locations/us-central1/repositories/gcf-artifacts/packages/schedule_messages 404
+[debug] [2024-12-04T22:21:15.085Z] <<< [apiv2][body] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dosagem-79271/locations/us-central1/repositories/gcf-artifacts/packages/schedule_messages {"error":{"code":404,"message":"Package \"projects/dosagem-79271/locations/us-central1/repositories/gcf-artifacts/packages/schedule_messages\" was not found.","status":"NOT_FOUND"}}
+[debug] [2024-12-04T22:21:15.212Z] <<< [apiv2][status] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list 404
+[debug] [2024-12-04T22:21:15.212Z] <<< [apiv2][body] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list {"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}]}
+[debug] [2024-12-04T22:21:15.213Z] Failed docker command with error  Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}],"error":{"message":"Not Found"}},"response":{"statusCode":404}},"exit":1,"message":"Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found","status":404}
+[debug] [2024-12-04T22:21:15.218Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:15.218Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:15.218Z] >>> [apiv2][query] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list [none]
+[debug] [2024-12-04T22:21:15.690Z] <<< [apiv2][status] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list 404
+[debug] [2024-12-04T22:21:15.690Z] <<< [apiv2][body] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list {"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}]}
+[debug] [2024-12-04T22:21:15.691Z] Failed docker command with error  Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}],"error":{"message":"Not Found"}},"response":{"statusCode":404}},"exit":1,"message":"Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found","status":404}
+[debug] [2024-12-04T22:21:15.804Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:15.805Z] Checked if tokens are valid: true, expires at: 1733352922649
+[debug] [2024-12-04T22:21:15.805Z] >>> [apiv2][query] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list [none]
+[debug] [2024-12-04T22:21:16.345Z] <<< [apiv2][status] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list 404
+[debug] [2024-12-04T22:21:16.345Z] <<< [apiv2][body] GET https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list {"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}]}
+[debug] [2024-12-04T22:21:16.345Z] Failed docker command with error  Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"NAME_UNKNOWN","message":"Repository \"us.gcr.io\" not found"}],"error":{"message":"Not Found"}},"response":{"statusCode":404}},"exit":1,"message":"Request to https://us.gcr.io/v2/dosagem-79271/gcf/us-central1/tags/list had HTTP Error: 404, Not Found","status":404}
+[warn] !  functions: Unhandled error cleaning up build images. This could result in a small monthly bill if not corrected. You can attempt to delete these images by redeploying or you can delete them manually at https://console.cloud.google.com/gcr/images/dosagem-79271/us/gcf 
+[debug] [2024-12-04T22:21:16.347Z] Functions deploy failed.
+[debug] [2024-12-04T22:21:16.347Z] {
+  "endpoint": {
+    "id": "scheduleMessages",
+    "project": "dosagem-79271",
+    "region": "us-central1",
+    "entryPoint": "scheduleMessages",
+    "platform": "gcfv2",
+    "runtime": "nodejs18",
+    "scheduleTrigger": {
+      "schedule": "*/1 * * * *",
+      "timeZone": null,
+      "retryConfig": {
+        "maxBackoffSeconds": null,
+        "minBackoffSeconds": null,
+        "maxRetrySeconds": null,
+        "retryCount": null,
+        "maxDoublings": null
+      }
+    },
+    "labels": {
+      "deployment-tool": "cli-firebase"
+    },
+    "ingressSettings": null,
+    "availableMemoryMb": null,
+    "serviceAccount": null,
+    "timeoutSeconds": null,
+    "maxInstances": null,
+    "minInstances": null,
+    "concurrency": 80,
+    "vpc": null,
+    "environmentVariables": {
+      "FIREBASE_CONFIG": "{\"projectId\":\"dosagem-79271\",\"databaseURL\":\"https://dosagem-79271-default-rtdb.firebaseio.com\",\"storageBucket\":\"dosagem-79271.firebasestorage.app\"}",
+      "GCLOUD_PROJECT": "dosagem-79271",
+      "EVENTARC_CLOUD_EVENT_SOURCE": "projects/dosagem-79271/locations/us-central1/services/scheduleMessages"
+    },
+    "codebase": "default",
+    "cpu": 1,
+    "targetedByOnly": true,
+    "hash": "b106de46791a79fab631c95090645c83853b1f1e",
+    "uri": "https://us-central1-dosagem-79271.cloudfunctions.net/scheduleMessages",
+    "runServiceId": "schedulemessages"
+  },
+  "op": "set invoker",
+  "original": {
+    "name": "FirebaseError",
+    "children": [],
+    "exit": 1,
+    "message": "Failed to set the IAM Policy on the Service projects/dosagem-79271/locations/us-central1/services/schedulemessages",
+    "original": {
+      "name": "FirebaseError",
+      "children": [],
+      "context": {
+        "body": {
+          "error": {
+            "code": 403,
+            "message": "Permission 'run.services.setIamPolicy' denied on resource 'projects/dosagem-79271/locations/us-central1/services/schedulemessages' (or resource may not exist).",
+            "status": "PERMISSION_DENIED"
+          }
+        },
+        "response": {
+          "statusCode": 403
+        }
+      },
+      "exit": 1,
+      "message": "Request to https://run.googleapis.com/v1/projects/dosagem-79271/locations/us-central1/services/schedulemessages:setIamPolicy had HTTP Error: 403, Permission 'run.services.setIamPolicy' denied on resource 'projects/dosagem-79271/locations/us-central1/services/schedulemessages' (or resource may not exist).",
+      "status": 403
+    },
+    "status": 403,
+    "code": 403
+  }
+}
+[debug] [2024-12-04T22:21:16.539Z] Error: Failed to set invoker function scheduleMessages in region us-central1
+    at C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:52:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Fabricator.createV2Function (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:339:13)
+    at async Fabricator.createEndpoint (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:137:13)
+    at async handle (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:89:17)
+[error] 
+[error] Error: There was an error deploying functions
