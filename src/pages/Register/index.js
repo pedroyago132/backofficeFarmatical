@@ -49,7 +49,7 @@ const Register = () => {
             // Signed up 
             const user = userCredential.user;
             window.alert('Usuário criado com sucesso')
-            navigate('/qrcode')
+            navigate('/')
             setProgressive(false)
           })
           .catch((error) => {
