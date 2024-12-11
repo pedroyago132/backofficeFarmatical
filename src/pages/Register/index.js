@@ -61,8 +61,9 @@ const Register = () => {
             // ..
           });
 
-        set(ref(database, `${encodeEmail}/clientes`), {
-
+        set(ref(database, `${encodeEmail}/mensagens`), {
+          msgCadastro:'Olá vimos que acabou de fazer registro para receber horários das suas medicações,no horário extao você será lembrado',
+          msgHorario:'Olá Está no horário da sua medicação, lembre-se , horários são importantes'
         })
       }
     } catch (error) {

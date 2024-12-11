@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Body, ContainerRules, Input, Container2, ContainerEditAccordion,GreenBox, RedBox } from './styles';
+import { Body, ContainerRules, Input, Container2, ContainerEditAccordion, GreenBox, RedBox } from './styles';
 import { backgroundMenu } from '../../Globals/globals'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -119,6 +119,7 @@ const Measurement = () => {
     const [clientForTime, setClientforTime] = React.useState([{ clientes: [] }]);
     const [checkForTime, setCheckforTime] = React.useState([{}]);
     const [connectednumber, setConnectedNumber] = React.useState(false);
+    const [userData, setUserData] = React.useState({ msgCadastro: '', msgHorario: '' });
 
 
 
@@ -161,7 +162,22 @@ const Measurement = () => {
     }
 
 
+    React.useEffect(() => {
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setUserData(snapshot.val())
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }, []); // Atualiza sempre que 'items' mudar
 
+    function getDataUser() {
+        
+    }
 
 
     React.useEffect(() => {
@@ -234,35 +250,35 @@ const Measurement = () => {
     React.useEffect(() => {
         const dbRef = ref(database, `/`); // Referência para a coleção 'clientes'
 
-    
 
-            const intervalo = setInterval(() => {
-                const unsubscribe = onValue(dbRef, (snapshot) => {
-                    const data = snapshot.val();
-                    console.log('ITEM1::::::::',data)
-                    if (data) {
-                        const dataList = Object.keys(data).map((key) => ({
-                            id: key,
-                            clientes:data[key].clientes
-                        }));
-                        setClientforTime(dataList);
 
-                  
-                    
-    
-                    }else {
-                        return null // Define uma lista vazia caso não haja dados
-                    }
-                    console.log(clientForTime)
+        const intervalo = setInterval(() => {
+            const unsubscribe = onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                console.log('ITEM1::::::::', data)
+                if (data) {
+                    const dataList = Object.keys(data).map((key) => ({
+                        id: key,
+                        clientes: data[key].clientes
+                    }));
+                    setClientforTime(dataList);
 
-                });
-                return unsubscribe;
-              }, 27000); 
-              return () => clearInterval(intervalo);
 
-          
 
-         
+
+                } else {
+                    return null // Define uma lista vazia caso não haja dados
+                }
+                console.log(clientForTime)
+
+            });
+            return unsubscribe;
+        }, 27000);
+        return () => clearInterval(intervalo);
+
+
+
+
     }, [])
 
     async function checkTime(hour, minute) {
@@ -271,7 +287,7 @@ const Measurement = () => {
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
-    
+
             // Verifica se os horários são iguais
             if (currentHour === hour && currentMinute === minute) {
                 executeAction(); // Chama a função se coincidir
@@ -292,23 +308,23 @@ const Measurement = () => {
                             const agora = new Date();
                             const horas = String(agora.getHours()).padStart(2, "0");
                             const minutos = String(agora.getMinutes()).padStart(2, "0");
-                            if(clienteT.hora == `${horas}:${minutos}`){
-                              
-                                    const body = {
-                                        message: `Olá Está no horário da sua medicação ${cliente.remedio},agora as ${horas}:${minutos} lembre-se, Medicações devem seguir o horário a risca`,
-                                        phone: `55${cliente.contato}`,
-                                        delayMessage: 10
-                                    }
-                                    console.log('ENVIARMENSAGEM::::',cliente.contato)
-                                     sendMessageAll(body)
-                                
-                                } else{
-                                    return null
+                            if (clienteT.hora == `${horas}:${minutos}`) {
+
+                                const body = {
+                                    message: `${userData.msgHorario} - ${cliente.remedio},agora as ${horas}:${minutos}`,
+                                    phone: `55${cliente.contato}`,
+                                    delayMessage: 10
                                 }
+                                console.log('ENVIARMENSAGEM::::', cliente.contato)
+                                sendMessageAll(body)
+
+                            } else {
+                                return null
+                            }
 
 
-                            
-                       });
+
+                        });
                     });
                 }
             });
@@ -320,13 +336,13 @@ const Measurement = () => {
         const tokeni = '9A63F56F86E49E2446ED34DD';
 
         try {
-            const response = await dataInstance(idi,tokeni); // Aguarda a função retornar o resultado
-            console.log('DATAAQUI:::::::',response)
-            if(response.connected){
+            const response = await dataInstance(idi, tokeni); // Aguarda a função retornar o resultado
+            console.log('DATAAQUI:::::::', response)
+            if (response.connected) {
                 setConnectedNumber(true)
-             }else{
+            } else {
                 setConnectedNumber(false)
-             }
+            }
         } catch (error) {
             console.error('TRYCAYCHERROR:::::QRCODE:::', error); // Lida com erros
         }
@@ -334,8 +350,8 @@ const Measurement = () => {
 
     React.useEffect(() => {
         dataInstanceValue();
-       
-    },[])
+
+    }, [])
 
 
 
@@ -346,7 +362,7 @@ const Measurement = () => {
         } else {
 
             const body = {
-                message: 'Olá vimos que acabou de fazer registro para receber horários das suas medicações,no horário extao você será lembrado',
+                message: `${userData.msgCadastro}`,
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
@@ -376,7 +392,7 @@ const Measurement = () => {
                 }).then(responses => {
                     handleCloseRegister()
                     response.horario.map(e => {
-                        console.log('EEEEEEEEE:::::::::',e)
+                        console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e}`), {
                             hora: e
                         }).then(i => sendMessageAll(body))
@@ -405,7 +421,7 @@ const Measurement = () => {
     };
 
     const handleChangeMenu = (event) => {
-        if(connectednumber){
+        if (connectednumber) {
             if (event = 'Cadastrar Cliente') {
                 handleOpenRegister()
                 console.log('ok')
@@ -415,7 +431,7 @@ const Measurement = () => {
         } else {
             window.alert('Necessário Conectar Número de celular.')
         }
-       
+
     };
 
     const handleInputChangeRemedio = (remedioInput1, newValue) => {
@@ -443,29 +459,29 @@ const Measurement = () => {
                             ? formatarHorario(newValue) // Formatar a hora antes de atualizar
                             : horario
                     );
-    
+
                     return { ...input, horario: updatedHorario };
                 }
                 return input;
             })
         );
     };
-    
+
     // Função para formatar o horário
     const formatarHorario = (newValue) => {
         // Remove qualquer caractere não numérico
         const valoresNumericos = newValue.replace(/\D/g, "");
-        
+
         // Se tiver 4 ou mais números, formate como hora:minuto
         if (valoresNumericos.length >= 4) {
             // Formata no estilo "HH:MM"
             return `${valoresNumericos.slice(0, 2)}:${valoresNumericos.slice(2, 4)}`;
         }
-        
+
         // Se o valor for menor que 4 caracteres, apenas retorna o que foi digitado
         return valoresNumericos;
     };
-    
+
     const removeTask = (index) => {
         const newsInputs = remedioInput.filter((_, i) => i !== index);
         setRemedioInput(newsInputs);
@@ -506,7 +522,7 @@ const Measurement = () => {
     console.log('FILTERED:::::',)
 
     const RenderConnected = () => {
-        if(connectednumber){
+        if (connectednumber) {
             return (
                 <GreenBox>Conectado</GreenBox>
             )

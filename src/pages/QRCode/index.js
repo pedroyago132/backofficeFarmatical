@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import "firebase/database";
 import base64 from 'base-64'
 import { dataInstance, lerQRCode, listingInstances } from '../../services';
+import Header from '../../components/Header';
 
 const QRCodePage = () => {
     const navigate = useNavigate()
@@ -88,6 +89,8 @@ const QRCodePage = () => {
     },[])
 
     return (
+        <>
+        <Header />
         <PageContainer>
             <FormContainer>
 
@@ -100,7 +103,7 @@ const QRCodePage = () => {
 
             </FormContainer>
         </PageContainer>
-
+        </>
     );
 }
 

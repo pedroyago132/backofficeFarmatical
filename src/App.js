@@ -9,19 +9,20 @@ import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { getDatabase } from 'firebase/database';
 import { initMercadoPago } from '@mercadopago/sdk-react';
 import QRCode from './pages/QRCode';
+import Configuracao from './pages/Config';
+import Clientes from './pages/Clientes';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBfjrD4DDMz2ucwLvdxf3-6K98514ZaSdw",
-  authDomain: "app-project-farmatical.firebaseapp.com",
-  databaseURL: "https://app-project-farmatical-default-rtdb.firebaseio.com",
-  projectId: "app-project-farmatical",
-  storageBucket: "app-project-farmatical.firebasestorage.app",
-  messagingSenderId: "264403208467",
-  appId: "1:264403208467:web:a7fb74ed3c6c7998eff2e6",
-  measurementId: "G-XR9NWN60G6"
+  apiKey: "AIzaSyAuBuQVnz974K2fXi9iq2qgtDm5kkd93zk",
+  authDomain: "dosagem-79271.firebaseapp.com",
+  databaseURL: "https://dosagem-79271-default-rtdb.firebaseio.com",
+  projectId: "dosagem-79271",
+  storageBucket: "dosagem-79271.firebasestorage.app",
+  messagingSenderId: "258455838256",
+  appId: "1:258455838256:web:d8386e88c570417720d7f5",
+  measurementId: "G-MV68282QW7"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -84,6 +85,8 @@ function App() {
           <Route path="/measure" element={<Measurement />} />
           <Route path="/registro" element={<Register />} />
           <Route path="/qrcode" element={<QRCode />} />
+          <Route path="/config" element={<Configuracao />} />
+          <Route path="/clientes" element={<Clientes />} />
         </Routes>
       </BrowserRouter>
       </ThemeProvider>

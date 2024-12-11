@@ -16,7 +16,7 @@ import { setItem } from '../../storage/serviceState';
 import { backgroundMenu } from '../../Globals/globals';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Dashboard', 'Validar QRCode'];
+const pages = ['Dashboard', 'Validar QRCode','Configurações','Clientes'];
 const settings = ['Perfil','Sair'];
 
 
@@ -46,6 +46,10 @@ const Header = () => {
           navigate('/qrcode')
         } else if (page == 'Dashboard' ){
             navigate('/measure')
+        }else if (page == 'Configurações' ){
+            navigate('/config')
+        }else if (page == 'Clientes' ){
+            navigate('/clientes')
         }
 
        

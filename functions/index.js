@@ -40,7 +40,7 @@ exports.scheduleMessages = onSchedule("*/1 * * * *", async (event) => {
 
             if (clienteT.hora === `${horas}:${minutos}`) {
               const body = {
-                message: `Olá! Está no horário da sua medicação ${cliente.remedio}, agora às ${horas}:${minutos}. Lembre-se: medicações devem seguir o horário à risca.`,
+                message: `${client.mensagens.msgHorario} ${cliente.remedio}, agora às ${horas}:${minutos}. .`,
                 phone: `55${cliente.contato}`,
                 delayMessage: 10,
               };
