@@ -173,7 +173,7 @@ const Clientes = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-                        farmaceutico: data[key].farmaceutico,
+                     
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
                     }));
@@ -198,13 +198,17 @@ const Clientes = () => {
             nome: nomeInput || itemCliente.nome,
             cpf: cpfInput || itemCliente.cpf,
             contato: wppInput || itemCliente.contato,
-            acabaEm: itemCliente.acabaEm || itemCliente.acabaEm,
+            acabaEm: itemCliente.acabaEm,
             doses: remedioInput[0]?.doses || itemCliente.doses, // Acessa o primeiro item do array
             remedio: remedioInput[0]?.remedio || itemCliente.remedio, // Acessa o primeiro item do array
-            horario: remedioInput[0]?.horario ?? itemCliente.horario ?? [], // Acessa o primeiro item do array
+            horario: itemCliente.horario || remedioInput[0]?.horario  , // Acessa o primeiro item do array
+            dataCadastro: itemCliente.dataCadastro,
+            receita: true,
+            usoContinuo: itemCliente.usoContinuo,
+           
         };
     
-        console.log("remedioInput", remedioInput);
+        console.log("remedioInput", itemCliente);
         console.log("postData", postData);
     
         // Obtem uma chave para o novo post.
