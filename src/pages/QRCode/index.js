@@ -68,7 +68,7 @@ const QRCodePage = () => {
             const response = await dataInstance(idi,tokeni); // Aguarda a função retornar o resultado
             if(response.connected){
                 window.alert('Verificado Com Sucesso!')
-                navigate('/')
+                navigate('/dashboard')
             }else{
                 return null
             }
