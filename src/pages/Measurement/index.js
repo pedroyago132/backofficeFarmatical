@@ -827,7 +827,7 @@ const Measurement = () => {
 
 
                                         <ContainerEditAccordion>
-                                            <a onClick={() => handleOpenRegister(item)} style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
+                                            <a style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
                                                 Salvar Edição
                                             </a>
                                         </ContainerEditAccordion>
