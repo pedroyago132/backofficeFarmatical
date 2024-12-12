@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PageContainer, SubTitle, FormContainer, ContainerEditAccordion, Title, TitleForm } from './styles';
+import { PageContainer, SubTitle, FormContainer, ContainerEdit, Title, TitleForm, ContainerEditIn } from './styles';
 import { useNavigate } from 'react-router-dom';
 import QRCode from "react-qr-code";
 import { getDatabase, ref, child, push, update } from "firebase/database";
@@ -21,6 +21,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import "firebase/database";
+import { BorderBottom } from '@mui/icons-material';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -30,7 +31,7 @@ const Clientes = () => {
     const [user, setUser] = React.useState({ email: 'alo' });
     const [qrCode, setQRCode] = React.useState(false);
     const [dataClientes, setDataClientes] = React.useState([]);
-    const [itemCliente, setItemCliente] = React.useState([{nome:'',contato:0}]);
+    const [itemCliente, setItemCliente] = React.useState([{ nome: '', contato: 0 }]);
     const listaRef = React.useRef(null);
     const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0 }]);
 
@@ -39,10 +40,10 @@ const Clientes = () => {
     const [wppInput, setWppInput] = React.useState('');
 
     const [cpfInput, setCpfInput] = React.useState('');
-    const [usoContinuo, setUsoContinuo] = React.useState('');
+    const [usoContinuo, setUsoContinuo] = React.useState(false);
     const [receita, setReceita] = React.useState('');
- 
-  
+
+
 
 
 
@@ -173,7 +174,7 @@ const Clientes = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-                     
+
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
                     }));
@@ -182,7 +183,7 @@ const Clientes = () => {
                     setDataClientes([]);
                 }
             });
-    
+
             return unsubscribe; // Retorna a função de limpeza
         }
     }, [user]);
@@ -192,7 +193,7 @@ const Clientes = () => {
     function writeNewPost() {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
-    
+
         // Cria uma entrada de post.
         const postData = {
             nome: nomeInput || itemCliente.nome,
@@ -201,182 +202,152 @@ const Clientes = () => {
             acabaEm: itemCliente.acabaEm,
             doses: remedioInput[0]?.doses || itemCliente.doses, // Acessa o primeiro item do array
             remedio: remedioInput[0]?.remedio || itemCliente.remedio, // Acessa o primeiro item do array
-            horario: itemCliente.horario || remedioInput[0]?.horario  , // Acessa o primeiro item do array
+            horario: itemCliente.horario || remedioInput[0]?.horario, // Acessa o primeiro item do array
             dataCadastro: itemCliente.dataCadastro,
             receita: true,
             usoContinuo: itemCliente.usoContinuo,
-           
+
         };
-    
+
         console.log("remedioInput", itemCliente);
         console.log("postData", postData);
-    
+
         // Obtem uma chave para o novo post.
         const newPostKey = push(child(ref(db), '/')).key;
-    
+
         // Atualiza os dados no banco, usando a chave gerada como índice.
         const updates = {};
         updates[`${email64}/clientes/${itemCliente.nome}${itemCliente.remedio}`] = postData;
-    
+
         return update(ref(db), updates)
             .then(() => window.alert('Alterado com sucesso!!'))
             .catch((log) => console.log('ERROREDITUSER:::::', log));
     }
-    
-    
+
+    const handleinputedit = (e) => {
+        if(e == 'on'){
+           setUsoContinuo(true)
+        }else if (!e || e !== 'on' ){
+           setUsoContinuo(false)
+        }
+    }
+
+
 
 
     return (
         <>
             <Header />
             <PageContainer>
+            <Title>Edite caso precise</Title>
+            <SubTitle>1. Insira as informações que queira editar</SubTitle>
+            <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
                 <FormContainer>
 
-                    <Title>Aqui você verá a lista de seus clientes</Title>
-                    <SubTitle>Edite dados caso precise</SubTitle>
-                   
+                    {
+                        dataClientes.length > 0 ? (dataClientes.map((item) => {
+                            if (item.nome) {
+                                return <div style={{borderBottom:2,borderColor:'red'}} >
+                                 <ContainerEdit >
+                                    <ContainerEditIn>
+                                        Nome: {item.nome}
+                                        <TextField
+                                            id={`outlined-basic`}
+                                            label={`editar Nome`}
+                                            fullWidth
+                                            variant="outlined"
+
+                                        />
+
+                                    </ContainerEditIn>
+                                    <ContainerEditIn>
+                                        Contato:{item.contato}
+                                        <TextField
+                                            id={`outlined-basic`}
+                                            label={`Editar Contato`}
+                                            fullWidth
+                                            variant="outlined"
+
+                                        />
+                                    </ContainerEditIn>
+                                    <ContainerEditIn>
+                                        CPF:{item.cpf}
+                                        <TextField
+                                            id={`outlined-basic`}
+                                            label={`Mensagem de lembrete - Horários`}
+                                            fullWidth
+                                            variant="outlined"
+
+                                        />
+                                    </ContainerEditIn>
+                                    {
+                                        Object.values(item.horario).map((hor, index) => (
+                                            <ContainerEditIn key={index}>
+                                                Horário: {hor.hora}
+                                                <TextField
+                                                    id={`outlined-basic-${index}`}
+                                                    label="Mensagem de lembrete - Horários"
+                                                    fullWidth
+                                                    variant="outlined"
+                                                />
+                                            </ContainerEditIn>
+                                        ))
+                                    }
 
 
-                    <Modal
-                        open={openRegister}
-                        onClose={handleCloseRegister}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={styleModalRegister} ref={listaRef} >
-                            <a
-                                onClick={() => handleCloseRegister()}
-                                style={{
-                                    fontSize: 19,
-                                    color: 'red',
-                                    cursor: 'pointer',
-                                    alignSelf: 'flex-end',
-                                    padding: 5,
-                                    border: '1px dotted red',
-                                }}
-                            >
-                                X
-                            </a>
-                            <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: 'bold', fontSize: 18 }} >
-                                Dados para cadastro do Cliente/Paciente
-                            </Typography>
-                            <TextField id="outlined-basic-nome"  label="Nome" onChange={text => setNomeInput(text.target.value)} fullWidth variant="outlined" />
-                            <TextField id="outlined-basic-wpp" label="Whatsapp" onChange={text => setWppInput(text.target.value)} fullWidth variant="outlined" />
-                            <TextField id="outlined-basic-cpf" label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
 
-                            {
-                                remedioInput.map((response, remedioIndex) => (
-                                    <div key={remedioIndex}>
-                                        <div style={{ width: "100%", display: 'flex' }}>
-                                            <div style={{ width: "50%" }}>
-                                                <Typography
-                                                    id="modal-modal-title"
-                                                    variant="h6"
-                                                    style={{
-                                                        fontWeight: '400',
-                                                        margin: 5,
-                                                        alignSelf: 'flex-start',
-                                                        fontSize: 12,
-                                                    }}
-                                                >
-                                                    Remédio {remedioIndex + 1}:
-                                                </Typography>
-                                            </div>
-                                            <div
-                                                style={{
-                                                    width: "50%",
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: "flex-end",
-                                                    margin: 5,
-                                                }}
-                                            >
-                                                <a
-                                                    onClick={() => removeTask(remedioIndex)}
-                                                    style={{
-                                                        fontSize: 13,
-                                                        color: 'red',
-                                                        cursor: 'pointer',
-                                                        alignSelf: 'flex-end',
-                                                        padding: 5,
-                                                        border: '1px solid red',
-                                                    }}
-                                                >
-                                                    Excluir Remédio
-                                                </a>
-                                            </div>
+
+
+                               
+                                    <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
+                                        <div style={{ display: 'flex' }} >
+                                            <Checkbox {...label} id='checkcontinuo' onChange={value => handleinputedit(value.target.value)} />
+                                            <a style={{ marginTop: 8 }}  >Uso continuo </a>
+
+                                            <Checkbox {...label} id='checkcontinuo' onChange={value => setReceita(value.target.value)} />
+                                            <a style={{ marginTop: 8 }}  >Precisa de Receita </a>
                                         </div>
+                                      {
+                                    usoContinuo && (
                                         <TextField
-                                            id="outlined-basic-remedio"
-                                            label="Nome do remédio"
-                                            style={{ width: '100%' }}
-                                            onChange={(text) =>
-                                                handleInputChangeRemedio(response.remedio, text.target.value)
-                                            }
-                                           
+                                        id={`outlined-basic`}
+                                        label={`Envie 36 horas antes - Uso Contínuo`}
+                                        fullWidth
+                                        variant="outlined"
+                                      
+                                    />
+                                    ) 
+                                      }
+                                        
+                                      {
+                                        receita == 'on' ? (
+                                       <TextField
+                                            id={`outlined-basic`}
+                                            label={`Envie 36 horas antes - RECEITA`}
+                                            fullWidth
                                             variant="outlined"
+
                                         />
-                                        <TextField
-                                            id="outlined-basic-remedio"
-                                            label="Doses"
-                                            style={{ width: '100%' }}
-                                            onChange={(text) =>
-                                                handleInputChangeDoses(response.remedio, text.target.value)
-                                            }
-                                            value={response.doses}
-                                            variant="outlined"
-                                        />
-                                        {response.horario.map((horario, horarioIndex) => (
-                                            <TextField
-                                                key={horarioIndex}
-                                                id={`outlined-basic-horario-${horarioIndex}`}
-                                                label={`Horário ${horarioIndex + 1}`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={(text) =>
-                                                    handleInputChangehorario(
-                                                        response.remedio,
-                                                        horarioIndex,
-                                                        text.target.value
-                                                    )
-                                                }
-                                                value={horario.hora}
-                                            />
-                                        ))}
-                                        <Button
-                                            style={{ marginTop: 10, alignSelf: 'flex-start' }}
-                                            variant="outlined"
-                                            onClick={() => addHorario(remedioIndex)}
-                                        >
-                                            Adicionar Horário
-                                        </Button>
-                                        <div style={{ width: '97%', border: '1px dotted grey' }} />
+                                    ) : null
+                                }
                                     </div>
-                                ))
+                                    <Button style={{ alignSelf: 'center' }} onClick={() => null} variant="contained">Salvar Edição</Button>
+                      
+                                    </ContainerEdit>
+                                    
+                                </div>
+                                
+                            } else {
+                                return null
                             }
-                            <Button style={{ marginTop: 10, }} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</Button>
+                        })) : (
+                            <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} > Nenhum usuário cadastrado </Typography>
+
+                        )
+                    }
 
 
 
-                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
-                                <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '500', fontSize: 14 }} >
-                                    Uso contínuo
-                                </Typography>
-                                <Checkbox {...label} id='checkcontinuo' onChange={value => setUsoContinuo(value.target.value)} />
-                            </div>
-
-                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
-                                <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: '500', fontSize: 14 }} >
-                                    Precisa de receita
-                                </Typography>
-                                <Checkbox {...label} id='checkreceita' onChange={value => setReceita(value.target.value)} />
-                            </div>
-
-
-                            <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => writeNewPost()}>Enviar</Button>
-
-                        </Box>
-                    </Modal>
 
 
                 </FormContainer>

@@ -357,17 +357,13 @@ const Measurement = () => {
 
 
 
-    function setNewClient() {
-        const database = getDatabase()
+   async function setNewClient() {
+     try{   const database = getDatabase()
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
 
-            const body = {
-                message: `${userData.msgCadastro}`,
-                phone: `55${wppInput}`,
-                delayMessage: 10
-            }
+          
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
                 const dosesCount = response.doses
@@ -391,19 +387,33 @@ const Measurement = () => {
                     horario: time,
                     dataCadastro: date
                 }).then(responses => {
-                    handleCloseRegister()
-                    response.horario.map(e => {
+                  
+                    Object.values(response.horario).forEach(e =>  {
                         console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e}`), {
                             hora: e
-                        }).then(i => sendMessageAll(body))
+                        })
                     })
 
-                })
+                }
+               
+            )
+           
             })
 
         }
-
+        const body = {
+            message: `${userData.msgCadastro}`,
+            phone: `55${wppInput}`,
+            delayMessage: 10
+        }
+        const response = await sendMessageAll(body)
+        handleCloseRegister()
+        return response
+       
+    } catch (error) {
+        console.log(error)
+    }
 
     }
 
@@ -862,56 +872,7 @@ export default Measurement
    {
                             dataClientes.length > 0 ? (dataClientes.map((item) => {
                                 if (item.nome) {
-                                    return <Accordion defaultExpanded style={{ alignSelf: 'flex-start', width: 450 }} >
-                                        <AccordionSummary
-                                            expandIcon={<ArrowDownwardIcon />}
-                                            aria-controls="panel1-content"
-                                            id="panel1-header"
-                                        >
-                                            <Typography>{item.nome}</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails  >
-
-                                            <Typography style={{ fontWeight: 'bold' }} >
-                                                Medicações:
-                                            </Typography>
-                                            <Typography style={{ marginTop: 12 }} >
-                                                {item.remedio} <br />
-                                            </Typography>
-
-                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
-                                            <Typography >
-                                                {item.remedio} ({item.horario}) <br /> 
-                                            </Typography>
-
-                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                                Contato:
-                                            </Typography>
-                                            <Typography>
-                                                {item.whatsapp} <br />
-                                            </Typography>
-
-                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                                Data do registro:
-                                            </Typography>
-                                            <Typography>
-                                                06/11/2024 <br />
-                                            </Typography>
-
-                                            <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                                Cadastrado por:
-                                            </Typography>
-                                            <Typography>
-                                                {item.farmaceutico}<br />
-                                            </Typography>
-                                            <ContainerEditAccordion>
-                                                <Typography style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
-                                                    Editar
-                                                </Typography>
-                                            </ContainerEditAccordion>
-
-                                        </AccordionDetails>
-                                    </Accordion>
+                                    return 
                                 } else {
                                     return null
                                 }
