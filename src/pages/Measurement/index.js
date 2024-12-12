@@ -813,7 +813,7 @@ const Measurement = () => {
                                         </Typography>
 
                                         <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                            Contato:
+                                            Contato número: {item.contato} 
                                         </Typography>
                                         <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={contatoEdit} label={`Editar Número: ${item.contato}`} onChange={text => setValueContatoEdit(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
 
