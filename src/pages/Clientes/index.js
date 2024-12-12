@@ -234,66 +234,7 @@ const Clientes = () => {
 
                     <Title>Aqui você verá a lista de seus clientes</Title>
                     <SubTitle>Edite dados caso precise</SubTitle>
-                    {
-                        dataClientes.map((item) => {
-                            if (item.nome) {
-                                return <Accordion defaultExpanded style={{ alignSelf: 'flex-start', width: '97%' }} >
-                                    <AccordionSummary
-                                        expandIcon={<ArrowDownwardIcon />}
-                                        aria-controls="panel1-content"
-                                        id="panel1-header"
-                                        f
-                                    >
-                                        <Typography>{item.nome}</Typography>
-                                    </AccordionSummary  >
-                                    <AccordionDetails  >
-
-                                        <Typography style={{ fontWeight: 'bold' }} >
-                                            Medicação:
-                                        </Typography>
-                                        <Typography style={{ marginTop: 12 }} >
-                                            {item.remedio} <br />
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
-                                        <Typography>
-                                            {item.remedio} (
-                                            {Array.isArray(item.horario)
-                                                ? item.horario.map((horario, index) => (
-                                                    <span key={index}>{horario.hora}</span>
-                                                )).join(", ")
-                                                : item.horario?.hora || "Sem horário"}
-                                            ) <br />
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                            Contato:
-                                        </Typography>
-                                        <Typography>
-                                            {item.contato} <br />
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                            Data do registro:
-                                        </Typography>
-                                        <Typography>
-                                            {item.dataCadastro} <br />
-                                        </Typography>
-
-
-                                        <ContainerEditAccordion>
-                                            <a onClick={() => handleOpenRegister(item)} style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
-                                                Editar
-                                            </a>
-                                        </ContainerEditAccordion>
-
-                                    </AccordionDetails>
-                                </Accordion>
-                            } else {
-                                return null
-                            }
-                        })
-                    }
+                   
 
 
                     <Modal

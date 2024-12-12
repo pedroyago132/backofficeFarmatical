@@ -121,6 +121,8 @@ const Measurement = () => {
     const [connectednumber, setConnectedNumber] = React.useState(false);
     const [userData, setUserData] = React.useState({ msgCadastro: '', msgHorario: '' });
 
+    const [contatoEdit, setValueContatoEdit] = React.useState('');
+
 
 
 
@@ -176,7 +178,7 @@ const Measurement = () => {
     }, []); // Atualiza sempre que 'items' mudar
 
     function getDataUser() {
-        
+
     }
 
 
@@ -229,7 +231,7 @@ const Measurement = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-                        farmaceutico: data[key].farmaceutico,
+
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro
                     }));
@@ -386,7 +388,6 @@ const Measurement = () => {
                     cpf: cpfInput,
                     receita: receita,
                     usoContinuo: usoContinuo,
-                    farmaceutico: farmaceutico,
                     horario: time,
                     dataCadastro: date
                 }).then(responses => {
@@ -422,11 +423,11 @@ const Measurement = () => {
 
     const handleChangeMenu = (event) => {
         if (connectednumber) {
-            if (event = 'Cadastrar Cliente') {
+            if (event == 'Cadastrar Cliente') {
                 handleOpenRegister()
                 console.log('ok')
-            } else {
-                return null
+            } else if (event == 'Ver Todos') {
+                handleOpenList()
             }
         } else {
             window.alert('Necessário Conectar Número de celular.')
@@ -763,6 +764,83 @@ const Measurement = () => {
                         }
                     </div>
                     <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={messageAll} label="Enviar para todos" onChange={text => setMessageAll(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
+
+                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => sendAll()}>Enviar</Button>
+
+
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openList}
+                onClose={handleCloseList}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={styleModalList}>
+                    {
+                        dataClientes.map((item) => {
+                           
+                            if (item.nome) {
+                             
+                                return <Accordion style={{ alignSelf: 'flex-start', width: '97%' }} >
+                                    <AccordionSummary
+                                        expandIcon={<ArrowDownwardIcon />}
+                                        aria-controls="panel1-content"
+                                        id="panel1-header"
+
+                                    >
+                                        <Typography>{item.nome}</Typography>
+                                    </AccordionSummary  >
+                                    <AccordionDetails  >
+
+                                        <Typography style={{ fontWeight: 'bold' }} >
+                                            Medicação:
+                                        </Typography>
+                                        <Typography style={{ marginTop: 12 }} >
+                                            {item.remedio} <br />
+                                        </Typography>
+
+                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
+                                        <Typography>
+                                            {item.remedio} (
+                                            {Array.isArray(item.horario)
+                                                ? item.horario.map((horario, index) => (
+                                                    <span key={index}>{horario.hora}</span>
+                                                )).join(", ")
+                                                : item.horario?.hora || "Sem horário"}
+                                            ) <br />
+                                        </Typography>
+
+                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
+                                            Contato:
+                                        </Typography>
+                                        <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={contatoEdit} label={`Editar Número: ${item.contato}`} onChange={text => setValueContatoEdit(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
+
+
+                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
+                                            Data do registro:
+                                        </Typography>
+                                        <Typography>
+                                            {item.dataCadastro} <br />
+                                        </Typography>
+
+
+                                        <ContainerEditAccordion>
+                                            <a onClick={() => handleOpenRegister(item)} style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
+                                                Salvar Edição
+                                            </a>
+                                        </ContainerEditAccordion>
+
+                                    </AccordionDetails>
+                                </Accordion>
+                            } else {
+                                return null
+                            }
+                        })
+                    }
+
+                    <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={messageAll} label="Enviar Mensagem para todos" onChange={text => setMessageAll(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
 
                     <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => sendAll()}>Enviar</Button>
 
