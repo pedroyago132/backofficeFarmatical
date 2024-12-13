@@ -190,23 +190,24 @@ const Clientes = () => {
 
 
 
-    function writeNewPost(item, inputNome, horarios) {
+    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo) {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
         console.log()
 
-        if(item.nome != inputNome){
+        if (item.nome != inputNome) {
             const postNome = {
-                nome:inputNome,
+                nome: inputNome,
                 cpf: item.cpf,
-                        contato: item.contato,
-                        acabaEm: item.acabaEm,
-                        doses: item.doses,
-                        remedio: item.remedio,
-                        horario: item.horario,
-                        dataCadastro: item.dataCadastro,
-                        receita: true,
-                        usoContinuo: item.usoContinuo,
+                contato: item.contato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: item.remedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                msgUsoContinuo:item.msgUsoContinuo,
+                msgReceita:item.msgReceita
             }
 
             const updates = {};
@@ -215,55 +216,147 @@ const Clientes = () => {
             return update(ref(db), updates)
                 .then(() => window.alert('Nome alterado com sucesso!!'))
                 .catch((log) => console.log('ERROREDITUSER:::::', log));
-        } else {
 
-        Object.values(horarios).forEach(horario => {
-            Object.values(item.horario).forEach(horarioT => {
-                if (horarioT.hora != horario.hora) {
-                    const postHorario = {
-                        hora:horario.hora
-                       
+        } else if (item.contato != inputContato) {
+            const postNome = {
+                nome: item.nome,
+                cpf: item.cpf,
+                contato: inputContato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: item.remedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                usoContinuo: item.usoContinuo,
+                msgUsoContinuo:item.msgUsoContinuo,
+                msgReceita:item.msgReceita
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Contato alterado com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+
+        } else if (item.remedio != inputRemedio) {
+            const postNome = {
+                nome: item.nome,
+                cpf: item.cpf,
+                contato: item.contato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: inputRemedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                usoContinuo: item.usoContinuo,
+                msgUsoContinuo:item.msgUsoContinuo,
+                msgReceita:item.msgReceita
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Remedio alterado com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+
+        } else if (item.msgUsoContinuo != inputUsoContinuo){
+            const postNome = {
+                nome: item.nome,
+                cpf: item.cpf,
+                contato: item.contato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: item.remedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                usoContinuo: item.usoContinuo,
+                msgUsoContinuo:inputUsoContinuo,
+                msgReceita:item.msgReceita
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Mensgaem para USO CONTINUO alterado com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+        }else if (item.msgReceita != inputReceita){
+            const postNome = {
+                nome: item.nome,
+                cpf: item.cpf,
+                contato: item.contato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: item.remedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                usoContinuo: item.usoContinuo,
+                msgUsoContinuo:item.msgUsoContinuo,
+                msgReceita:inputReceita
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Mensagem para RECEITA alterada com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+        }
+        else {
+
+            Object.values(horarios).forEach(horario => {
+                Object.values(item.horario).forEach(horarioT => {
+                    if (horarioT.hora != horario.hora) {
+                        const postHorario = {
+                            hora: horario.hora
+
+                        }
+
+                        const updates = {};
+                        updates[`${email64}/clientes/${item.cpf}/horario/${horarioT.hora}`] = postHorario;
+
+                        return update(ref(db), updates)
+                            .then(() => window.alert('Horario alterado com sucesso!!'))
+                            .catch((log) => console.log('ERROREDITUSER:::::', log));
+
+
+                    } else if (horarioT.hora == horario.hora) {
+                        const postData = {
+                            nome: inputNome || item.nome,
+                            cpf: item.cpf,
+                            contato: item.contato,
+                            acabaEm: item.acabaEm,
+                            doses: item.doses,
+                            remedio: item.remedio,
+                            horario: item.horario || horario,
+                            dataCadastro: item.dataCadastro,
+                            receita: true,
+                            usoContinuo: item.usoContinuo,
+                        };
+
+
+
+                        // Obtem uma chave para o novo post.
+                        const newPostKey = push(child(ref(db), '/')).key;
+
+                        // Atualiza os dados no banco, usando a chave gerada como índice.
+                        const updates = {};
+                        updates[`${email64}/clientes/${item.nome}${item.remedio}`] = postData;
+
+                        return update(ref(db), updates)
+                            .then(() => window.alert('Alterado com sucesso!!'))
+                            .catch((log) => console.log('ERROREDITUSER:::::', log));
                     }
-
-                    const updates = {};
-                    updates[`${email64}/clientes/${item.cpf}/horario/${horarioT.hora}`] = postHorario;
-
-                    return update(ref(db), updates)
-                        .then(() => window.alert('Horario alterado com sucesso!!'))
-                        .catch((log) => console.log('ERROREDITUSER:::::', log));
-                    
-
-                } else if (horarioT.hora == horario.hora) {
-                    const postData = {
-                        nome: inputNome || item.nome,
-                        cpf: item.cpf,
-                        contato: item.contato,
-                        acabaEm: item.acabaEm,
-                        doses: item.doses,
-                        remedio: item.remedio,
-                        horario: item.horario || horario,
-                        dataCadastro: item.dataCadastro,
-                        receita: true,
-                        usoContinuo: item.usoContinuo,
-                    };
-
-
-
-                    // Obtem uma chave para o novo post.
-                    const newPostKey = push(child(ref(db), '/')).key;
-
-                    // Atualiza os dados no banco, usando a chave gerada como índice.
-                    const updates = {};
-                    updates[`${email64}/clientes/${item.nome}${item.remedio}`] = postData;
-
-                    return update(ref(db), updates)
-                        .then(() => window.alert('Alterado com sucesso!!'))
-                        .catch((log) => console.log('ERROREDITUSER:::::', log));
-                }              
-                else return null
+                    else return null
+                })
             })
-        })
-    }
+        }
 
         // Cria uma entrada de post.
 
@@ -292,9 +385,11 @@ const Clientes = () => {
                     {
                         dataClientes.length > 0 ? (dataClientes.map((item) => {
                             let inputNome = item.nome;
-                            let inputContato = '';
-                            let inputCPF = '';
+                            let inputContato = item.contato;
+                            let inputRemedio = item.remedio;
+                            let inputUsoContinuo = 'item.msgUsoContinuo';
                             let horarios = []; // Inicia com um array vazio
+
                             const handleEventTargert = (text) => {
                                 inputNome = text
 
@@ -305,8 +400,13 @@ const Clientes = () => {
 
                             }
 
-                            const handleEventCPF = (text) => {
-                                inputCPF = text
+                            const handleEventRemedio = (text) => {
+                                inputRemedio = text
+
+                            }
+
+                            const handleEventUsoContinuo = (text) => {
+                                inputUsoContinuo = text
 
                             }
 
@@ -319,7 +419,7 @@ const Clientes = () => {
                             };
 
                             if (item.nome) {
-                                return <div style={{ borderBottom: 2, borderColor: 'red' }} >
+                                return <div style={{ borderBottom: 1, borderColor: 'blak', marginTop:10 }} >
                                     <ContainerEdit >
                                         <ContainerEditIn>
                                             Nome: {item.nome}
@@ -333,6 +433,16 @@ const Clientes = () => {
 
                                         </ContainerEditIn>
                                         <ContainerEditIn>
+                                            Remédio:{item.remedio}
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`Editar Remedio`}
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={text => handleEventRemedio(text.target.value)}
+                                            />
+                                        </ContainerEditIn>
+                                        <ContainerEditIn>
                                             Contato:{item.contato}
                                             <TextField
                                                 id={`outlined-basic`}
@@ -342,16 +452,7 @@ const Clientes = () => {
                                                 onChange={text => handleEventContato(text.target.value)}
                                             />
                                         </ContainerEditIn>
-                                        <ContainerEditIn>
-                                            CPF:{item.cpf}
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`Editar CPF`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventCPF(text.target.value)}
-                                            />
-                                        </ContainerEditIn>
+                                   
                                         {Object.values(item.horario || []).map((hor, index) => (
                                             <ContainerEditIn key={index}>
                                                 Horário: {hor.hora}
@@ -376,7 +477,7 @@ const Clientes = () => {
                                                 label={`Envie 36 horas antes - Uso Contínuo`}
                                                 fullWidth
                                                 variant="outlined"
-
+                                                onChange={text => handleEventUsoContinuo(text.target.value)}
                                             />
 
 
@@ -391,7 +492,7 @@ const Clientes = () => {
                                             />
 
                                         </div>
-                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios)} variant="contained">Salvar Edição</Button>
+                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo)} variant="contained">Salvar Edição</Button>
 
                                     </ContainerEdit>
 

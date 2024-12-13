@@ -120,7 +120,8 @@ const Measurement = () => {
     const [checkForTime, setCheckforTime] = React.useState([{}]);
     const [connectednumber, setConnectedNumber] = React.useState(false);
     const [userData, setUserData] = React.useState({ msgCadastro: '', msgHorario: '' });
-
+    const [inputUsocontinuo, setInputUsoContinuo] = React.useState('');
+    const [inputReceita, setInputReceita] = React.useState('');
     const [contatoEdit, setValueContatoEdit] = React.useState('');
 
 
@@ -385,7 +386,9 @@ const Measurement = () => {
                     receita: receita,
                     usoContinuo: usoContinuo,
                     horario: time,
-                    dataCadastro: date
+                    dataCadastro: date,
+                    msgUsoContinuo:inputUsocontinuo,
+                    msgReceita:inputReceita
                 }).then(responses => {
                   
                     Object.values(response.horario).forEach(e =>  {
@@ -736,6 +739,20 @@ const Measurement = () => {
                             Uso contínuo
                         </Typography>
                         <Checkbox {...label} id='checkcontinuo' onChange={value => setUsoContinuo(value.target.value)} />
+                            {
+                                usoContinuo == 'on' ? (
+                                    <TextField
+                                    id="outlined-basic-remedio"
+                                    label="Doses"
+                                    style={{ width: '100%' }}
+                                    onChange={(text) =>
+                                        setInputUsoContinuo(response.remedio, text.target.value)
+                                    }
+                                    variant="outlined"
+                                    value={inputUsocontinuo}
+                                />
+                                ) : null
+                            }
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
@@ -743,6 +760,21 @@ const Measurement = () => {
                             Precisa de receita
                         </Typography>
                         <Checkbox {...label} id='checkreceita' onChange={value => setReceita(value.target.value)} />
+
+                        {
+                                receita == 'on' ? (
+                                    <TextField
+                                    id="outlined-basic-remedio"
+                                    label="Doses"
+                                    style={{ width: '100%' }}
+                                    onChange={(text) =>
+                                        setInputReceita(response.remedio, text.target.value)
+                                    }
+                                    variant="outlined"
+                                    value={inputReceita}
+                                />
+                                ) : null
+                            }
                     </div>
 
 

@@ -98,7 +98,7 @@ const Configuracao = () => {
                         value={msgCadastro}
                     />
 
-                    <SubTitle>Mensagem Padrão: {userData.msgCadastro}</SubTitle>
+                    <SubTitle>Mensagem Escolhida: {userData.msgCadastro}</SubTitle>
 
 
                     <TitleForm>Enviado para horário das medicações:</TitleForm>
@@ -115,7 +115,7 @@ const Configuracao = () => {
                         value={msgHorario}
                     />
 
-                    <SubTitle>Mensagem Padrão: {userData.msgHorario}</SubTitle>
+                    <SubTitle>Mensagem Escolhida: {userData.msgHorario}</SubTitle>
 
 
                     <Button id='Button-id' fullWidth variant='outlined' onClick={() => writeNewPost()} >Salvar</Button>

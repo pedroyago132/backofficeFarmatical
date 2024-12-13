@@ -7,7 +7,7 @@ export const PageContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color:${backgroundColor}
+  background-color:${backgroundColor};
 `;
 
 // Estilizando o formulário
@@ -24,11 +24,15 @@ export const FormContainer = styled.div`
   gap:15px;
   align-items:center;
   justify-content:center;
+   @media (max-width: 768px) { 
+    width:95%;
+    height:90%;
+  }
 `;
 
 export const Title = styled.a`
 color:black;
-font-size:21px;
+font-size:24px;
 font-weight:bold;
 `
 
@@ -40,7 +44,7 @@ font-weight:600;
 
 export const SubTitle = styled.a`
 color:grey;
-font-size:14px;
+font-size:18px;
 font-weight:500;
 `
 // Estilizando os campos de entrada
