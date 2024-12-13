@@ -174,7 +174,8 @@ const Clientes = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-
+                        msgUsoContinuo:data[key].msgUsoContinuo,
+                        msgReceita:data[key].msgReceita,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
                     }));
@@ -190,7 +191,7 @@ const Clientes = () => {
 
 
 
-    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo) {
+    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo,inputReceita) {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
         console.log()
@@ -241,6 +242,7 @@ const Clientes = () => {
                 .catch((log) => console.log('ERROREDITUSER:::::', log));
 
         } else if (item.remedio != inputRemedio) {
+            console.log(item.msgUsoContinuo)
             const postNome = {
                 nome: item.nome,
                 cpf: item.cpf,
@@ -384,29 +386,37 @@ const Clientes = () => {
 
                     {
                         dataClientes.length > 0 ? (dataClientes.map((item) => {
+                            console.log(item)
                             let inputNome = item.nome;
                             let inputContato = item.contato;
                             let inputRemedio = item.remedio;
-                            let inputUsoContinuo = 'item.msgUsoContinuo';
-                            let horarios = []; // Inicia com um array vazio
+                            let inputUsoContinuo = item.msgUsoContinuo;
+                            let inputReceita = item.msgReceita;
+                            let horarios = []; 
+                            console.log('MSG::::::::', item)
 
                             const handleEventTargert = (text) => {
-                                inputNome = text
+                                inputNome = text;
 
                             }
 
                             const handleEventContato = (text) => {
-                                inputContato = text
+                                inputContato = text;
 
                             }
 
                             const handleEventRemedio = (text) => {
-                                inputRemedio = text
+                                inputRemedio = text;
 
                             }
 
                             const handleEventUsoContinuo = (text) => {
-                                inputUsoContinuo = text
+                                inputUsoContinuo = text;
+
+                            }
+
+                            const handleEventReceita = (text) => {
+                                inputReceita = text;
 
                             }
 
@@ -429,6 +439,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventTargert(text.target.value)}
+                                               
                                             />
 
                                         </ContainerEditIn>
@@ -440,6 +451,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventRemedio(text.target.value)}
+                                               
                                             />
                                         </ContainerEditIn>
                                         <ContainerEditIn>
@@ -450,6 +462,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventContato(text.target.value)}
+                                              
                                             />
                                         </ContainerEditIn>
                                    
@@ -478,6 +491,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventUsoContinuo(text.target.value)}
+                                             
                                             />
 
 
@@ -488,11 +502,12 @@ const Clientes = () => {
                                                 label={`Envie 36 horas antes para RECEITA`}
                                                 fullWidth
                                                 variant="outlined"
-
+                                                onChange={text => handleEventReceita(text.target.value)}
+                                             
                                             />
 
                                         </div>
-                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo)} variant="contained">Salvar Edição</Button>
+                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo,inputReceita)} variant="contained">Salvar Edição</Button>
 
                                     </ContainerEdit>
 

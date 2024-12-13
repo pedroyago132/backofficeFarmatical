@@ -120,8 +120,8 @@ const Measurement = () => {
     const [checkForTime, setCheckforTime] = React.useState([{}]);
     const [connectednumber, setConnectedNumber] = React.useState(false);
     const [userData, setUserData] = React.useState({ msgCadastro: '', msgHorario: '' });
-    const [inputUsocontinuo, setInputUsoContinuo] = React.useState('');
-    const [inputReceita, setInputReceita] = React.useState('');
+    const [inputUsocontinuo, setInputUsoContinuo] = React.useState('Sua medicação esta acabando lembre-se de comprar');
+    const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
     const [contatoEdit, setValueContatoEdit] = React.useState('');
 
 
