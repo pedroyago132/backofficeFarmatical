@@ -374,7 +374,7 @@ const Measurement = () => {
 
                 // Adiciona a data ao objeto response
                 response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
-                set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}`), {
+                set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}`), {
 
                     acabaEm: response.acabaEm,
                     nome: nomeInput,
@@ -390,7 +390,7 @@ const Measurement = () => {
                   
                     Object.values(response.horario).forEach(e =>  {
                         console.log('EEEEEEEEE:::::::::', e)
-                        set(ref(database, `${base64.encode(user.email)}/clientes/${nomeInput}${response.remedio}/horario/${e}`), {
+                        set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
                             hora: e
                         })
                     })
@@ -525,6 +525,8 @@ const Measurement = () => {
         const filtered = dataClientes.filter((item) =>
             item.nome.toLowerCase().includes(value) ||
             item.dataCadastro.toLowerCase().includes(value) ||
+            item.acabaEm.toLowerCase().includes(value) ||
+            item.doses.toLowerCase().includes(value) ||
             item.remedio.toLowerCase().includes(value)
         );
 

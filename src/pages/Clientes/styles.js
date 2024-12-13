@@ -53,7 +53,7 @@ export const FormContainer = styled.div`
   width: 95%;
   display: flex;
   flex-direction: column;
-  height: 65%; /* Altura fixa */
+  max-height: 80%; /* Altura fixa */
   gap: 15px;
   align-items: flex-start;
   justify-content: center;

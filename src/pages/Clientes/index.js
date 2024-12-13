@@ -190,45 +190,90 @@ const Clientes = () => {
 
 
 
-    function writeNewPost() {
+    function writeNewPost(item, inputNome, horarios) {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
+        console.log()
+
+        if(item.nome != inputNome){
+            const postNome = {
+                nome:inputNome,
+                cpf: item.cpf,
+                        contato: item.contato,
+                        acabaEm: item.acabaEm,
+                        doses: item.doses,
+                        remedio: item.remedio,
+                        horario: item.horario,
+                        dataCadastro: item.dataCadastro,
+                        receita: true,
+                        usoContinuo: item.usoContinuo,
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Nome alterado com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+        } else {
+
+        Object.values(horarios).forEach(horario => {
+            Object.values(item.horario).forEach(horarioT => {
+                if (horarioT.hora != horario.hora) {
+                    const postHorario = {
+                        hora:horario.hora
+                       
+                    }
+
+                    const updates = {};
+                    updates[`${email64}/clientes/${item.cpf}/horario/${horarioT.hora}`] = postHorario;
+
+                    return update(ref(db), updates)
+                        .then(() => window.alert('Horario alterado com sucesso!!'))
+                        .catch((log) => console.log('ERROREDITUSER:::::', log));
+                    
+
+                } else if (horarioT.hora == horario.hora) {
+                    const postData = {
+                        nome: inputNome || item.nome,
+                        cpf: item.cpf,
+                        contato: item.contato,
+                        acabaEm: item.acabaEm,
+                        doses: item.doses,
+                        remedio: item.remedio,
+                        horario: item.horario || horario,
+                        dataCadastro: item.dataCadastro,
+                        receita: true,
+                        usoContinuo: item.usoContinuo,
+                    };
+
+
+
+                    // Obtem uma chave para o novo post.
+                    const newPostKey = push(child(ref(db), '/')).key;
+
+                    // Atualiza os dados no banco, usando a chave gerada como índice.
+                    const updates = {};
+                    updates[`${email64}/clientes/${item.nome}${item.remedio}`] = postData;
+
+                    return update(ref(db), updates)
+                        .then(() => window.alert('Alterado com sucesso!!'))
+                        .catch((log) => console.log('ERROREDITUSER:::::', log));
+                }              
+                else return null
+            })
+        })
+    }
 
         // Cria uma entrada de post.
-        const postData = {
-            nome: nomeInput || itemCliente.nome,
-            cpf: cpfInput || itemCliente.cpf,
-            contato: wppInput || itemCliente.contato,
-            acabaEm: itemCliente.acabaEm,
-            doses: remedioInput[0]?.doses || itemCliente.doses, // Acessa o primeiro item do array
-            remedio: remedioInput[0]?.remedio || itemCliente.remedio, // Acessa o primeiro item do array
-            horario: itemCliente.horario || remedioInput[0]?.horario, // Acessa o primeiro item do array
-            dataCadastro: itemCliente.dataCadastro,
-            receita: true,
-            usoContinuo: itemCliente.usoContinuo,
 
-        };
-
-        console.log("remedioInput", itemCliente);
-        console.log("postData", postData);
-
-        // Obtem uma chave para o novo post.
-        const newPostKey = push(child(ref(db), '/')).key;
-
-        // Atualiza os dados no banco, usando a chave gerada como índice.
-        const updates = {};
-        updates[`${email64}/clientes/${itemCliente.nome}${itemCliente.remedio}`] = postData;
-
-        return update(ref(db), updates)
-            .then(() => window.alert('Alterado com sucesso!!'))
-            .catch((log) => console.log('ERROREDITUSER:::::', log));
     }
 
     const handleinputedit = (e) => {
-        if(e == 'on'){
-           setUsoContinuo(true)
-        }else if (!e || e !== 'on' ){
-           setUsoContinuo(false)
+        if (e == 'on') {
+            setUsoContinuo(true)
+        } else if (!e || e !== 'on') {
+            setUsoContinuo(false)
         }
     }
 
@@ -239,104 +284,119 @@ const Clientes = () => {
         <>
             <Header />
             <PageContainer>
-            <Title>Edite caso precise</Title>
-            <SubTitle>1. Insira as informações que queira editar</SubTitle>
-            <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
+                <Title>Edite caso precise</Title>
+                <SubTitle>1. Insira as informações que queira editar</SubTitle>
+                <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
                 <FormContainer>
 
                     {
                         dataClientes.length > 0 ? (dataClientes.map((item) => {
+                            let inputNome = item.nome;
+                            let inputContato = '';
+                            let inputCPF = '';
+                            let horarios = []; // Inicia com um array vazio
+                            const handleEventTargert = (text) => {
+                                inputNome = text
+
+                            }
+
+                            const handleEventContato = (text) => {
+                                inputContato = text
+
+                            }
+
+                            const handleEventCPF = (text) => {
+                                inputCPF = text
+
+                            }
+
+                            const handleHorarioChange = (index, newHora) => {
+                                // Atualiza o valor diretamente no array
+                                horarios[index] = { hora: newHora };
+                                // Remove valores vazios ou inválidos
+                                horarios = horarios.filter((hor) => hor.hora);
+                                console.log(horarios); // Apenas para verificar as mudanças
+                            };
+
                             if (item.nome) {
-                                return <div style={{borderBottom:2,borderColor:'red'}} >
-                                 <ContainerEdit >
-                                    <ContainerEditIn>
-                                        Nome: {item.nome}
-                                        <TextField
-                                            id={`outlined-basic`}
-                                            label={`editar Nome`}
-                                            fullWidth
-                                            variant="outlined"
+                                return <div style={{ borderBottom: 2, borderColor: 'red' }} >
+                                    <ContainerEdit >
+                                        <ContainerEditIn>
+                                            Nome: {item.nome}
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`editar Nome`}
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={text => handleEventTargert(text.target.value)}
+                                            />
 
-                                        />
-
-                                    </ContainerEditIn>
-                                    <ContainerEditIn>
-                                        Contato:{item.contato}
-                                        <TextField
-                                            id={`outlined-basic`}
-                                            label={`Editar Contato`}
-                                            fullWidth
-                                            variant="outlined"
-
-                                        />
-                                    </ContainerEditIn>
-                                    <ContainerEditIn>
-                                        CPF:{item.cpf}
-                                        <TextField
-                                            id={`outlined-basic`}
-                                            label={`Mensagem de lembrete - Horários`}
-                                            fullWidth
-                                            variant="outlined"
-
-                                        />
-                                    </ContainerEditIn>
-                                    {
-                                        Object.values(item.horario).map((hor, index) => (
+                                        </ContainerEditIn>
+                                        <ContainerEditIn>
+                                            Contato:{item.contato}
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`Editar Contato`}
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={text => handleEventContato(text.target.value)}
+                                            />
+                                        </ContainerEditIn>
+                                        <ContainerEditIn>
+                                            CPF:{item.cpf}
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`Editar CPF`}
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={text => handleEventCPF(text.target.value)}
+                                            />
+                                        </ContainerEditIn>
+                                        {Object.values(item.horario || []).map((hor, index) => (
                                             <ContainerEditIn key={index}>
                                                 Horário: {hor.hora}
                                                 <TextField
                                                     id={`outlined-basic-${index}`}
-                                                    label="Mensagem de lembrete - Horários"
+                                                    label="Editar horário"
                                                     fullWidth
                                                     variant="outlined"
+                                                    defaultValue={horarios[index]?.hora || ""} // Mostra o valor atual ou vazio
+                                                    onChange={(e) => handleHorarioChange(index, e.target.value)}
                                                 />
                                             </ContainerEditIn>
-                                        ))
-                                    }
+                                        ))}
+
+
+                                        <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
+
+
+                                            Envie uma mensagem 36 horas do medicamento acabar:
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`Envie 36 horas antes - Uso Contínuo`}
+                                                fullWidth
+                                                variant="outlined"
+
+                                            />
 
 
 
 
+                                            <TextField
+                                                id={`outlined-basic`}
+                                                label={`Envie 36 horas antes para RECEITA`}
+                                                fullWidth
+                                                variant="outlined"
 
-                               
-                                    <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
-                                        <div style={{ display: 'flex' }} >
-                                            <Checkbox {...label} id='checkcontinuo' onChange={value => handleinputedit(value.target.value)} />
-                                            <a style={{ marginTop: 8 }}  >Uso continuo </a>
+                                            />
 
-                                            <Checkbox {...label} id='checkcontinuo' onChange={value => setReceita(value.target.value)} />
-                                            <a style={{ marginTop: 8 }}  >Precisa de Receita </a>
                                         </div>
-                                      {
-                                    usoContinuo && (
-                                        <TextField
-                                        id={`outlined-basic`}
-                                        label={`Envie 36 horas antes - Uso Contínuo`}
-                                        fullWidth
-                                        variant="outlined"
-                                      
-                                    />
-                                    ) 
-                                      }
-                                        
-                                      {
-                                        receita == 'on' ? (
-                                       <TextField
-                                            id={`outlined-basic`}
-                                            label={`Envie 36 horas antes - RECEITA`}
-                                            fullWidth
-                                            variant="outlined"
+                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios)} variant="contained">Salvar Edição</Button>
 
-                                        />
-                                    ) : null
-                                }
-                                    </div>
-                                    <Button style={{ alignSelf: 'center' }} onClick={() => null} variant="contained">Salvar Edição</Button>
-                      
                                     </ContainerEdit>
-                                    
+
                                 </div>
-                                
+
                             } else {
                                 return null
                             }
@@ -351,7 +411,7 @@ const Clientes = () => {
 
 
                 </FormContainer>
-            </PageContainer>
+            </PageContainer >
         </>
     );
 }
