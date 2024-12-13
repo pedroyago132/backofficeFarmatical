@@ -363,7 +363,13 @@ const Measurement = () => {
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
-
+            const body = {
+                message: `${userData.msgCadastro}`,
+                phone: `55${wppInput}`,
+                delayMessage: 10
+            }
+            const responset = await sendMessageAll(body)
+            console.log(responset)
           
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
@@ -405,12 +411,7 @@ const Measurement = () => {
             })
 
         }
-        const body = {
-            message: `${userData.msgCadastro}`,
-            phone: `55${wppInput}`,
-            delayMessage: 10
-        }
-        const response = await sendMessageAll(body)
+      
         handleCloseRegister()
         return response
        
