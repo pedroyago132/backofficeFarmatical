@@ -36,16 +36,21 @@ const QRCodePage = () => {
     }
 
     async function GerarQRCode() {
-        const idi = '3D826867ABEC00CA23EBB2D4EBC7E202';
-        const tokeni = '9A63F56F86E49E2446ED34DD';
-
-        try {
-            const response = await lerQRCode(idi, tokeni); // Aguarda a função retornar o resultado
-            setQRCode(response); // Atualiza o estado ou faz o que for necessário com o QR Code
-            console.log('RSPONEVALUE::::::', response); // Imprime o resultado
-        } catch (error) {
-            console.error('TRYCAYCHERROR:::::QRCODE:::', error); // Lida com erros
+        if(connected){
+            return window.alert('Conectado')
+        }else{
+            const idi = '3D826867ABEC00CA23EBB2D4EBC7E202';
+            const tokeni = '9A63F56F86E49E2446ED34DD';
+    
+            try {
+                const response = await lerQRCode(idi, tokeni); // Aguarda a função retornar o resultado
+                setQRCode(response); // Atualiza o estado ou faz o que for necessário com o QR Code
+                console.log('RSPONEVALUE::::::', response); // Imprime o resultado
+            } catch (error) {
+                console.error('TRYCAYCHERROR:::::QRCODE:::', error); // Lida com erros
+            }
         }
+     
     }
 
     async function listingInstacesValue() {
@@ -67,8 +72,9 @@ const QRCodePage = () => {
         try {
             const response = await dataInstance(idi,tokeni); // Aguarda a função retornar o resultado
             if(response.connected){
-                window.alert('Verificado Com Sucesso!')
-                navigate('/dashboard')
+                window.alert('Celular Conhectado!')
+                setConnected(true)
+                navigate('/measure')
             }else{
                 return null
             }
@@ -78,6 +84,7 @@ const QRCodePage = () => {
     }
 
     React.useEffect(() => {
+        dataInstanceValue();
         const interval = setInterval(() => {
             console.log("Função executada!");
             dataInstanceValue();
