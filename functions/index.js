@@ -91,7 +91,7 @@ exports.alertClient = onSchedule("*/1 * * * *", async (event) => {
 
           // Calcula o momento exato para envio (36 horas antes)
           const momentoEnvio = new Date(dataAcabaEm);
-          momentoEnvio.setHours(momentoEnvio.getHours() - 36);
+          momentoEnvio.setHours(momentoEnvio.getHours() - 35);
 
           // Verifica se o horário atual corresponde ao momento de envio
           const horas = String(agora.getHours()).padStart(2, "0");
@@ -108,7 +108,7 @@ exports.alertClient = onSchedule("*/1 * * * *", async (event) => {
 
           if (dataAtualStr === momentoEnvioStr) {
             const body = {
-              message: `${cliente.msgUsoContinuo}`,
+              message: `,${cliente.msgUsoContinuo} - Medicação: ${cliente.remedio}`,
               phone: `55${cliente.contato}`,
               delayMessage: 10,
             };

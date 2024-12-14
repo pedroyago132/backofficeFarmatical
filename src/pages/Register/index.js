@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Container, Input, Title, Logo, SubTitle, Body, Container1, ImageBackground, FormControl } from './styles';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { getDatabase, ref, set, get, child, onValue } from "firebase/database";
 import "firebase/database";
 import base64 from 'base-64'
@@ -44,13 +44,14 @@ const Register = () => {
         const database = getDatabase()
         const encodeEmail = base64.encode(emailInput)
        
-        createUserWithEmailAndPassword(auth, emailInput, senhaInput)
+       const newUser =  createUserWithEmailAndPassword(auth, emailInput, senhaInput)
           .then((userCredential) => {
             // Signed up 
             const user = userCredential.user;
-            window.alert('Usuário criado com sucesso')
+            window.alert('Usuário Cadastrado - VERIFIQUE SEU EMAIL')
             navigate('/')
             setProgressive(false)
+            sendEmailVerification(auth.currentUser).then(log => console.log('sendemailsuce',log)).catch(erro => console.log(erro))
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -61,10 +62,14 @@ const Register = () => {
             // ..
           });
 
+         
+          console.log(newUser)
+
         set(ref(database, `${encodeEmail}/mensagens`), {
           msgCadastro:'Olá vimos que acabou de fazer registro para receber horários das suas medicações,no horário extao você será lembrado',
           msgHorario:'Olá Está no horário da sua medicação, lembre-se , horários são importantes'
         })
+        return newUser
       }
     } catch (error) {
       window.alert('ERRO:', error)

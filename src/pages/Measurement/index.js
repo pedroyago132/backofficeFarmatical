@@ -28,6 +28,7 @@ import AccountBoxOutlined from '@mui/icons-material/AccountBoxOutlined';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "firebase/database";
 import { dataInstance } from '../../services';
+import styled from 'styled-components';
 
 
 
@@ -48,7 +49,7 @@ const style = {
 };
 
 const styleModalRegister = {
-    height: '97%',
+    maxHeight: '100vh',
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -86,7 +87,6 @@ const styleModalList = {
 
 const actions = [
     { icon: <AccountBoxOutlined />, name: 'Cadastrar Cliente' },
-    { icon: <ListAltOutlined />, name: 'Ver Todos' },
 
 ];
 
@@ -101,7 +101,7 @@ const Measurement = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0 }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: null }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -114,7 +114,6 @@ const Measurement = () => {
     const [filteredData, setFilteredData] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState('');
     const [user, setUser] = React.useState({ email: 'alo' });
-    const listaRef = React.useRef(null);
     const [novaData, setNovaData] = React.useState(null);
     const [clientForTime, setClientforTime] = React.useState([{ clientes: [] }]);
     const [checkForTime, setCheckforTime] = React.useState([{}]);
@@ -123,6 +122,78 @@ const Measurement = () => {
     const [inputUsocontinuo, setInputUsoContinuo] = React.useState('Sua medicação esta acabando lembre-se de comprar');
     const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
     const [contatoEdit, setValueContatoEdit] = React.useState('');
+    const [image, setImage] = React.useState(null);
+    const listRef = React.useRef(null); 
+
+
+    const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+`;
+
+    const Title = styled.h1`
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+`;
+
+    const UploadButton = styled.label`
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+  max-height:50px;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+    const Input = styled.input`
+  display: none;
+`;
+
+    const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+    const ImagePreview = styled.img`
+  max-width: 300px;
+  max-height: 300px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin-top: 10px;
+`;
+
+    const PlaceholderText = styled.p`
+  color: #555;
+  font-size: 14px;
+  margin-top:-7px;
+
+`;
+
+    const RemoveButton = styled.button`
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #a71d2a;
+  }
+`;
 
 
 
@@ -149,6 +220,26 @@ const Measurement = () => {
     const paginationModel = { page: 0, pageSize: 5 };
 
 
+    const handleImageUpload = (remedioIndex, event) => {
+        console.log('EVENTTTTT:::', event)
+        const file = event?.target?.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const updated = [...remedioInput];
+                updated[remedioIndex].foto = reader.result; // Armazena a foto em base64
+                setRemedioInput(updated);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Remover foto
+    const handleRemoveImage = (remedioIndex) => {
+        const updated = [...remedioInput];
+        updated[remedioIndex].foto = null;
+        setRemedioInput(updated);
+    };
 
     function setSelectionItem() {
         handleOpen();
@@ -182,12 +273,6 @@ const Measurement = () => {
 
     }
 
-
-    React.useEffect(() => {
-        if (listaRef.current) {
-            listaRef.current.scrollTop = listaRef.current.scrollHeight;
-        }
-    }, [remedioInput]); // Atualiza sempre que 'items' mudar
 
     React.useEffect(() => {
         const today = new Date();
@@ -232,7 +317,7 @@ const Measurement = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-                        mensagens:data[key].mensagens,
+                        mensagens: data[key].mensagens,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro
                     }));
@@ -263,7 +348,7 @@ const Measurement = () => {
                     const dataList = Object.keys(data).map((key) => ({
                         id: key,
                         clientes: data[key].clientes,
-                        mensagens:data[key].mensagens
+                        mensagens: data[key].mensagens
                     }));
                     setClientforTime(dataList);
 
@@ -304,6 +389,51 @@ const Measurement = () => {
     }
 
     React.useEffect(() => {
+        const agora = new Date();
+        if (clientForTime) {
+            clientForTime.forEach((client) => {
+                if (client.clientes) {
+                    Object.values(client.clientes).forEach((cliente) => {
+                        const acabaEmStr = cliente.acabaEm; // Ex: "16/10/2024"
+                        const [dia, mes, ano] = acabaEmStr.split("/").map(Number); // Quebra o formato DD/MM/YYYY
+                        const dataAcabaEm = new Date(ano, mes - 1, dia); // Cria objeto Date para `acabaEm`
+
+                        // Calcula o momento exato para envio (36 horas antes)
+                        const momentoEnvio = new Date(dataAcabaEm);
+                        momentoEnvio.setHours(momentoEnvio.getHours() - 35);
+
+                        // Verifica se o horário atual corresponde ao momento de envio
+                        const horas = String(agora.getHours()).padStart(2, "0");
+                        const minutos = String(agora.getMinutes()).padStart(2, "0");
+                        const dataAtualStr = `${agora.getFullYear()}-${String(
+                            agora.getMonth() + 1
+                        ).padStart(2, "0")}-${String(agora.getDate()).padStart(2, "0")} ${horas}:${minutos}`;
+
+                        const momentoEnvioStr = `${momentoEnvio.getFullYear()}-${String(
+                            momentoEnvio.getMonth() + 1
+                        ).padStart(2, "0")}-${String(momentoEnvio.getDate()).padStart(2, "0")} ${String(
+                            momentoEnvio.getHours()
+                        ).padStart(2, "0")}:${String(momentoEnvio.getMinutes()).padStart(2, "0")}`;
+
+                        console.log('momentoenvio::::', momentoEnvioStr, 'dataatualizar:::', dataAtualStr)
+
+                        if (dataAtualStr === momentoEnvioStr) {
+                            const body = {
+                                message: `,${cliente.msgUsoContinuo} - Medicação: ${cliente.remedio}`,
+                                phone: `55${cliente.contato}`,
+                                delayMessage: 10,
+                            };
+
+                            console.log("Enviando mensagem para:", cliente.contato);
+                            sendMessageAll(body); // Função já implementada para envio de mensagem
+                        }
+                    });
+                }
+            });
+        }
+    }, [clientForTime])
+
+    React.useEffect(() => {
         if (clientForTime) {
             clientForTime.forEach(client => {
                 if (client.clientes) {
@@ -312,8 +442,8 @@ const Measurement = () => {
                             const agora = new Date();
                             const horas = String(agora.getHours()).padStart(2, "0");
                             const minutos = String(agora.getMinutes()).padStart(2, "0");
-        
-                          
+
+
                             if (clienteT.hora == `${horas}:${minutos}`) {
 
                                 const body = {
@@ -360,20 +490,19 @@ const Measurement = () => {
     }, [])
 
 
-
-   async function setNewClient() {
-    const database = getDatabase()
+    function setNewClient() {
+        const database = getDatabase()
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
-           
+
             const body = {
                 message: `${userData.msgCadastro}`,
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
-             sendMessageAll(body)
-          
+            sendMessageAll(body)
+
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
                 const dosesCount = response.doses
@@ -396,11 +525,11 @@ const Measurement = () => {
                     usoContinuo: usoContinuo,
                     horario: time,
                     dataCadastro: date,
-                    msgUsoContinuo:inputUsocontinuo,
-                    msgReceita:inputReceita
+                    msgUsoContinuo: inputUsocontinuo,
+                    msgReceita: inputReceita
                 }).then(responses => {
-                  
-                    Object.values(response.horario).forEach(e =>  {
+
+                    Object.values(response.horario).forEach(e => {
                         console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
                             hora: e
@@ -408,22 +537,27 @@ const Measurement = () => {
                     })
 
                 }
-               
-            )
-           
+
+                )
+
             })
 
         }
-      
+
         handleCloseRegister()
-   
-       
+
+
 
 
     }
 
     const addMedicacao = () => {
         setRemedioInput([...remedioInput, { horario: [{ hora: '10:00' }], remedio: '' }]);
+        setTimeout(() => {
+            if (listRef.current) {
+              listRef.current.scrollTop = listRef.current.scrollHeight;
+            }
+          }, 50);
     };
 
     const addHorario = (index) => {
@@ -434,6 +568,11 @@ const Measurement = () => {
                     : item
             )
         );
+        setTimeout(() => {
+            if (listRef.current) {
+              listRef.current.scrollTop = listRef.current.scrollHeight;
+            }
+          }, 50);
     };
 
     const handleChangeMenu = (event) => {
@@ -621,7 +760,7 @@ const Measurement = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={styleModalRegister} ref={listaRef} >
+                <Box sx={styleModalRegister} ref={listRef} >
                     <a
                         onClick={() => handleCloseRegister()}
                         style={{
@@ -631,6 +770,7 @@ const Measurement = () => {
                             alignSelf: 'flex-end',
                             padding: 5,
                             border: '1px dotted red',
+                            marginTop:10
                         }}
                     >
                         X
@@ -721,14 +861,39 @@ const Measurement = () => {
                                         value={horario.hora}
                                     />
                                 ))}
-                                <Button
-                                    style={{ marginTop: 10, alignSelf: 'flex-start' }}
-                                    variant="outlined"
-                                    onClick={() => addHorario(remedioIndex)}
-                                >
-                                    Adicionar Horário
-                                </Button>
+                                <div style={{ flexDirection: 'row', display: 'flex', gap:15}} >
+
+
+                                    <Button
+                                        style={{ marginTop: 10, alignSelf: 'flex-start' }}
+                                        variant="outlined"
+                                        onClick={() => addHorario(remedioIndex)}
+                                    >
+                                        Adicionar Horário
+                                    </Button>
+                                
+                                    <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
+                                    <Input
+                                        id={`file-input-${remedioIndex}`}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(remedioIndex, e)}
+                                    />
+                                    <ImageContainer>
+                                        {response.foto ? (
+                                            <>
+                                                <ImagePreview src={response.foto} alt="Pré-visualização da imagem" />
+                                                <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
+                                                    Remover Foto
+                                                </RemoveButton>
+                                            </>
+                                        ) : (
+                                            <PlaceholderText>Escolha uma foto para visualizar.</PlaceholderText>
+                                        )}
+                                    </ImageContainer>
+                                </div>
                                 <div style={{ width: '97%', border: '1px dotted grey' }} />
+
                             </div>
                         ))
                     }
@@ -741,9 +906,9 @@ const Measurement = () => {
                             Uso contínuo
                         </Typography>
                         <Checkbox {...label} id='checkcontinuo' onChange={value => setUsoContinuo(value.target.value)} />
-                            {
-                                usoContinuo == 'on' ? (
-                                    <TextField
+                        {
+                            usoContinuo == 'on' ? (
+                                <TextField
                                     id="outlined-basic-remedio"
                                     label="Doses"
                                     style={{ width: '100%' }}
@@ -753,8 +918,8 @@ const Measurement = () => {
                                     variant="outlined"
                                     value={inputUsocontinuo}
                                 />
-                                ) : null
-                            }
+                            ) : null
+                        }
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "center" }} >
@@ -764,8 +929,8 @@ const Measurement = () => {
                         <Checkbox {...label} id='checkreceita' onChange={value => setReceita(value.target.value)} />
 
                         {
-                                receita == 'on' ? (
-                                    <TextField
+                            receita == 'on' ? (
+                                <TextField
                                     id="outlined-basic-remedio"
                                     label="Doses"
                                     style={{ width: '100%' }}
@@ -775,8 +940,8 @@ const Measurement = () => {
                                     variant="outlined"
                                     value={inputReceita}
                                 />
-                                ) : null
-                            }
+                            ) : null
+                        }
                     </div>
 
 
@@ -817,82 +982,7 @@ const Measurement = () => {
                 </Box>
             </Modal>
 
-            <Modal
-                open={openList}
-                onClose={handleCloseList}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={styleModalList}>
-                    {
-                        dataClientes.map((item) => {
-                           
-                            if (item.nome) {
-                             
-                                return <Accordion style={{ alignSelf: 'flex-start', width: '97%' }} >
-                                    <AccordionSummary
-                                        expandIcon={<ArrowDownwardIcon />}
-                                        aria-controls="panel1-content"
-                                        id="panel1-header"
-
-                                    >
-                                        <Typography>{item.nome}</Typography>
-                                    </AccordionSummary  >
-                                    <AccordionDetails  >
-
-                                        <Typography style={{ fontWeight: 'bold' }} >
-                                            Medicação:
-                                        </Typography>
-                                        <Typography style={{ marginTop: 12 }} >
-                                            {item.remedio} <br />
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >  Horários: </Typography>
-                                        <Typography>
-                                            {item.remedio} (
-                                            {Array.isArray(item.horario)
-                                                ? item.horario.map((horario, index) => (
-                                                    <span key={index}>{horario.hora}</span>
-                                                )).join(", ")
-                                                : item.horario?.hora || "Sem horário"}
-                                            ) <br />
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                            Contato número: {item.contato} 
-                                        </Typography>
-                                        <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={contatoEdit} label={`Editar Número: ${item.contato}`} onChange={text => setValueContatoEdit(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
-
-
-                                        <Typography style={{ fontWeight: 'bold', marginTop: 12 }} >
-                                            Data do registro:
-                                        </Typography>
-                                        <Typography>
-                                            {item.dataCadastro} <br />
-                                        </Typography>
-
-
-                                        <ContainerEditAccordion>
-                                            <a style={{ fontWeight: '600', color: 'blue', cursor: 'pointer' }} >
-                                                Salvar Edição
-                                            </a>
-                                        </ContainerEditAccordion>
-
-                                    </AccordionDetails>
-                                </Accordion>
-                            } else {
-                                return null
-                            }
-                        })
-                    }
-
-                    <TextField id="outlined-basic-cpf" style={{ marginTop: 15 }} value={messageAll} label="Enviar Mensagem para todos" onChange={text => setMessageAll(text.target.value)} placeholder='Mensagem' fullWidth variant="outlined" />
-
-                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => sendAll()}>Enviar</Button>
-
-
-                </Box>
-            </Modal>
+          
 
         </>
     );
