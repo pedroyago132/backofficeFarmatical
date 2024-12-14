@@ -495,14 +495,12 @@ const Measurement = () => {
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
-
             const body = {
                 message: `${userData.msgCadastro}`,
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
-            sendMessageAll(body)
-
+         
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
                 const dosesCount = response.doses
@@ -533,6 +531,10 @@ const Measurement = () => {
                         console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
                             hora: e
+                        }).then(log =>{
+                         
+                           sendMessageAll(body)
+                
                         })
                     })
 
