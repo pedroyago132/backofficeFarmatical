@@ -232,7 +232,7 @@ const Measurement = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-
+                        mensagens:data[key].mensagens,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro
                     }));
@@ -262,7 +262,8 @@ const Measurement = () => {
                 if (data) {
                     const dataList = Object.keys(data).map((key) => ({
                         id: key,
-                        clientes: data[key].clientes
+                        clientes: data[key].clientes,
+                        mensagens:data[key].mensagens
                     }));
                     setClientforTime(dataList);
 
@@ -311,10 +312,12 @@ const Measurement = () => {
                             const agora = new Date();
                             const horas = String(agora.getHours()).padStart(2, "0");
                             const minutos = String(agora.getMinutes()).padStart(2, "0");
+        
+                          
                             if (clienteT.hora == `${horas}:${minutos}`) {
 
                                 const body = {
-                                    message: `${userData.msgHorario} - ${cliente.remedio},agora as ${horas}:${minutos}`,
+                                    message: `${client.mensagens.msgHorario} - ${cliente.remedio},agora as ${horas}:${minutos}`,
                                     phone: `55${cliente.contato}`,
                                     delayMessage: 10
                                 }
@@ -359,17 +362,17 @@ const Measurement = () => {
 
 
    async function setNewClient() {
-     try{   const database = getDatabase()
+    const database = getDatabase()
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
             window.alert('Complete os campos')
         } else {
+           
             const body = {
                 message: `${userData.msgCadastro}`,
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
-            const responset = await sendMessageAll(body)
-            console.log(responset)
+             sendMessageAll(body)
           
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
@@ -413,11 +416,9 @@ const Measurement = () => {
         }
       
         handleCloseRegister()
-        return response
+   
        
-    } catch (error) {
-        console.log(error)
-    }
+
 
     }
 

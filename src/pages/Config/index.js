@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PageContainer, SubTitle, FormContainer, Title, TitleForm } from './styles';
 import { useNavigate } from 'react-router-dom';
 import QRCode from "react-qr-code";
-import { getDatabase, ref, child, push, update,get } from "firebase/database";
+import { getDatabase, ref, child, push, update, get } from "firebase/database";
 import Button from '@mui/material/Button';
 import "firebase/database";
 import TextField from '@mui/material/TextField';
@@ -39,7 +39,7 @@ const Configuracao = () => {
 
 
     React.useEffect(() => {
-        if(user){
+        if (user) {
             const dbRef = ref(getDatabase());
             get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
                 if (snapshot.exists()) {
@@ -52,27 +52,38 @@ const Configuracao = () => {
                 console.error(error);
             });
         }
-      
+
     }, [user]); // Atualiza sempre que 'items' mudar
 
     function writeNewPost() {
         const email64 = base64.encode(user.email)
         const db = getDatabase();
 
-        // A post entry.
-        const postData = {
-            msgCadastro: msgCadastro,
-            msgHorario: msgHorario,
-        };
+        if (userData.msgCadastro != msgCadastro) {
+            const postData = {
+                msgCadastro: msgCadastro,
+                msgHorario: userData.msgHorario,
+            };
 
-        // Get a key for a new Post.
-        const newPostKey = push(child(ref(db), '/')).key;
+            const updates = {};
+            updates[email64 + '/mensagens'] = postData;
 
-        // Write the new post's data simultaneously in the posts list and the user's post list.
-        const updates = {};
-        updates[email64 + '/mensagens'] = postData;
+            return update(ref(db), updates).then(log => window.alert('Alterado com sucesso!!')).catch(log => console.log('ERROREDITUSER:::::', log))
 
-        return update(ref(db), updates).then(log => window.alert('Alterado com sucesso!!')).catch(log => console.log('ERROREDITUSER:::::', log))
+        }
+       
+        if (userData.msgHorario != msgHorario) {
+            const postData = {
+                msgCadastro: userData.msgCadastro,
+                msgHorario: msgHorario,
+            };
+
+            const updates = {};
+            updates[email64 + '/mensagens'] = postData;
+
+            return update(ref(db), updates).then(log => window.alert('Alterado com sucesso!!')).catch(log => console.log('ERROREDITUSER:::::', log))
+
+        }
     }
 
 

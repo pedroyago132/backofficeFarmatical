@@ -29,6 +29,7 @@ exports.scheduleMessages = onSchedule("*/1 * * * *", async (event) => {
     const dataList = Object.keys(data).map((key) => ({
       id: key,
       clientes: data[key].clientes,
+      mensagens:data[key].mensagens
     }));
 
     dataList.forEach(client => {
