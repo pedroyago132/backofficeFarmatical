@@ -59,7 +59,7 @@ const Configuracao = () => {
         const email64 = base64.encode(user.email)
         const db = getDatabase();
 
-        if (userData.msgCadastro != msgCadastro) {
+        if (userData.msgCadastro != msgCadastro && msgCadastro != '') {
             const postData = {
                 msgCadastro: msgCadastro,
                 msgHorario: userData.msgHorario,
@@ -72,7 +72,7 @@ const Configuracao = () => {
 
         }
        
-        if (userData.msgHorario != msgHorario) {
+        if (userData.msgHorario != msgHorario && msgHorario != '') {
             const postData = {
                 msgCadastro: userData.msgCadastro,
                 msgHorario: msgHorario,
