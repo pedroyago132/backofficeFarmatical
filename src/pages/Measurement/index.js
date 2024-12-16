@@ -890,7 +890,7 @@ const Measurement = () => {
                                                 </RemoveButton>
                                             </>
                                         ) : (
-                                            <PlaceholderText>Escolha uma foto para visualizar.</PlaceholderText>
+                                            <PlaceholderText></PlaceholderText>
                                         )}
                                     </ImageContainer>
                                 </div>
