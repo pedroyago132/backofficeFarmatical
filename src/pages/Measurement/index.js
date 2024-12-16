@@ -29,6 +29,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "firebase/database";
 import { dataInstance } from '../../services';
 import styled from 'styled-components';
+import { useMediaQuery } from '@mui/material';
 
 
 
@@ -85,6 +86,7 @@ const styleModalList = {
     gap: 1
 };
 
+
 const actions = [
     { icon: <AccountBoxOutlined />, name: 'Cadastrar Cliente' },
 
@@ -123,8 +125,15 @@ const Measurement = () => {
     const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
     const [contatoEdit, setValueContatoEdit] = React.useState('');
     const [image, setImage] = React.useState(null);
-    const listRef = React.useRef(null); 
+    const listRef = React.useRef(null);
 
+    const isMobile = useMediaQuery('(max-width:600px)');
+
+    const buttonStyles = {
+      marginBottom:6,
+      width: isMobile ? '100%' : '60%'  
+      };
+    
 
     const Container = styled.div`
   display: flex;
@@ -500,7 +509,7 @@ const Measurement = () => {
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
-         
+
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
                 const dosesCount = response.doses
@@ -531,10 +540,10 @@ const Measurement = () => {
                         console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
                             hora: e
-                        }).then(log =>{
-                         
-                           sendMessageAll(body)
-                
+                        }).then(log => {
+
+                            sendMessageAll(body)
+
                         })
                     })
 
@@ -557,9 +566,9 @@ const Measurement = () => {
         setRemedioInput([...remedioInput, { horario: [{ hora: '00:00' }], remedio: '' }]);
         setTimeout(() => {
             if (listRef.current) {
-              listRef.current.scrollTop = listRef.current.scrollHeight;
+                listRef.current.scrollTop = listRef.current.scrollHeight;
             }
-          }, 50);
+        }, 50);
     };
 
     const addHorario = (index) => {
@@ -572,9 +581,9 @@ const Measurement = () => {
         );
         setTimeout(() => {
             if (listRef.current) {
-              listRef.current.scrollTop = listRef.current.scrollHeight;
+                listRef.current.scrollTop = listRef.current.scrollHeight;
             }
-          }, 50);
+        }, 50);
     };
 
     const handleChangeMenu = (event) => {
@@ -772,7 +781,7 @@ const Measurement = () => {
                             alignSelf: 'flex-end',
                             padding: 5,
                             border: '1px dotted red',
-                            marginTop:10
+                            marginTop: 10
                         }}
                     >
                         X
@@ -863,7 +872,7 @@ const Measurement = () => {
                                         value={horario.hora}
                                     />
                                 ))}
-                                <div style={{ flexDirection: 'row', display: 'flex', gap:15}} >
+                                <div style={{ flexDirection: 'row', display: 'flex', gap: 15 }} >
 
 
                                     <Button
@@ -873,7 +882,7 @@ const Measurement = () => {
                                     >
                                         Adicionar Horário
                                     </Button>
-                                
+
                                     <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                                     <Input
                                         id={`file-input-${remedioIndex}`}
@@ -945,10 +954,16 @@ const Measurement = () => {
                             ) : null
                         }
                     </div>
+                    <div style={{height:60,width:20}} />
 
 
-                    <Button style={{ marginTop: 10 }} variant='contained' fullWidth onClick={() => setNewClient()}>Enviar</Button>
-
+                    <Button
+                        style={buttonStyles}
+                        variant="contained"
+                        onClick={() => setNewClient()}
+                    >
+                        Cadastrar
+                    </Button>
                 </Box>
             </Modal>
 
@@ -984,7 +999,7 @@ const Measurement = () => {
                 </Box>
             </Modal>
 
-          
+
 
         </>
     );
