@@ -174,8 +174,8 @@ const Clientes = () => {
                         remedio: data[key].remedio,
                         receita: data[key].receita,
                         usoContinuo: data[key].usoContinuo,
-                        msgUsoContinuo:data[key].msgUsoContinuo,
-                        msgReceita:data[key].msgReceita,
+                        msgUsoContinuo: data[key].msgUsoContinuo,
+                        msgReceita: data[key].msgReceita,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
                     }));
@@ -191,7 +191,7 @@ const Clientes = () => {
 
 
 
-    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo,inputReceita) {
+    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita) {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
         console.log()
@@ -207,8 +207,8 @@ const Clientes = () => {
                 horario: item.horario,
                 dataCadastro: item.dataCadastro,
                 receita: true,
-                msgUsoContinuo:item.msgUsoContinuo,
-                msgReceita:item.msgReceita
+                msgUsoContinuo: item.msgUsoContinuo,
+                msgReceita: item.msgReceita
             }
 
             const updates = {};
@@ -230,8 +230,8 @@ const Clientes = () => {
                 dataCadastro: item.dataCadastro,
                 receita: true,
                 usoContinuo: item.usoContinuo,
-                msgUsoContinuo:item.msgUsoContinuo,
-                msgReceita:item.msgReceita
+                msgUsoContinuo: item.msgUsoContinuo,
+                msgReceita: item.msgReceita
             }
 
             const updates = {};
@@ -254,8 +254,8 @@ const Clientes = () => {
                 dataCadastro: item.dataCadastro,
                 receita: true,
                 usoContinuo: item.usoContinuo,
-                msgUsoContinuo:item.msgUsoContinuo,
-                msgReceita:item.msgReceita
+                msgUsoContinuo: item.msgUsoContinuo,
+                msgReceita: item.msgReceita
             }
 
             const updates = {};
@@ -265,7 +265,7 @@ const Clientes = () => {
                 .then(() => window.alert('Remedio alterado com sucesso!!'))
                 .catch((log) => console.log('ERROREDITUSER:::::', log));
 
-        } else if (item.msgUsoContinuo != inputUsoContinuo){
+        } else if (item.msgUsoContinuo != inputUsoContinuo) {
             const postNome = {
                 nome: item.nome,
                 cpf: item.cpf,
@@ -277,8 +277,8 @@ const Clientes = () => {
                 dataCadastro: item.dataCadastro,
                 receita: true,
                 usoContinuo: item.usoContinuo,
-                msgUsoContinuo:inputUsoContinuo,
-                msgReceita:item.msgReceita
+                msgUsoContinuo: inputUsoContinuo,
+                msgReceita: item.msgReceita
             }
 
             const updates = {};
@@ -287,7 +287,7 @@ const Clientes = () => {
             return update(ref(db), updates)
                 .then(() => window.alert('Mensgaem para USO CONTINUO alterado com sucesso!!'))
                 .catch((log) => console.log('ERROREDITUSER:::::', log));
-        }else if (item.msgReceita != inputReceita){
+        } else if (item.msgReceita != inputReceita) {
             const postNome = {
                 nome: item.nome,
                 cpf: item.cpf,
@@ -299,8 +299,8 @@ const Clientes = () => {
                 dataCadastro: item.dataCadastro,
                 receita: true,
                 usoContinuo: item.usoContinuo,
-                msgUsoContinuo:item.msgUsoContinuo,
-                msgReceita:inputReceita
+                msgUsoContinuo: item.msgUsoContinuo,
+                msgReceita: inputReceita
             }
 
             const updates = {};
@@ -392,7 +392,7 @@ const Clientes = () => {
                             let inputRemedio = item.remedio;
                             let inputUsoContinuo = item.msgUsoContinuo;
                             let inputReceita = item.msgReceita;
-                            let horarios = []; 
+                            let horarios = [];
                             console.log('MSG::::::::', item)
 
                             const handleEventTargert = (text) => {
@@ -429,7 +429,7 @@ const Clientes = () => {
                             };
 
                             if (item.nome) {
-                                return <div style={{ borderBottom: 1, borderColor: 'blak', marginTop:10 }} >
+                                return <div style={{ borderBottom: 1, borderColor: 'blak', marginTop: 10 }} >
                                     <ContainerEdit >
                                         <ContainerEditIn>
                                             Nome: {item.nome}
@@ -439,7 +439,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventTargert(text.target.value)}
-                                               
+
                                             />
 
                                         </ContainerEditIn>
@@ -451,7 +451,7 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventRemedio(text.target.value)}
-                                               
+
                                             />
                                         </ContainerEditIn>
                                         <ContainerEditIn>
@@ -462,10 +462,10 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventContato(text.target.value)}
-                                              
+
                                             />
                                         </ContainerEditIn>
-                                   
+
                                         {Object.values(item.horario || []).map((hor, index) => (
                                             <ContainerEditIn key={index}>
                                                 Horário: {hor.hora}
@@ -491,10 +491,10 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventUsoContinuo(text.target.value)}
-                                             
+
                                             />
 
-
+                                            Mensagem:{item.msgUsoContinuo}
 
 
                                             <TextField
@@ -503,11 +503,11 @@ const Clientes = () => {
                                                 fullWidth
                                                 variant="outlined"
                                                 onChange={text => handleEventReceita(text.target.value)}
-                                             
-                                            />
 
+                                            />
+                                            Mensagem:{item.msgReceita}
                                         </div>
-                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato,inputUsoContinuo,inputReceita)} variant="contained">Salvar Edição</Button>
+                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita)} variant="contained">Salvar Edição</Button>
 
                                     </ContainerEdit>
 

@@ -57,7 +57,7 @@ const styleModalRegister = {
     transform: 'translate(-50%, -50%)',
     width: '95%',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '1px solid #000',
     boxShadow: 24,
     p: 4,
     display: 'flex',
@@ -130,7 +130,8 @@ const Measurement = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
 
     const buttonStyles = {
-      marginBottom:17,
+      marginBottom:25,
+      paddingTop:7,
       width: isMobile ? '100%' : '60%'  
       };
     
