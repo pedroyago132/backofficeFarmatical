@@ -554,7 +554,7 @@ const Measurement = () => {
     }
 
     const addMedicacao = () => {
-        setRemedioInput([...remedioInput, { horario: [{ hora: '10:00' }], remedio: '' }]);
+        setRemedioInput([...remedioInput, { horario: [{ hora: '00:00' }], remedio: '' }]);
         setTimeout(() => {
             if (listRef.current) {
               listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -915,7 +915,7 @@ const Measurement = () => {
                                     label="Doses"
                                     style={{ width: '100%' }}
                                     onChange={(text) =>
-                                        setInputUsoContinuo(response.remedio, text.target.value)
+                                        setInputUsoContinuo(text.target.value)
                                     }
                                     variant="outlined"
                                     value={inputUsocontinuo}
@@ -937,7 +937,7 @@ const Measurement = () => {
                                     label="Doses"
                                     style={{ width: '100%' }}
                                     onChange={(text) =>
-                                        setInputReceita(response.remedio, text.target.value)
+                                        setInputReceita(text.target.value)
                                     }
                                     variant="outlined"
                                     value={inputReceita}
