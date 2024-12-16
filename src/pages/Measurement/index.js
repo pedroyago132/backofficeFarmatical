@@ -179,7 +179,7 @@ const Measurement = () => {
   max-height: 300px;
   border: 2px solid #ccc;
   border-radius: 10px;
-  margin-top: 10px;
+  margin-top: 16px;
 `;
 
     const PlaceholderText = styled.p`
@@ -882,8 +882,8 @@ const Measurement = () => {
                                     >
                                         Adicionar Horário
                                     </Button>
-
-                                    <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
+                                 <div style={{display:"flex",flexDirection:"column"}} >
+                                 <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                                     <Input
                                         id={`file-input-${remedioIndex}`}
                                         type="file"
@@ -902,6 +902,8 @@ const Measurement = () => {
                                             <PlaceholderText></PlaceholderText>
                                         )}
                                     </ImageContainer>
+                                 </div>
+                                   
                                 </div>
                                 <div style={{ width: '97%', border: '1px dotted grey' }} />
 
