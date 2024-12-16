@@ -130,7 +130,7 @@ const Measurement = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
 
     const buttonStyles = {
-      marginBottom:6,
+      marginBottom:15,
       width: isMobile ? '100%' : '60%'  
       };
     
@@ -954,7 +954,7 @@ const Measurement = () => {
                             ) : null
                         }
                     </div>
-                    <div style={{height:60,width:20}} />
+                    <div style={{height:25,width:20}} />
 
 
                     <Button
