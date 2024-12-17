@@ -30,6 +30,7 @@ import "firebase/database";
 import { dataInstance } from '../../services';
 import styled from 'styled-components';
 import { useMediaQuery } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -95,6 +96,7 @@ const actions = [
 
 
 const Measurement = () => {
+    const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const [openRegister, setOpenRegister] = React.useState(false);
     const [openList, setOpenList] = React.useState(false);
@@ -130,11 +132,11 @@ const Measurement = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
 
     const buttonStyles = {
-      marginBottom:25,
-      paddingTop:7,
-      width: isMobile ? '100%' : '60%'  
-      };
-    
+        marginBottom: 25,
+        paddingTop: 7,
+        width: isMobile ? '100%' : '60%'
+    };
+
 
     const Container = styled.div`
   display: flex;
@@ -565,11 +567,7 @@ const Measurement = () => {
 
     const addMedicacao = () => {
         setRemedioInput([...remedioInput, { horario: [{ hora: '00:00' }], remedio: '' }]);
-        setTimeout(() => {
-            if (listRef.current) {
-                listRef.current.scrollTop = listRef.current.scrollHeight;
-            }
-        }, 50);
+        setTimeout(scrollToLastItem, 100);
     };
 
     const addHorario = (index) => {
@@ -590,8 +588,7 @@ const Measurement = () => {
     const handleChangeMenu = (event) => {
         if (connectednumber) {
             if (event == 'Cadastrar Cliente') {
-                handleOpenRegister()
-                console.log('ok')
+               navigate('/registerClient')
             } else if (event == 'Ver Todos') {
                 handleOpenList()
             }
@@ -632,6 +629,12 @@ const Measurement = () => {
                 return input;
             })
         );
+    };
+
+    const scrollToLastItem = () => {
+        if (listRef.current) {
+            listRef.current.scrollIntoView({ behavior: "smooth" });
+        }
     };
 
     // Função para formatar o horário
@@ -688,7 +691,6 @@ const Measurement = () => {
 
         setFilteredData(filtered); // Atualiza os dados filtrados
     };
-    console.log('FILTERED:::::',)
 
     const RenderConnected = () => {
         if (connectednumber) {
@@ -796,7 +798,7 @@ const Measurement = () => {
 
                     {
                         remedioInput.map((response, remedioIndex) => (
-                            <div key={remedioIndex}>
+                            <div key={remedioIndex} ref={remedioIndex === remedioInput.length - 1 ? listRef : null} >
                                 <div style={{ width: "100%", display: 'flex' }}>
                                     <div style={{ width: "50%" }}>
                                         <Typography
@@ -883,28 +885,28 @@ const Measurement = () => {
                                     >
                                         Adicionar Horário
                                     </Button>
-                                 <div style={{display:"flex",flexDirection:"column"}} >
-                                 <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
-                                    <Input
-                                        id={`file-input-${remedioIndex}`}
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageUpload(remedioIndex, e)}
-                                    />
-                                    <ImageContainer>
-                                        {response.foto ? (
-                                            <>
-                                                <ImagePreview src={response.foto} alt="Pré-visualização da imagem" />
-                                                <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
-                                                    Remover Foto
-                                                </RemoveButton>
-                                            </>
-                                        ) : (
-                                            <PlaceholderText></PlaceholderText>
-                                        )}
-                                    </ImageContainer>
-                                 </div>
-                                   
+                                    <div style={{ display: "flex", flexDirection: "column" }} >
+                                        <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
+                                        <Input
+                                            id={`file-input-${remedioIndex}`}
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleImageUpload(remedioIndex, e)}
+                                        />
+                                        <ImageContainer>
+                                            {response.foto ? (
+                                                <>
+                                                    <ImagePreview src={response.foto} alt="Pré-visualização da imagem" />
+                                                    <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
+                                                        Remover Foto
+                                                    </RemoveButton>
+                                                </>
+                                            ) : (
+                                                <PlaceholderText></PlaceholderText>
+                                            )}
+                                        </ImageContainer>
+                                    </div>
+
                                 </div>
                                 <div style={{ width: '97%', border: '1px dotted grey' }} />
 

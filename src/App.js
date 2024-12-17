@@ -11,6 +11,7 @@ import { initMercadoPago } from '@mercadopago/sdk-react';
 import QRCode from './pages/QRCode';
 import Configuracao from './pages/Config';
 import Clientes from './pages/Clientes';
+import RegisterClient from './pages/RegisterClient';
 
 
 const firebaseConfig = {
@@ -87,6 +88,7 @@ function App() {
           <Route path="/qrcode" element={<QRCode />} />
           <Route path="/config" element={<Configuracao />} />
           <Route path="/clientes" element={<Clientes />} />
+          <Route path="/registerClient" element={<RegisterClient />} />
         </Routes>
       </BrowserRouter>
       </ThemeProvider>
