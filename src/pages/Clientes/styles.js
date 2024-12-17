@@ -7,11 +7,14 @@ export const PageContainer = styled.div`
   display: flex;
   justify-content:center;
   align-items: center;
-  height: 100vh;
+  max-height: 100vh;
   background-color:${backgroundColor};
 width:100%;
 flex-direction:column;
 gap:10px;
+overflow-y:auto;
+overflow-x:hidden;
+padding:10px
 `;
 
 export const ContainerEditAccordion = styled(Box)`
@@ -29,6 +32,7 @@ align-items:center;
 justify-content:flex-start;
 gap:25px;
 border-bottom:1px solid black;
+background-color:white;
 
 `
 

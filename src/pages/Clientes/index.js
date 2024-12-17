@@ -159,6 +159,13 @@ const Clientes = () => {
     }, [])
 
     React.useEffect(() => {
+        if (listaRef.current) {
+            listaRef.current.scrollTop = listaRef.current.scrollHeight; // Scroll automático
+        }
+    }, [dataClientes]);
+
+
+    React.useEffect(() => {
         if (user) {
             const dbRef = ref(database, `${base64.encode(user.email)}/clientes`);
             const unsubscribe = onValue(dbRef, (snapshot) => {
@@ -376,13 +383,13 @@ const Clientes = () => {
 
 
     return (
-        <>
+       <div style={{display:'flex',flexDirection:'column',overflowY:'auto',overflowX:'hidden',maxHeight:'100vh'}} >
             <Header />
-            <PageContainer>
+         
                 <Title>Edite caso precise</Title>
                 <SubTitle>1. Insira as informações que queira editar</SubTitle>
                 <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
-                <FormContainer>
+        
 
                     {
                         dataClientes.length > 0 ? (dataClientes.map((item) => {
@@ -526,9 +533,9 @@ const Clientes = () => {
 
 
 
-                </FormContainer>
-            </PageContainer >
-        </>
+       
+            </div>
+     
     );
 }
 
