@@ -268,23 +268,7 @@ const Measurement = () => {
     }
 
 
-    React.useEffect(() => {
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                setUserData(snapshot.val())
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    }, []); // Atualiza sempre que 'items' mudar
-
-    function getDataUser() {
-
-    }
-
+   
 
     React.useEffect(() => {
         const today = new Date();
@@ -336,6 +320,17 @@ const Measurement = () => {
                     setFilteredData(dataList);
                     setDataClientes(dataList);
 
+                    const dbRef = ref(getDatabase());
+                    get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            setUserData(snapshot.val())
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
+
                 } else {
                     return null // Define uma lista vazia caso não haja dados
                 }
@@ -344,7 +339,7 @@ const Measurement = () => {
             return null
         }
 
-    }, [user])
+    }, [user,console.log('MSG:::::::',userData.msgCadastro)])
 
 
     React.useEffect(() => {
@@ -703,6 +698,9 @@ const Measurement = () => {
             )
         }
     }
+
+    console.log('userdata',userData.msgCadastro)
+
 
 
     return (

@@ -40,7 +40,7 @@ const RegisterClient = () => {
     const [clientForTime, setClientforTime] = React.useState([{ clientes: [] }]);
     const [checkForTime, setCheckforTime] = React.useState([{}]);
     const [connectednumber, setConnectedNumber] = React.useState(false);
-    const [userData, setUserData] = React.useState({ msgCadastro: '', msgHorario: '' });
+    const [userData, setUserData] = React.useState('');
     const [inputUsocontinuo, setInputUsoContinuo] = React.useState('Sua medicação esta acabando lembre-se de comprar');
     const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
     const listRef = React.useRef(null);
@@ -162,29 +162,6 @@ const RegisterClient = () => {
         }
     }
 
-    React.useEffect(() => {
-        dataInstanceValue();
-
-    }, [])
-
-
-    React.useEffect(() => {
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                setUserData(snapshot.val())
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    }, []); // Atualiza sempre que 'items' mudar
-
-    function getDataUser() {
-
-    }
-
 
     React.useEffect(() => {
         const today = new Date();
@@ -203,48 +180,24 @@ const RegisterClient = () => {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/auth.user
                 setUser(user)
+
+                const dbRef = ref(getDatabase());
+                get(child(dbRef, `${base64.encode(user.email)}/mensagens`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        setUserData(snapshot.val())
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
                 // ...
             } else {
                 // User is signed out
                 // ...
             }
         });
-    }, [])
-
-    React.useEffect(() => {
-        if (user) {
-            const dbRef = ref(database, `${base64.encode(user.email)}/clientes`); // Referência para a coleção 'clientes'
-
-            // Escuta mudanças em tempo real
-            const unsubscribe = onValue(dbRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    const dataList = Object.keys(data).map((key) => ({
-                        id: key,
-                        nome: data[key].nome,
-                        acabaEm: data[key].acabaEm,
-                        cpf: data[key].cpf,
-                        contato: data[key].contato,
-                        doses: data[key].doses,
-                        remedio: data[key].remedio,
-                        receita: data[key].receita,
-                        usoContinuo: data[key].usoContinuo,
-                        mensagens: data[key].mensagens,
-                        horario: data[key].horario,
-                        dataCadastro: data[key].dataCadastro
-                    }));
-                    setFilteredData(dataList);
-                    setDataClientes(dataList);
-
-                } else {
-                    return null // Define uma lista vazia caso não haja dados
-                }
-            });
-        } else {
-            return null
-        }
-
-    }, [user])
+    }, [user,console.log('MSG:::',userData.msgCadastro)])
 
 
     React.useEffect(() => {
@@ -265,8 +218,6 @@ const RegisterClient = () => {
                     setClientforTime(dataList);
 
 
-
-
                 } else {
                     return null // Define uma lista vazia caso não haja dados
                 }
@@ -274,7 +225,7 @@ const RegisterClient = () => {
 
             });
             return unsubscribe;
-        }, 27000);
+        }, 4000);
         return () => clearInterval(intervalo);
 
 
@@ -300,84 +251,6 @@ const RegisterClient = () => {
         }
     }
 
-    React.useEffect(() => {
-        const agora = new Date();
-        if (clientForTime) {
-            clientForTime.forEach((client) => {
-                if (client.clientes) {
-                    Object.values(client.clientes).forEach((cliente) => {
-                        const acabaEmStr = cliente.acabaEm; // Ex: "16/10/2024"
-                        const [dia, mes, ano] = acabaEmStr.split("/").map(Number); // Quebra o formato DD/MM/YYYY
-                        const dataAcabaEm = new Date(ano, mes - 1, dia); // Cria objeto Date para `acabaEm`
-
-                        // Calcula o momento exato para envio (36 horas antes)
-                        const momentoEnvio = new Date(dataAcabaEm);
-                        momentoEnvio.setHours(momentoEnvio.getHours() - 35);
-
-                        // Verifica se o horário atual corresponde ao momento de envio
-                        const horas = String(agora.getHours()).padStart(2, "0");
-                        const minutos = String(agora.getMinutes()).padStart(2, "0");
-                        const dataAtualStr = `${agora.getFullYear()}-${String(
-                            agora.getMonth() + 1
-                        ).padStart(2, "0")}-${String(agora.getDate()).padStart(2, "0")} ${horas}:${minutos}`;
-
-                        const momentoEnvioStr = `${momentoEnvio.getFullYear()}-${String(
-                            momentoEnvio.getMonth() + 1
-                        ).padStart(2, "0")}-${String(momentoEnvio.getDate()).padStart(2, "0")} ${String(
-                            momentoEnvio.getHours()
-                        ).padStart(2, "0")}:${String(momentoEnvio.getMinutes()).padStart(2, "0")}`;
-
-                        console.log('momentoenvio::::', momentoEnvioStr, 'dataatualizar:::', dataAtualStr)
-
-                        if (dataAtualStr === momentoEnvioStr) {
-                            const body = {
-                                message: `,${cliente.msgUsoContinuo} - Medicação: ${cliente.remedio}`,
-                                phone: `55${cliente.contato}`,
-                                delayMessage: 10,
-                            };
-
-                            console.log("Enviando mensagem para:", cliente.contato);
-                            sendMessageAll(body); // Função já implementada para envio de mensagem
-                        }
-                    });
-                }
-            });
-        }
-    }, [clientForTime])
-
-    React.useEffect(() => {
-        if (clientForTime) {
-            clientForTime.forEach(client => {
-                if (client.clientes) {
-                    Object.values(client.clientes).forEach(cliente => {
-                        Object.values(cliente.horario).forEach(clienteT => {
-                            const agora = new Date();
-                            const horas = String(agora.getHours()).padStart(2, "0");
-                            const minutos = String(agora.getMinutes()).padStart(2, "0");
-
-
-                            if (clienteT.hora == `${horas}:${minutos}`) {
-
-                                const body = {
-                                    message: `${client.mensagens.msgHorario} - ${cliente.remedio},agora as ${horas}:${minutos}`,
-                                    phone: `55${cliente.contato}`,
-                                    delayMessage: 10
-                                }
-                                console.log('ENVIARMENSAGEM::::', cliente.contato)
-                                sendMessageAll(body)
-
-                            } else {
-                                return null
-                            }
-
-
-
-                        });
-                    });
-                }
-            });
-        }
-    }, [clientForTime]);
 
     async function dataInstanceValue() {
         const idi = '3D826867ABEC00CA23EBB2D4EBC7E202';
@@ -402,6 +275,7 @@ const RegisterClient = () => {
     }, [])
 
 
+
     function setNewClient() {
         const database = getDatabase()
         if (wppInput == '' || nomeInput == '' || cpfInput == '') {
@@ -412,6 +286,7 @@ const RegisterClient = () => {
                 phone: `55${wppInput}`,
                 delayMessage: 10
             }
+
 
             remedioInput.map((response) => {
                 const horariosCount = response.horario.length
@@ -443,18 +318,18 @@ const RegisterClient = () => {
                         console.log('EEEEEEEEE:::::::::', e)
                         set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
                             hora: e
-                        }).then(log => {
-
-                            sendMessageAll(body)
-
                         })
-                    })
 
+
+                    })
+                    sendMessageAll(body)
                 }
 
                 )
 
             })
+
+
 
         }
         navigate('/measure')
@@ -589,7 +464,7 @@ const RegisterClient = () => {
     };
 
     return (
-        <Box sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}} ref={listRef} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} ref={listRef} >
             <a
                 onClick={() => navigate('/measure')}
                 style={{
@@ -607,9 +482,9 @@ const RegisterClient = () => {
             <Typography id="modal-modal-title" variant="h6" style={{ fontWeight: 'bold', fontSize: 18 }} >
                 Dados para cadastro do Cliente/Paciente
             </Typography>
-            <TextField id="outlined-basic-nome" label="Nome" onChange={text => setNomeInput(text.target.value)} fullWidth variant="outlined" />
-            <TextField id="outlined-basic-wpp" label="Whatsapp" onChange={text => setWppInput(text.target.value)} fullWidth variant="outlined" />
-            <TextField id="outlined-basic-cpf" label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
+            <TextField id="outlined-basic-nome" value={nomeInput} label="Nome" onChange={text => setNomeInput(text.target.value)} fullWidth variant="outlined" />
+            <TextField id="outlined-basic-wpp" value={wppInput} label="Whatsapp" onChange={text => setWppInput(text.target.value)} fullWidth variant="outlined" />
+            <TextField id="outlined-basic-cpf" value={cpfInput} label="CPF" fullWidth onChange={text => setCpfInput(text.target.value)} variant="outlined" />
 
             {
                 remedioInput.map((response, remedioIndex) => (
