@@ -464,7 +464,7 @@ const RegisterClient = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} ref={listRef} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',gap:6 }} ref={listRef} >
             <a
                 onClick={() => navigate('/measure')}
                 style={{
