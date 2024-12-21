@@ -39,37 +39,7 @@ const Register = () => {
       if (!emailInput || !razaoSocial || !cnpjInput && senhaInput != confirmarSenhaInput) {
         window.alert('Complete os campos')
       } else {
-        setProgressive(true)
-        const auth = getAuth();
-        const database = getDatabase()
-        const encodeEmail = base64.encode(emailInput)
-       
-       const newUser =  createUserWithEmailAndPassword(auth, emailInput, senhaInput)
-          .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            window.alert('Usuário Cadastrado - VERIFIQUE SEU EMAIL')
-            navigate('/')
-            setProgressive(false)
-            sendEmailVerification(auth.currentUser).then(log => console.log('sendemailsuce',log)).catch(erro => console.log(erro))
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode,errorMessage)
-            window.alert('Falha, seguinte error - Usuário já cadastrado', errorMessage)
-            setProgressive(false)
-            // ..
-          });
-
-         
-          console.log(newUser)
-
-        set(ref(database, `${encodeEmail}/mensagens`), {
-          msgCadastro:'Olá vimos que acabou de fazer registro para receber horários das suas medicações,no horário extao você será lembrado',
-          msgHorario:'Olá Está no horário da sua medicação, lembre-se , horários são importantes'
-        })
-        return newUser
+        navigate('/payment',{emailInput,senhaInput})
       }
     } catch (error) {
       window.alert('ERRO:', error)

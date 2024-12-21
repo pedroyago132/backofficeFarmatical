@@ -7,11 +7,12 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { getDatabase } from 'firebase/database';
-import { initMercadoPago } from '@mercadopago/sdk-react';
 import QRCode from './pages/QRCode';
 import Configuracao from './pages/Config';
 import Clientes from './pages/Clientes';
 import RegisterClient from './pages/RegisterClient';
+import Payment from './pages/Payment';
+import { initMercadoPago } from '@mercadopago/sdk-react';
 
 
 const firebaseConfig = {
@@ -28,6 +29,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
+
+initMercadoPago('TEST-7a50d17f-477e-46fc-9155-03f005a2e20f');
 
 export { database }
 
@@ -89,6 +92,7 @@ function App() {
           <Route path="/config" element={<Configuracao />} />
           <Route path="/clientes" element={<Clientes />} />
           <Route path="/registerClient" element={<RegisterClient />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </BrowserRouter>
       </ThemeProvider>

@@ -50,7 +50,8 @@ const RegisterClient = () => {
     const buttonStyles = {
         marginBottom: 25,
         paddingTop: 7,
-        width: isMobile ? '100%' : '60%'
+        width: isMobile ? '100%' : '60%',
+        backgroundColor:'#007bff'
     };
     const UploadButton = styled.label`
               background-color: #007bff;
@@ -59,8 +60,8 @@ const RegisterClient = () => {
               border-radius: 5px;
               cursor: pointer;
               font-size: 16px;
-              margin-bottom: 20px;
               max-height:50px;
+              margin-top:10px;
               &:hover {
                 background-color: #0056b3;
               }
@@ -74,7 +75,7 @@ const RegisterClient = () => {
               display: flex;
               flex-direction: column;
               align-items: center;
-              margin-top: 20px;
+
             `;
 
     const ImagePreview = styled.img`
@@ -82,13 +83,11 @@ const RegisterClient = () => {
               max-height: 300px;
               border: 2px solid #ccc;
               border-radius: 10px;
-              margin-top: 16px;
             `;
 
     const PlaceholderText = styled.p`
               color: #555;
               font-size: 14px;
-              margin-top:-7px;
             
             `;
 
@@ -106,6 +105,23 @@ const RegisterClient = () => {
                 background-color: #a71d2a;
               }
             `;
+
+            const BotaoAzul = styled.button`
+  background-color: white;
+  color:rgb(8, 53, 68); /* Azul claro */
+  border: 2px solidrgb(12, 51, 65); /* Azul claro */
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #ADD8E6; /* Azul claro no hover */
+    color: white;
+  }
+`;
 
     const paginationModel = { page: 0, pageSize: 5 };
 
@@ -464,7 +480,7 @@ const RegisterClient = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',gap:6 }} ref={listRef} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding:4,justifyContent: 'center',gap:6 }} ref={listRef} >
             <a
                 onClick={() => navigate('/measure')}
                 style={{
@@ -517,11 +533,11 @@ const RegisterClient = () => {
                                     onClick={() => removeTask(remedioIndex)}
                                     style={{
                                         fontSize: 13,
-                                        color: 'red',
+                                        color: 'blue',
                                         cursor: 'pointer',
                                         alignSelf: 'flex-end',
                                         padding: 5,
-                                        border: '1px solid red',
+                                        border: '1px solid blue',
                                     }}
                                 >
                                     Excluir Remédio
@@ -565,17 +581,17 @@ const RegisterClient = () => {
                                 value={horario.hora}
                             />
                         ))}
-                        <div style={{ flexDirection: 'row', display: 'flex', gap: 15 }} >
+                        <div style={{ flexDirection: 'row', display: 'flex', gap: 15,alignItems:'center',justifyContent:'center',padding:10 }} >
 
 
-                            <Button
+                            <BotaoAzul
                                 style={{ marginTop: 10, alignSelf: 'flex-start' }}
                                 variant="outlined"
                                 onClick={() => addHorario(remedioIndex)}
                             >
                                 Adicionar Horário
-                            </Button>
-                            <div style={{ display: "flex", flexDirection: "column" }} >
+                            </BotaoAzul>
+                       
                                 <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                                 <Input
                                     id={`file-input-${remedioIndex}`}
@@ -595,15 +611,16 @@ const RegisterClient = () => {
                                         <PlaceholderText></PlaceholderText>
                                     )}
                                 </ImageContainer>
-                            </div>
+                      
 
                         </div>
+
                         <div style={{ width: '97%', border: '1px dotted grey' }} />
 
                     </div>
                 ))
             }
-            <Button style={{ marginTop: 10, }} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</Button>
+            <Button style={{ marginTop: 10, borderColor:'blue',color:"blue"}} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</Button>
 
 
 

@@ -207,6 +207,23 @@ const Measurement = () => {
   }
 `;
 
+const BotaoAzul = styled.button`
+  background-color: white;
+  color: #ADD8E6; /* Azul claro */
+  border: 2px solid #ADD8E6; /* Azul claro */
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #ADD8E6; /* Azul claro no hover */
+    color: white;
+  }
+`;
+
 
 
 
@@ -873,16 +890,16 @@ const Measurement = () => {
                                         value={horario.hora}
                                     />
                                 ))}
-                                <div style={{ flexDirection: 'row', display: 'flex', gap: 15 }} >
+                                <div style={{ flexDirection: 'row', display: 'flex', gap: 10,alignItems:'center',justifyContent:'center' }} >
 
 
-                                    <Button
+                                    <BotaoAzul
                                         style={{ marginTop: 10, alignSelf: 'flex-start' }}
                                         variant="outlined"
                                         onClick={() => addHorario(remedioIndex)}
                                     >
                                         Adicionar Horário
-                                    </Button>
+                                    </BotaoAzul>
                                     <div style={{ display: "flex", flexDirection: "column" }} >
                                         <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                                         <Input
