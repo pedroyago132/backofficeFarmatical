@@ -27,7 +27,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: '' }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto:'' }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -127,32 +127,43 @@ const RegisterClient = () => {
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        console.log("Evento:", event);
         const files = event.target.files;
-        console.log("Arquivos:", files);
     
-        if (files) {
+        if (files && files.length > 0) {
             const file = files[0];
             console.log("Arquivo selecionado:", file);
     
-            // Criar um FileReader para converter o arquivo em Base64
+            // Verificar se é uma imagem válida
+            if (!file.type.startsWith("image/")) {
+                console.error("O arquivo selecionado não é uma imagem.");
+                return;
+            }
+    
             const reader = new FileReader();
             reader.onload = () => {
-                const base64 = reader.result; // Contém a imagem em Base64
+                const base64 = reader.result;
                 console.log("Imagem em Base64:", base64);
     
+                // Atualizar o estado com a nova imagem
                 const updated = [...remedioInput];
-                updated[remedioIndex].foto = base64; // Armazena a imagem em Base64
+                updated[remedioIndex].foto = base64;
                 setRemedioInput(updated);
     
                 console.log("Estado atualizado:", updated);
+    
+                // Reseta o campo de entrada
+                event.target.value = '';
             };
-            reader.readAsDataURL(file); // Lê o arquivo como Data URL (Base64)
+    
+            reader.onerror = () => {
+                console.error("Erro ao ler o arquivo.");
+            };
+    
+            reader.readAsDataURL(file);
         } else {
             console.log("Nenhum arquivo selecionado.");
         }
     };
-
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
