@@ -130,20 +130,24 @@ const RegisterClient = () => {
         console.log("Evento:", event);
         const files = event.target.files;
         console.log("Arquivos:", files);
-        
-        if (files && files[0]) {
+    
+        if (files) {
             const file = files[0];
             console.log("Arquivo selecionado:", file);
     
-            // Gerar uma URL temporária para o arquivo
-            const fileURL = URL.createObjectURL(file);
+            // Criar um FileReader para converter o arquivo em Base64
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result; // Contém a imagem em Base64
+                console.log("Imagem em Base64:", base64);
     
-            const updated = [...remedioInput];
-            updated[remedioIndex].foto = fileURL; // Armazena a URL gerada
-            setRemedioInput(updated);
+                const updated = [...remedioInput];
+                updated[remedioIndex].foto = base64; // Armazena a imagem em Base64
+                setRemedioInput(updated);
     
-            console.log("URL gerada:", fileURL);
-            console.log("Estado atualizado:", updated);
+                console.log("Estado atualizado:", updated);
+            };
+            reader.readAsDataURL(file); // Lê o arquivo como Data URL (Base64)
         } else {
             console.log("Nenhum arquivo selecionado.");
         }

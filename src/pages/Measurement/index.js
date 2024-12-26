@@ -534,8 +534,8 @@ const BotaoAzul = styled.button`
                                if(cliente.fotoUrl){
                                 const bodyImage = {
                                     phone: `55${cliente.contato}`,
-                                    image: cliente.fotoUrl,
-                                    caption: "Remédio"
+                                    image: `${cliente.fotoUrl}`,
+                                    caption: "Remedio"
                                   }
 
                                   sendImage(bodyImage)
