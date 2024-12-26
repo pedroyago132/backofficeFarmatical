@@ -127,43 +127,19 @@ const RegisterClient = () => {
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        const files = event.target.files;
+        const file = event?.target?.files[0];
+        if (!file) return;
     
-        if (files && files.length > 0) {
-            const file = files[0];
-            console.log("Arquivo selecionado:", file);
-    
-            // Verificar se é uma imagem válida
-            if (!file.type.startsWith("image/")) {
-                console.error("O arquivo selecionado não é uma imagem.");
-                return;
-            }
-    
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result;
-                console.log("Imagem em Base64:", base64);
-    
-                // Atualizar o estado com a nova imagem
-                const updated = [...remedioInput];
-                updated[remedioIndex].foto = base64;
-                setRemedioInput(updated);
-    
-                console.log("Estado atualizado:", updated);
-    
-                // Reseta o campo de entrada
-                event.target.value = '';
-            };
-    
-            reader.onerror = () => {
-                console.error("Erro ao ler o arquivo.");
-            };
-    
-            reader.readAsDataURL(file);
-        } else {
-            console.log("Nenhum arquivo selecionado.");
-        }
-    };
+        // Atualizar o estado com o arquivo selecionado
+        setRemedioInput((prevState) => {
+          const updatedInputs = [...prevState];
+          updatedInputs[remedioIndex] = {
+            ...updatedInputs[remedioIndex],
+            foto: URL.createObjectURL(file), // Salva a URL da imagem para pré-visualização
+          };
+          return updatedInputs;
+        });
+      };
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
