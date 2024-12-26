@@ -174,7 +174,7 @@ const Header = () => {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={() => selectItemMenu(page)}>
+                            <MenuItem key={setting} onClick={() => selectItemMenu(setting)}>
                                 <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                             </MenuItem>
                         ))}

@@ -140,6 +140,7 @@ const RegisterClient = () => {
           return updatedInputs;
         });
       };
+      
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
