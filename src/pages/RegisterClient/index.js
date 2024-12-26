@@ -27,7 +27,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: null }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: '' }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -127,19 +127,25 @@ const RegisterClient = () => {
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        console.log('EVENTTTTT:::', event);
-        const file = event.target.files;
-        if (file) {
-            // Gera uma URL temporária para o arquivo selecionado
+        console.log("Evento:", event);
+        const files = event.target.files;
+        console.log("Arquivos:", files);
+        
+        if (files && files[0]) {
+            const file = files[0];
+            console.log("Arquivo selecionado:", file);
+    
+            // Gerar uma URL temporária para o arquivo
             const fileURL = URL.createObjectURL(file);
     
             const updated = [...remedioInput];
             updated[remedioIndex].foto = fileURL; // Armazena a URL gerada
             setRemedioInput(updated);
     
-            console.log('Imagem carregada com URL:', fileURL);
+            console.log("URL gerada:", fileURL);
+            console.log("Estado atualizado:", updated);
         } else {
-            console.log('Nenhum arquivo selecionado.');
+            console.log("Nenhum arquivo selecionado.");
         }
     };
 
