@@ -51,6 +51,9 @@ const Header = () => {
         }else if (page == 'Editar Clientes' ){
             navigate('/clientes')
         }
+        else if (page == 'Sair' ){
+            navigate('/')
+        }
 
        
     }
