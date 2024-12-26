@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "firebase/storage";
 import "firebase/database";
 import { database } from '../../App';
 
@@ -51,7 +52,6 @@ const RegisterClient = () => {
         marginBottom: 25,
         paddingTop: 7,
         width: isMobile ? '100%' : '60%',
-        backgroundColor:'#007bff'
     };
     const UploadButton = styled.label`
               background-color: #007bff;
@@ -127,7 +127,7 @@ const RegisterClient = () => {
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        console.log('EVENTTTTT:::', event)
+        console.log('EVENTTTTT:::', event);
         const file = event?.target?.files[0];
         if (file) {
             const reader = new FileReader();
@@ -292,63 +292,83 @@ const RegisterClient = () => {
 
 
 
-    function setNewClient() {
-        const database = getDatabase()
-        if (wppInput == '' || nomeInput == '' || cpfInput == '') {
-            window.alert('Complete os campos')
-        } else {
-            const body = {
-                message: `${userData.msgCadastro}`,
-                phone: `55${wppInput}`,
-                delayMessage: 10
-            }
-
-
-            remedioInput.map((response) => {
-                const horariosCount = response.horario.length
-                const dosesCount = response.doses
-                const acabaEmDias = dosesCount / horariosCount
-                const hoje = new Date(); // Data atual
-                const novaData = new Date(hoje); // Clona a data atual
-                novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
-
-                // Adiciona a data ao objeto response
-                response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
-                set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}`), {
-
-                    acabaEm: response.acabaEm,
-                    nome: nomeInput,
-                    contato: wppInput,
-                    remedio: response.remedio,
-                    doses: response.doses,
-                    cpf: cpfInput,
-                    receita: receita,
-                    usoContinuo: usoContinuo,
-                    horario: time,
-                    dataCadastro: date,
-                    msgUsoContinuo: inputUsocontinuo,
-                    msgReceita: inputReceita
-                }).then(responses => {
-
-                    Object.values(response.horario).forEach(e => {
-                        console.log('EEEEEEEEE:::::::::', e)
-                        set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
-                            hora: e
-                        })
-
-
-                    })
-                    sendMessageAll(body)
-                }
-
-                )
-
-            })
-
-
-
+    async function setNewClient() {
+        const database = getDatabase();
+        const storage = getStorage();
+    
+        if (wppInput === '' || nomeInput === '' || cpfInput === '') {
+            window.alert('Complete os campos');
+            return;
         }
-        navigate('/measure')
+    
+        const body = {
+            message: `${userData.msgCadastro}`,
+            phone: `55${wppInput}`,
+            delayMessage: 10
+        };
+    
+        const uploadPromises = remedioInput.map(async (response, remedioIndex) => {
+            const horariosCount = response.horario.length;
+            const dosesCount = response.doses;
+            const acabaEmDias = dosesCount / horariosCount;
+            const hoje = new Date(); // Data atual
+            const novaData = new Date(hoje); // Clona a data atual
+            novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
+    
+            // Adiciona a data ao objeto response
+            response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
+    
+            let imageUrl = '';
+    
+            if (response.foto) {
+                // Upload da imagem ao Firebase Storage
+                const storagePath = `${base64.encode(user.email)}/clientes/${cpfInput}/remedios/${remedioIndex}/foto.jpg`;
+                const storageReference = storageRef(storage, storagePath);
+    
+                try {
+                    await uploadString(storageReference, response.foto, 'data_url');
+                    imageUrl = await getDownloadURL(storageReference);
+                } catch (error) {
+                    console.error("Erro ao fazer upload da imagem:", error);
+                }
+            }
+    
+            // Caminho no Realtime Database com cpfInput, remedioIndex e response.remedio
+            const databasePath = `${base64.encode(user.email)}/clientes/${base64.encode(cpfInput + remedioIndex + response.remedio)}`;
+            await set(ref(database, databasePath), {
+                acabaEm: response.acabaEm,
+                nome: nomeInput,
+                contato: wppInput,
+                remedio: response.remedio,
+                doses: response.doses,
+                cpf: cpfInput,
+                receita: receita,
+                usoContinuo: usoContinuo,
+                horario: time,
+                dataCadastro: date,
+                msgUsoContinuo: inputUsocontinuo,
+                msgReceita: inputReceita,
+                fotoUrl: imageUrl, // Adiciona a URL da imagem ao banco
+                digit: remedioIndex // Adiciona o índice como "digit"
+            });
+    
+            // Atualiza os horários individualmente
+            const horarioPromises = Object.values(response.horario).map(e =>
+                set(ref(database, `${databasePath}/horario/${e}`), {
+                    hora: e
+                })
+            );
+            await Promise.all(horarioPromises);
+        });
+    
+        // Aguarda todos os uploads e gravações de dados
+        await Promise.all(uploadPromises);
+    
+        // Envia a mensagem
+        sendMessageAll(body);
+    
+        // Navega para a próxima página
+        navigate('/measure');
     }
 
     const addMedicacao = () => {
@@ -584,13 +604,13 @@ const RegisterClient = () => {
                         <div style={{ flexDirection: 'row', display: 'flex', gap: 15,alignItems:'center',justifyContent:'center',padding:10 }} >
 
 
-                            <BotaoAzul
+                            <UploadButton
                                 style={{ marginTop: 10, alignSelf: 'flex-start' }}
                                 variant="outlined"
                                 onClick={() => addHorario(remedioIndex)}
                             >
                                 Adicionar Horário
-                            </BotaoAzul>
+                            </UploadButton>
                        
                                 <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                                 <Input
@@ -620,7 +640,7 @@ const RegisterClient = () => {
                     </div>
                 ))
             }
-            <Button style={{ marginTop: 10, borderColor:'blue',color:"blue"}} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</Button>
+            <UploadButton style={{ marginTop: 10}} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</UploadButton>
 
 
 

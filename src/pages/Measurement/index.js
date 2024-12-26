@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import { sendMessageAll, setNewClient } from '../../services';
+import { sendImage, sendMessageAll, setNewClient } from '../../services';
 import base64 from 'base-64';
 import { getDatabase, ref, set, get, child, onValue } from "firebase/database";
 import { database } from '../../App';
@@ -31,6 +31,8 @@ import { dataInstance } from '../../services';
 import styled from 'styled-components';
 import { useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from "@mui/material"; // Certifique-se de ter os componentes do Material-UI instalados
+
 
 
 
@@ -105,7 +107,7 @@ const Measurement = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: null }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto:'' }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -127,6 +129,7 @@ const Measurement = () => {
     const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
     const [contatoEdit, setValueContatoEdit] = React.useState('');
     const [image, setImage] = React.useState(null);
+    const [loadRegisterClient, setLoadRegisterClient] = React.useState(false);
     const listRef = React.useRef(null);
 
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -250,16 +253,21 @@ const BotaoAzul = styled.button`
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        console.log('EVENTTTTT:::', event)
-        const file = event?.target?.files[0];
+        const file = event.target.files;
         if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const updated = [...remedioInput];
-                updated[remedioIndex].foto = reader.result; // Armazena a foto em base64
-                setRemedioInput(updated);
-            };
-            reader.readAsDataURL(file);
+            console.log('Arquivo selecionado:', file);
+    
+            // Gerar uma URL temporária para o arquivo
+            const fileURL = URL.createObjectURL(file);
+    
+            const updated = [...remedioInput];
+            updated[remedioIndex].foto = fileURL; // Armazena a URL gerada
+            setRemedioInput(updated);
+    
+            console.log('URL gerada:', fileURL);
+            console.log('Estado atualizado:', updated);
+        } else {
+            console.log('Nenhum arquivo selecionado.');
         }
     };
 
@@ -424,7 +432,52 @@ const BotaoAzul = styled.button`
 
                         // Calcula o momento exato para envio (36 horas antes)
                         const momentoEnvio = new Date(dataAcabaEm);
-                        momentoEnvio.setHours(momentoEnvio.getHours() - 35);
+                        momentoEnvio.setHours(momentoEnvio.getHours() - 58);
+
+                        // Verifica se o horário atual corresponde ao momento de envio
+                        const horas = String(agora.getHours()).padStart(2, "0");
+                        const minutos = String(agora.getMinutes()).padStart(2, "0");
+                        const dataAtualStr = `${agora.getFullYear()}-${String(
+                            agora.getMonth() + 1
+                        ).padStart(2, "0")}-${String(agora.getDate()).padStart(2, "0")} ${horas}:${minutos}`;
+
+                        const momentoEnvioStr = `${momentoEnvio.getFullYear()}-${String(
+                            momentoEnvio.getMonth() + 1
+                        ).padStart(2, "0")}-${String(momentoEnvio.getDate()).padStart(2, "0")} ${String(
+                            momentoEnvio.getHours()
+                        ).padStart(2, "0")}:${String(momentoEnvio.getMinutes()).padStart(2, "0")}`;
+
+                        console.log('momentoenvio::::', momentoEnvioStr, 'dataatualizar:::', dataAtualStr)
+
+                        if (dataAtualStr === momentoEnvioStr) {
+                            const body = {
+                                message: `,${cliente.msgUsoContinuo} - Medicação: ${cliente.remedio}`,
+                                phone: `55${cliente.contato}`,
+                                delayMessage: 10,
+                            };
+
+                            console.log("Enviando mensagem para:", cliente.contato);
+                            sendMessageAll(body); // Função já implementada para envio de mensagem
+                        }
+                    });
+                }
+            });
+        }
+    }, [clientForTime])
+
+    React.useEffect(() => {
+        const agora = new Date();
+        if (clientForTime) {
+            clientForTime.forEach((client) => {
+                if (client.clientes) {
+                    Object.values(client.clientes).forEach((cliente) => {
+                        const acabaEmStr = cliente.acabaEm; // Ex: "16/10/2024"
+                        const [dia, mes, ano] = acabaEmStr.split("/").map(Number); // Quebra o formato DD/MM/YYYY
+                        const dataAcabaEm = new Date(ano, mes - 1, dia); // Cria objeto Date para `acabaEm`
+
+                        // Calcula o momento exato para envio (36 horas antes)
+                        const momentoEnvio = new Date(dataAcabaEm);
+                        momentoEnvio.setHours(momentoEnvio.getHours() - 34);
 
                         // Verifica se o horário atual corresponde ao momento de envio
                         const horas = String(agora.getHours()).padStart(2, "0");
@@ -478,6 +531,14 @@ const BotaoAzul = styled.button`
                                 console.log('ENVIARMENSAGEM::::', cliente.contato)
                                 sendMessageAll(body)
 
+                                const bodyImage = {
+                                    phone: `55${cliente.contato}`,
+                                    image: cliente.fotoUrl,
+                                    caption: "Remédio"
+                                  }
+
+                                  sendImage(bodyImage)
+
                             } else {
                                 return null
                             }
@@ -514,67 +575,88 @@ const BotaoAzul = styled.button`
     }, [])
 
 
-    function setNewClient() {
-        const database = getDatabase()
-        if (wppInput == '' || nomeInput == '' || cpfInput == '') {
-            window.alert('Complete os campos')
-        } else {
-            const body = {
-                message: `${userData.msgCadastro}`,
-                phone: `55${wppInput}`,
-                delayMessage: 10
-            }
+    async function setNewClient() {
+        const database = getDatabase();
+        const storage = getStorage();
 
-            remedioInput.map((response) => {
-                const horariosCount = response.horario.length
-                const dosesCount = response.doses
-                const acabaEmDias = dosesCount / horariosCount
-                const hoje = new Date(); // Data atual
-                const novaData = new Date(hoje); // Clona a data atual
-                novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
-
-                // Adiciona a data ao objeto response
-                response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
-                set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}`), {
-
-                    acabaEm: response.acabaEm,
-                    nome: nomeInput,
-                    contato: wppInput,
-                    remedio: response.remedio,
-                    doses: response.doses,
-                    cpf: cpfInput,
-                    receita: receita,
-                    usoContinuo: usoContinuo,
-                    horario: time,
-                    dataCadastro: date,
-                    msgUsoContinuo: inputUsocontinuo,
-                    msgReceita: inputReceita
-                }).then(responses => {
-
-                    Object.values(response.horario).forEach(e => {
-                        console.log('EEEEEEEEE:::::::::', e)
-                        set(ref(database, `${base64.encode(user.email)}/clientes/${cpfInput}/horario/${e}`), {
-                            hora: e
-                        }).then(log => {
-
-                            sendMessageAll(body)
-
-                        })
-                    })
-
-                }
-
-                )
-
-            })
-
+       
+    
+        if (wppInput === '' || nomeInput === '' || cpfInput === '') {
+            window.alert('Complete os campos');
+            return;
         }
+    
+        const body = {
+            message: `${userData.msgCadastro}`,
+            phone: `55${wppInput}`,
+            delayMessage: 10
+        };
 
-        handleCloseRegister()
-
-
-
-
+        setLoadRegisterClient(true)
+    
+        const uploadPromises = remedioInput.map(async (response, remedioIndex) => {
+            const horariosCount = response.horario.length;
+            const dosesCount = response.doses;
+            const acabaEmDias = dosesCount / horariosCount;
+            const hoje = new Date(); // Data atual
+            const novaData = new Date(hoje); // Clona a data atual
+            novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
+    
+            // Adiciona a data ao objeto response
+            response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
+    
+            let imageUrl = '';
+    
+            if (response.foto) {
+                // Upload da imagem ao Firebase Storage
+                const storagePath = `${base64.encode(user.email)}/clientes/${cpfInput}/remedios/${remedioIndex}/foto.jpg`;
+                const storageReference = storageRef(storage, storagePath);
+    
+                try {
+                    await uploadString(storageReference, response.foto, 'data_url');
+                    imageUrl = await getDownloadURL(storageReference);
+                } catch (error) {
+                    console.error("Erro ao fazer upload da imagem:", error);
+                }
+            }
+    
+            // Caminho no Realtime Database com cpfInput, remedioIndex e response.remedio
+            const databasePath = `${base64.encode(user.email)}/clientes/${cpfInput}_${remedioIndex}_${response.remedio}`;
+            await set(ref(database, databasePath), {
+                acabaEm: response.acabaEm,
+                nome: nomeInput,
+                contato: wppInput,
+                remedio: response.remedio,
+                doses: response.doses,
+                cpf: cpfInput,
+                receita: receita,
+                usoContinuo: usoContinuo,
+                horario: time,
+                dataCadastro: date,
+                msgUsoContinuo: inputUsocontinuo,
+                msgReceita: inputReceita,
+                fotoUrl: imageUrl, // Adiciona a URL da imagem ao banco
+                digit: remedioIndex // Adiciona o índice como "digit"
+            });
+    
+            // Atualiza os horários individualmente
+            const horarioPromises = Object.values(response.horario).map(e =>
+                set(ref(database, `${databasePath}/horario/${e}`), {
+                    hora: e
+                })
+            );
+            await Promise.all(horarioPromises);
+        });
+        
+        setLoadRegisterClient(false)
+        // Aguarda todos os uploads e gravações de dados
+        await Promise.all(uploadPromises);
+    
+        // Envia a mensagem
+        sendMessageAll(body);
+    
+        // Navega para a próxima página
+        navigate('/measure');
     }
 
     const addMedicacao = () => {
@@ -676,14 +758,14 @@ const BotaoAzul = styled.button`
                 const body = {
                     message: messageAll,
                     phone: `55${item.contato}`,
-                    delayMessage: 10
+                    delayMessage: 2
                 }
 
-                const response = sendMessageAll(body)
-                return response
+            sendMessageAll(body)
+               
             })
         } catch (error) {
-            console.log('ERROR TRYCATCH::::::::')
+           window.alert('Erro interno ao enviar')
         }
 
 
@@ -975,14 +1057,24 @@ const BotaoAzul = styled.button`
                         }
                     </div>
 
+                {
+                    loadRegisterClient && (
+                      <CircularProgress />
+                    ) 
+                }
 
-                    <Button
+{
+                    !loadRegisterClient && (
+                        <Button
                         style={buttonStyles}
                         variant="contained"
                         onClick={() => setNewClient()}
                     >
                         Cadastrar
                     </Button>
+                    ) 
+                }
+                   
                 </Box>
             </Modal>
 

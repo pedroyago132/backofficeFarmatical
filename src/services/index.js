@@ -117,3 +117,29 @@ export async function dataInstance(idi, tokeni) {
     throw error; // Repassa o erro para que possa ser tratado por quem chamou
   }
 }
+
+export async function sendImage(bodyImage) {
+  try {
+    const response = await fetch(`${Globalurl}/send-image`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Define que o conteúdo do corpo é JSON
+        'Client-Token': 'F5cdad44569cc4be0b47eb93c308ddbf4S',
+      },
+      body: JSON.stringify(bodyImage),
+    });
+
+    // Verifica se a resposta está OK
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+    }
+
+    const result = await response.json(); // Aguarda a conversão para JSON
+    console.log('Success:', result);
+
+    return result; // Retorna o resultado, se necessário
+  } catch (error) {
+    console.error('Error:', error);
+    throw error; // Relança o erro, se você quiser tratá-lo fora dessa função
+  }
+}

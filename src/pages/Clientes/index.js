@@ -185,6 +185,7 @@ const Clientes = () => {
                         msgReceita: data[key].msgReceita,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
+                        digit:data[key].digit
                     }));
                     setDataClientes(dataList);
                 } else {
@@ -215,11 +216,12 @@ const Clientes = () => {
                 dataCadastro: item.dataCadastro,
                 receita: true,
                 msgUsoContinuo: item.msgUsoContinuo,
-                msgReceita: item.msgReceita
+                msgReceita: item.msgReceita,
+                digit:item.digit
             }
 
             const updates = {};
-            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
             return update(ref(db), updates)
                 .then(() => window.alert('Nome alterado com sucesso!!'))
@@ -238,11 +240,12 @@ const Clientes = () => {
                 receita: true,
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
-                msgReceita: item.msgReceita
+                msgReceita: item.msgReceita,
+                digit:item.digit
             }
 
             const updates = {};
-            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
             return update(ref(db), updates)
                 .then(() => window.alert('Contato alterado com sucesso!!'))
@@ -262,11 +265,12 @@ const Clientes = () => {
                 receita: true,
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
-                msgReceita: item.msgReceita
+                msgReceita: item.msgReceita,
+                digit:item.digit
             }
 
             const updates = {};
-            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
             return update(ref(db), updates)
                 .then(() => window.alert('Remedio alterado com sucesso!!'))
@@ -285,11 +289,12 @@ const Clientes = () => {
                 receita: true,
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: inputUsoContinuo,
-                msgReceita: item.msgReceita
+                msgReceita: item.msgReceita,
+                digit:item.digit
             }
 
             const updates = {};
-            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
             return update(ref(db), updates)
                 .then(() => window.alert('Mensgaem para USO CONTINUO alterado com sucesso!!'))
@@ -307,11 +312,12 @@ const Clientes = () => {
                 receita: true,
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
-                msgReceita: inputReceita
+                msgReceita: inputReceita,
+                digit:item.digit
             }
 
             const updates = {};
-            updates[`${email64}/clientes/${item.cpf}`] = postNome;
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
             return update(ref(db), updates)
                 .then(() => window.alert('Mensagem para RECEITA alterada com sucesso!!'))
@@ -347,6 +353,7 @@ const Clientes = () => {
                             dataCadastro: item.dataCadastro,
                             receita: true,
                             usoContinuo: item.usoContinuo,
+                            digit:item.digit
                         };
 
 
@@ -356,7 +363,7 @@ const Clientes = () => {
 
                         // Atualiza os dados no banco, usando a chave gerada como índice.
                         const updates = {};
-                        updates[`${email64}/clientes/${item.nome}${item.remedio}`] = postData;
+                        updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
 
                         return update(ref(db), updates)
                             .then(() => window.alert('Alterado com sucesso!!'))
