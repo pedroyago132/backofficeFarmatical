@@ -531,6 +531,7 @@ const BotaoAzul = styled.button`
                                 console.log('ENVIARMENSAGEM::::', cliente.contato)
                                 sendMessageAll(body)
 
+                               if(cliente.fotoUrl){
                                 const bodyImage = {
                                     phone: `55${cliente.contato}`,
                                     image: cliente.fotoUrl,
@@ -539,6 +540,7 @@ const BotaoAzul = styled.button`
 
                                   sendImage(bodyImage)
 
+                               } 
                             } else {
                                 return null
                             }
