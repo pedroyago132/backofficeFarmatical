@@ -253,7 +253,7 @@ const BotaoAzul = styled.button`
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        const file = event.target.files;
+        const file = event.target.files[0];
         if (file) {
             console.log('Arquivo selecionado:', file);
     
