@@ -128,15 +128,18 @@ const RegisterClient = () => {
 
     const handleImageUpload = (remedioIndex, event) => {
         console.log('EVENTTTTT:::', event);
-        const file = event?.target?.files[0];
+        const file = event.target.files;
         if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const updated = [...remedioInput];
-                updated[remedioIndex].foto = reader.result; // Armazena a foto em base64
-                setRemedioInput(updated);
-            };
-            reader.readAsDataURL(file);
+            // Gera uma URL temporária para o arquivo selecionado
+            const fileURL = URL.createObjectURL(file);
+    
+            const updated = [...remedioInput];
+            updated[remedioIndex].foto = fileURL; // Armazena a URL gerada
+            setRemedioInput(updated);
+    
+            console.log('Imagem carregada com URL:', fileURL);
+        } else {
+            console.log('Nenhum arquivo selecionado.');
         }
     };
 
