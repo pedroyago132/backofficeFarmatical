@@ -27,7 +27,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto:'' }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: null }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -106,7 +106,7 @@ const RegisterClient = () => {
               }
             `;
 
-            const BotaoAzul = styled.button`
+    const BotaoAzul = styled.button`
   background-color: white;
   color:rgb(8, 53, 68); /* Azul claro */
   border: 2px solidrgb(12, 51, 65); /* Azul claro */
@@ -127,20 +127,38 @@ const RegisterClient = () => {
 
 
     const handleImageUpload = (remedioIndex, event) => {
-        const file = event?.target?.files[0];
-        if (!file) return;
+        const file = event.target.files[0];
+
     
-        // Atualizar o estado com o arquivo selecionado
-        setRemedioInput((prevState) => {
-          const updatedInputs = [...prevState];
-          updatedInputs[remedioIndex] = {
-            ...updatedInputs[remedioIndex],
-            foto: URL.createObjectURL(file), // Salva a URL da imagem para pré-visualização
-          };
-          return updatedInputs;
-        });
-      };
-      
+        // Validações de tipo de arquivo
+        if (!file.type.startsWith('image/')) {
+            console.error('Por favor, selecione um arquivo de imagem.');
+            return;
+        }
+    
+        const reader = new FileReader();
+    
+        reader.onload = (e) => {
+            setRemedioInput((prevState) => {
+                const updatedInputs = [...prevState];
+                updatedInputs[remedioIndex] = {
+                    ...updatedInputs[remedioIndex],
+                    foto: e.target.result, // Salva a URL base64 para pré-visualização
+                };
+                return updatedInputs;
+            });
+    
+            // Resetar valor do input para permitir o mesmo arquivo
+            event.target.value = '';
+        };
+    
+        reader.onerror = () => {
+            console.error('Erro ao carregar a imagem.');
+        };
+    
+        reader.readAsDataURL(file); // Lê o arquivo como base64
+    };
+
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
@@ -214,7 +232,7 @@ const RegisterClient = () => {
                 // ...
             }
         });
-    }, [user,console.log('MSG:::',userData.msgCadastro)])
+    }, [user, console.log('MSG:::', userData.msgCadastro)])
 
 
     React.useEffect(() => {
@@ -296,18 +314,18 @@ const RegisterClient = () => {
     async function setNewClient() {
         const database = getDatabase();
         const storage = getStorage();
-    
+
         if (wppInput === '' || nomeInput === '' || cpfInput === '') {
             window.alert('Complete os campos');
             return;
         }
-    
+
         const body = {
             message: `${userData.msgCadastro}`,
             phone: `55${wppInput}`,
             delayMessage: 10
         };
-    
+
         const uploadPromises = remedioInput.map(async (response, remedioIndex) => {
             const horariosCount = response.horario.length;
             const dosesCount = response.doses;
@@ -315,17 +333,17 @@ const RegisterClient = () => {
             const hoje = new Date(); // Data atual
             const novaData = new Date(hoje); // Clona a data atual
             novaData.setDate(novaData.getDate() + acabaEmDias); // Adiciona os dias
-    
+
             // Adiciona a data ao objeto response
             response.acabaEm = novaData.toLocaleDateString(); // Formata a data no formato local
-    
+
             let imageUrl = '';
-    
+
             if (response.foto) {
                 // Upload da imagem ao Firebase Storage
                 const storagePath = `${base64.encode(user.email)}/clientes/${cpfInput}/remedios/${remedioIndex}/foto.jpg`;
                 const storageReference = storageRef(storage, storagePath);
-    
+
                 try {
                     await uploadString(storageReference, response.foto, 'data_url');
                     imageUrl = await getDownloadURL(storageReference);
@@ -333,7 +351,7 @@ const RegisterClient = () => {
                     console.error("Erro ao fazer upload da imagem:", error);
                 }
             }
-    
+
             // Caminho no Realtime Database com cpfInput, remedioIndex e response.remedio
             const databasePath = `${base64.encode(user.email)}/clientes/${base64.encode(cpfInput + remedioIndex + response.remedio)}`;
             await set(ref(database, databasePath), {
@@ -352,7 +370,7 @@ const RegisterClient = () => {
                 fotoUrl: imageUrl, // Adiciona a URL da imagem ao banco
                 digit: remedioIndex // Adiciona o índice como "digit"
             });
-    
+
             // Atualiza os horários individualmente
             const horarioPromises = Object.values(response.horario).map(e =>
                 set(ref(database, `${databasePath}/horario/${e}`), {
@@ -361,13 +379,13 @@ const RegisterClient = () => {
             );
             await Promise.all(horarioPromises);
         });
-    
+
         // Aguarda todos os uploads e gravações de dados
         await Promise.all(uploadPromises);
-    
+
         // Envia a mensagem
         sendMessageAll(body);
-    
+
         // Navega para a próxima página
         navigate('/measure');
     }
@@ -501,7 +519,7 @@ const RegisterClient = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding:4,justifyContent: 'center',gap:6 }} ref={listRef} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 4, justifyContent: 'center', gap: 6 }} ref={listRef} >
             <a
                 onClick={() => navigate('/measure')}
                 style={{
@@ -602,7 +620,7 @@ const RegisterClient = () => {
                                 value={horario.hora}
                             />
                         ))}
-                        <div style={{ flexDirection: 'row', display: 'flex', gap: 15,alignItems:'center',justifyContent:'center',padding:10 }} >
+                        <div style={{ flexDirection: 'row', display: 'flex', gap: 15, alignItems: 'center', justifyContent: 'center', padding: 10 }} >
 
 
                             <UploadButton
@@ -612,36 +630,38 @@ const RegisterClient = () => {
                             >
                                 Adicionar Horário
                             </UploadButton>
-                       
-                                <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
-                                <Input
-                                    id={`file-input-${remedioIndex}`}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleImageUpload(remedioIndex, e)}
-                                />
-                                <ImageContainer>
-                                    {response.foto ? (
-                                        <>
-                                            <ImagePreview src={response.foto} alt="Pré-visualização da imagem" />
-                                            <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
-                                                Remover Foto
-                                            </RemoveButton>
-                                        </>
-                                    ) : (
-                                        <PlaceholderText></PlaceholderText>
-                                    )}
-                                </ImageContainer>
-                      
+
+                            <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
+                            <Input
+                                id={`file-input-${remedioIndex}`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleImageUpload(remedioIndex, e)}
+                            />
+                           
+                           <ImageContainer>
+                                {remedioInput[remedioIndex]?.foto ? ( // Certifique-se de acessar o índice correto no estado
+                                    <>
+                                        <ImagePreview src={remedioInput[remedioIndex].foto} alt="Pré-visualização da imagem" />
+                                        <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
+                                            Remover Foto
+                                        </RemoveButton>
+                                    </>
+                                ) : (
+                                    <PlaceholderText>Nenhuma foto selecionada</PlaceholderText> // Texto placeholder
+                                )}
+                            </ImageContainer>
+
 
                         </div>
+                       
 
                         <div style={{ width: '97%', border: '1px dotted grey' }} />
 
                     </div>
                 ))
             }
-            <UploadButton style={{ marginTop: 10}} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</UploadButton>
+            <UploadButton style={{ marginTop: 10 }} variant='outlined' fullWidth onClick={() => addMedicacao()}>Adicionar Remédio</UploadButton>
 
 
 
