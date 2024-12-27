@@ -614,24 +614,41 @@ const RegisterClient = () => {
                                 Adicionar Horário
                             </UploadButton>
                             <div style={{ display: 'flex', flexDirection: 'column' }} >
+                                <label
+                                    htmlFor={`file-input-${remedioIndex}`}
+                                    style={{
+                                        display: "inline-block",
+                                        padding: "10px 20px",
+                                        backgroundColor: "#007BFF",
+                                        color: "#fff",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                        marginTop:10
+                                    }}
+                                >
+                                    Selecionar Foto
+                                </label>
                                 <input
-                                    
+                                    id={`file-input-${remedioIndex}`}
                                     type="file"
                                     accept="image/*"
                                     onChange={(event) => handleImageChange(event, remedioIndex)}
-                                    style={{ marginBottom: "10px"}}
+                                    style={{ display: "none" }}
                                 />
                                 {response.foto && (
-                                    <div>
+                                    <div style={{display:'flex',flexDirection:'column'}} >
                                         <img
                                             src={response.foto}
                                             alt={`Preview ${remedioIndex}`}
-                                            style={{ maxWidth: "100%", maxHeight: "200px" }}
+                                            style={{ maxWidth: "70%", maxHeight: "200px" }}
                                         />
-
-                                        <RemoveButton onClick={() => handleRemoveImage(remedioIndex)} >Excluir Foto</RemoveButton>
-                                    </div>
+                                          <RemoveButton onClick={() => handleRemoveImage(remedioIndex)} >Excluir Foto</RemoveButton>
+                                   
+                                     </div>
+                                     
                                 )}
+
+                                
                             </div>
 
 
