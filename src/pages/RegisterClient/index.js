@@ -27,7 +27,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: '' }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: "" }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -126,41 +126,22 @@ const RegisterClient = () => {
     const paginationModel = { page: 0, pageSize: 5 };
 
 
-    const handleImageUpload = (remedioIndex, event) => {
+    const handleImageChange = (event, index) => {
         const file = event.target.files[0];
-    
-        // Validações de tipo de arquivo
-        if (!file.type.startsWith('image/')) {
-            console.error('Por favor, selecione um arquivo de imagem.');
-            return;
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // Atualizar o objeto certo no array
+                setRemedioInput((prevState) => {
+                    const updatedRemedioInput = [...prevState];
+                    updatedRemedioInput[index].foto = e.target.result;
+                    return updatedRemedioInput;
+                });
+            };
+            reader.readAsDataURL(file);
         }
-    
-        const reader = new FileReader();
-    
-        reader.onload = (e) => {
-            // Atualiza o estado com a imagem carregada
-            setRemedioInput((prevState) => {
-                const updatedInputs = [...prevState];
-                updatedInputs[remedioIndex] = {
-                    ...updatedInputs[remedioIndex],
-                    foto: e.target.result, // Salva a URL base64 para pré-visualização
-                };
-                return updatedInputs;
-            });
-    
-            // Aguarda a próxima renderização para resetar o input
-            setTimeout(() => {
-                event.target.value = '';
-            }, 0); // Garante que o estado foi atualizado antes do reset
-        };
-    
-        reader.onerror = () => {
-            console.error('Erro ao carregar a imagem.');
-        };
-    
-        reader.readAsDataURL(file); // Lê o arquivo como base64
     };
-    
+
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
@@ -632,32 +613,31 @@ const RegisterClient = () => {
                             >
                                 Adicionar Horário
                             </UploadButton>
-                      <div style={{display:'flex',flexDirection:'column'}} >
-                      <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
-                            <Input
-                                id={`file-input-${remedioIndex}`}
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleImageUpload(remedioIndex, e)}
-                            />
-                           <ImageContainer>
-                                {remedioInput[remedioIndex]?.foto ? ( // Certifique-se de acessar o índice correto no estado
-                                    <>
-                                        <ImagePreview src={remedioInput[remedioIndex].foto} alt="Pré-visualização da imagem" />
-                                        <RemoveButton onClick={() => handleRemoveImage(remedioIndex)}>
-                                            Remover Foto
-                                        </RemoveButton>
-                                    </>
-                                ) : (
-                                    <PlaceholderText>Nenhuma foto selecionada</PlaceholderText> // Texto placeholder
+                            <div style={{ display: 'flex', flexDirection: 'column' }} >
+                                <input
+                                    
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(event) => handleImageChange(event, remedioIndex)}
+                                    style={{ marginBottom: "10px"}}
+                                />
+                                {response.foto && (
+                                    <div>
+                                        <img
+                                            src={response.foto}
+                                            alt={`Preview ${remedioIndex}`}
+                                            style={{ maxWidth: "100%", maxHeight: "200px" }}
+                                        />
+
+                                        <RemoveButton onClick={() => handleRemoveImage(remedioIndex)} >Excluir Foto</RemoveButton>
+                                    </div>
                                 )}
-                            </ImageContainer>
-                      </div>
-                           
+                            </div>
+
 
 
                         </div>
-                       
+
 
                         <div style={{ width: '97%', border: '1px dotted grey' }} />
 
