@@ -498,7 +498,7 @@ const Clientes = () => {
                                         <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
 
 
-                                            Envie uma mensagem 36 horas do medicamento acabar:
+                                            Envie uma mensagem 72 horas do medicamento ou receita acabar:
                                             <TextField
                                                 id={`outlined-basic`}
                                                 label={`Envie 36 horas antes - Uso Contínuo`}
