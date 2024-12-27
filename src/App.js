@@ -13,6 +13,7 @@ import Clientes from './pages/Clientes';
 import RegisterClient from './pages/RegisterClient';
 import Payment from './pages/Payment';
 import { initMercadoPago } from '@mercadopago/sdk-react';
+import ChangePassword from './pages/ChangePassword';
 
 
 const firebaseConfig = {
@@ -93,6 +94,7 @@ function App() {
           <Route path="/clientes" element={<Clientes />} />
           <Route path="/registerClient" element={<RegisterClient />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/password" element={<ChangePassword />} />
         </Routes>
       </BrowserRouter>
       </ThemeProvider>

@@ -27,7 +27,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: null }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: '' }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -128,7 +128,6 @@ const RegisterClient = () => {
 
     const handleImageUpload = (remedioIndex, event) => {
         const file = event.target.files[0];
-
     
         // Validações de tipo de arquivo
         if (!file.type.startsWith('image/')) {
@@ -139,6 +138,7 @@ const RegisterClient = () => {
         const reader = new FileReader();
     
         reader.onload = (e) => {
+            // Atualiza o estado com a imagem carregada
             setRemedioInput((prevState) => {
                 const updatedInputs = [...prevState];
                 updatedInputs[remedioIndex] = {
@@ -148,8 +148,10 @@ const RegisterClient = () => {
                 return updatedInputs;
             });
     
-            // Resetar valor do input para permitir o mesmo arquivo
-            event.target.value = '';
+            // Aguarda a próxima renderização para resetar o input
+            setTimeout(() => {
+                event.target.value = '';
+            }, 0); // Garante que o estado foi atualizado antes do reset
         };
     
         reader.onerror = () => {
@@ -158,7 +160,7 @@ const RegisterClient = () => {
     
         reader.readAsDataURL(file); // Lê o arquivo como base64
     };
-
+    
     // Remover foto
     const handleRemoveImage = (remedioIndex) => {
         const updated = [...remedioInput];
@@ -630,15 +632,14 @@ const RegisterClient = () => {
                             >
                                 Adicionar Horário
                             </UploadButton>
-
-                            <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
+                      <div style={{display:'flex',flexDirection:'column'}} >
+                      <UploadButton htmlFor={`file-input-${remedioIndex}`}>Escolher uma Foto</UploadButton>
                             <Input
                                 id={`file-input-${remedioIndex}`}
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => handleImageUpload(remedioIndex, e)}
                             />
-                           
                            <ImageContainer>
                                 {remedioInput[remedioIndex]?.foto ? ( // Certifique-se de acessar o índice correto no estado
                                     <>
@@ -651,6 +652,8 @@ const RegisterClient = () => {
                                     <PlaceholderText>Nenhuma foto selecionada</PlaceholderText> // Texto placeholder
                                 )}
                             </ImageContainer>
+                      </div>
+                           
 
 
                         </div>
