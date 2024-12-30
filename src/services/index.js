@@ -143,3 +143,30 @@ export async function sendImage(bodyImage) {
     throw error; // Relança o erro, se você quiser tratá-lo fora dessa função
   }
 }
+
+export async function createClient(body) {
+  const API_URL = 'https://api.abacatepay.com/v1/customer/create';
+  const AUTH_TOKEN = 'abc_dev_HSqTWMnYzmneM4d2KC1ZdmGt';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Configuração para ignorar CORS
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    // Verifica se a resposta não é bem-sucedida
+
+    const result = await response.json(); // Converte a resposta para JSON
+    console.log('Sucesso:', result);
+    return result; // Retorna o resultado
+  } catch (error) {
+    console.error('Erro ao criar cliente:', error.message);
+    throw error; // Relança o erro para tratamento externo
+  }
+}

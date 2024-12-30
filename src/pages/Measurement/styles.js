@@ -71,7 +71,7 @@ align-items:flex-end;
 justify-content:flex-end;
 `
 
-export const Input = styled.input`
+export const InputText = styled.input`
 color: black;
 font-size: 14px;
 font-weight: 400;
@@ -87,6 +87,10 @@ margin:5px;
 &::placeholder {
     font-weight: 500;
     color:#4f614f; /* ajuste a cor conforme necessário */
+  }
+     @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+     flex-direction:row;
+     width:85%
   }
 `
 

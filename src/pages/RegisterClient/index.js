@@ -15,6 +15,7 @@ import { useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "firebase/storage";
+import { CircularProgress } from "@mui/material"; // Certifique-se de ter os componentes do Material-UI instalados
 import "firebase/database";
 import { database } from '../../App';
 
@@ -44,6 +45,7 @@ const RegisterClient = () => {
     const [userData, setUserData] = React.useState('');
     const [inputUsocontinuo, setInputUsoContinuo] = React.useState('Sua medicação esta acabando lembre-se de comprar');
     const [inputReceita, setInputReceita] = React.useState('Sua medicaçãoe sta vencendo precisa de nova receia?');
+    const [progress, setProgress] = React.useState(false);
     const listRef = React.useRef(null);
 
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -297,11 +299,18 @@ const RegisterClient = () => {
     async function setNewClient() {
         const database = getDatabase();
         const storage = getStorage();
-
+        setProgress(true)
         if (wppInput === '' || nomeInput === '' || cpfInput === '') {
             window.alert('Complete os campos');
+            setProgress(false)
+            return;
+        } else if (remedioInput.some(item => item.horario.length === 0)) {
+            setProgress(false);
+            window.alert('Insira um horário');
             return;
         }
+
+       
 
         const body = {
             message: `${userData.msgCadastro}`,
@@ -365,9 +374,11 @@ const RegisterClient = () => {
 
         // Aguarda todos os uploads e gravações de dados
         await Promise.all(uploadPromises);
-
+  
         // Envia a mensagem
         sendMessageAll(body);
+
+        setProgress(false)
 
         // Navega para a próxima página
         navigate('/measure');
@@ -709,13 +720,27 @@ const RegisterClient = () => {
             </div>
 
 
-            <Button
+        {
+            !progress && (
+                <Button
                 style={buttonStyles}
                 variant="contained"
                 onClick={() => setNewClient()}
             >
                 Cadastrar
             </Button>
+            )
+        }
+
+        {
+            progress && (
+                <div style={{display:'flex',gap:7}} >
+                    <label>Cadastrando....</label>
+               <CircularProgress />
+               <label>Ao carregar foto, demora um pouco mais</label>
+               </div>
+            )
+        }
         </Box>
     );
 }

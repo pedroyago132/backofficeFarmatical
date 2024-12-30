@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { PageContainer, SubTitle, FormContainer, ContainerEdit, Title, TitleForm, ContainerEditIn } from './styles';
+import { PageContainer, SubTitle, InputText, ContainerEdit, Title, TitleForm, ContainerEditIn } from './styles';
 import { useNavigate } from 'react-router-dom';
 import QRCode from "react-qr-code";
 import { getDatabase, ref, child, push, update } from "firebase/database";
 import Button from '@mui/material/Button';
-import "firebase/database";
 import TextField from '@mui/material/TextField';
 import Header from '../../components/Header';
 import base64 from 'base-64';
@@ -22,6 +21,7 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import "firebase/database";
 import { BorderBottom } from '@mui/icons-material';
+import YourComponent from '../../components/Foto';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -33,8 +33,13 @@ const Clientes = () => {
     const [dataClientes, setDataClientes] = React.useState([]);
     const [itemCliente, setItemCliente] = React.useState([{ nome: '', contato: 0 }]);
     const listaRef = React.useRef(null);
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0 }]);
-
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: '' }]);
+    const [images, setImages] = React.useState(
+        dataClientes.reduce((acc, item) => {
+            acc[item.id] = item.fotoUrl; // Inicializa com a URL original de cada item
+            return acc;
+        }, {})
+    );
 
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
@@ -42,6 +47,9 @@ const Clientes = () => {
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState(false);
     const [receita, setReceita] = React.useState('');
+    const [updatedPhotosAtual, setUpdatedPhotosAtual] = React.useState(''); // Foto original ou vazia
+    const [filteredData, setFilteredData] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState('');
 
 
 
@@ -116,6 +124,24 @@ const Clientes = () => {
         );
     };
 
+    const handleFilterChange = (e) => {
+        const value = e.target.value.toLowerCase(); // Converte o valor do filtro para minúsculas
+        setFilterValue(value); // Atualiza o valor do filtro
+    
+        if (value === '') {
+            // Retorna ao estado original se o filtro estiver vazio
+            setFilteredData(dataClientes); // Use o conjunto original de dados
+            return;
+        }
+    
+        const filtered = dataClientes.filter((item) =>
+            item.nome.toLowerCase().includes(value) ||
+            item.contato.toLowerCase().includes(value)
+        );
+    
+        setFilteredData(filtered); // Atualiza os dados filtrados
+    };
+
     // Função para formatar o horário
     const formatarHorario = (newValue) => {
         // Remove qualquer caractere não numérico
@@ -185,11 +211,14 @@ const Clientes = () => {
                         msgReceita: data[key].msgReceita,
                         horario: data[key].horario,
                         dataCadastro: data[key].dataCadastro,
-                        digit:data[key].digit
+                        digit: data[key].digit,
+                        fotoUrl: data[key].fotoUrl
                     }));
                     setDataClientes(dataList);
+                    setFilteredData(dataList)
                 } else {
                     setDataClientes([]);
+                    setFilteredData([])
                 }
             });
 
@@ -199,7 +228,7 @@ const Clientes = () => {
 
 
 
-    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita) {
+    function writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita, inputFoto) {
         const email64 = base64.encode(user.email);
         const db = getDatabase();
         console.log()
@@ -217,7 +246,8 @@ const Clientes = () => {
                 receita: true,
                 msgUsoContinuo: item.msgUsoContinuo,
                 msgReceita: item.msgReceita,
-                digit:item.digit
+                digit: item.digit,
+                fotoUrl: item.fotoUrl
             }
 
             const updates = {};
@@ -241,7 +271,8 @@ const Clientes = () => {
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
                 msgReceita: item.msgReceita,
-                digit:item.digit
+                digit: item.digit,
+                fotoUrl: item.fotoUrl
             }
 
             const updates = {};
@@ -266,7 +297,8 @@ const Clientes = () => {
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
                 msgReceita: item.msgReceita,
-                digit:item.digit
+                digit: item.digit,
+                fotoUrl: item.fotoUrl
             }
 
             const updates = {};
@@ -290,7 +322,8 @@ const Clientes = () => {
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: inputUsoContinuo,
                 msgReceita: item.msgReceita,
-                digit:item.digit
+                digit: item.digit,
+                fotoUrl: item.fotoUrl
             }
 
             const updates = {};
@@ -313,7 +346,8 @@ const Clientes = () => {
                 usoContinuo: item.usoContinuo,
                 msgUsoContinuo: item.msgUsoContinuo,
                 msgReceita: inputReceita,
-                digit:item.digit
+                digit: item.digit,
+                fotoUrl: item.fotoUrl
             }
 
             const updates = {};
@@ -321,6 +355,31 @@ const Clientes = () => {
 
             return update(ref(db), updates)
                 .then(() => window.alert('Mensagem para RECEITA alterada com sucesso!!'))
+                .catch((log) => console.log('ERROREDITUSER:::::', log));
+
+        } else if (updatedPhotosAtual != '' ) {
+            const postNome = {
+                nome: item.nome,
+                cpf: item.cpf,
+                contato: item.contato,
+                acabaEm: item.acabaEm,
+                doses: item.doses,
+                remedio: item.remedio,
+                horario: item.horario,
+                dataCadastro: item.dataCadastro,
+                receita: true,
+                usoContinuo: item.usoContinuo,
+                msgUsoContinuo: item.msgUsoContinuo,
+                msgReceita: inputReceita,
+                digit: item.digit,
+                fotoUrl: updatedPhotosAtual
+            }
+
+            const updates = {};
+            updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
+
+            return update(ref(db), updates)
+                .then(() => window.alert('Foto Alterada com sucesso!!'))
                 .catch((log) => console.log('ERROREDITUSER:::::', log));
         }
         else {
@@ -353,7 +412,8 @@ const Clientes = () => {
                             dataCadastro: item.dataCadastro,
                             receita: true,
                             usoContinuo: item.usoContinuo,
-                            digit:item.digit
+                            digit: item.digit,
+                            fotoUrl: item.fotoUrl
                         };
 
 
@@ -390,159 +450,191 @@ const Clientes = () => {
 
 
     return (
-       <div style={{display:'flex',flexDirection:'column',overflowY:'auto',overflowX:'hidden',maxHeight:'100vh'}} >
+        <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', maxHeight: '100vh' }} >
             <Header />
-         
-                <Title>Edite caso precise</Title>
-                <SubTitle>1. Insira as informações que queira editar</SubTitle>
-                <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
-        
 
-                    {
-                        dataClientes.length > 0 ? (dataClientes.map((item) => {
-                            console.log(item)
-                            let inputNome = item.nome;
-                            let inputContato = item.contato;
-                            let inputRemedio = item.remedio;
-                            let inputUsoContinuo = item.msgUsoContinuo;
-                            let inputReceita = item.msgReceita;
-                            let horarios = [];
-                            console.log('MSG::::::::', item)
+            <Title>Edite caso precise</Title>
+            <SubTitle>1. Insira as informações que queira editar</SubTitle>
+            <SubTitle>2. Após isso clique em salvar para salvar as alterações</SubTitle>
 
-                            const handleEventTargert = (text) => {
-                                inputNome = text;
-
-                            }
-
-                            const handleEventContato = (text) => {
-                                inputContato = text;
-
-                            }
-
-                            const handleEventRemedio = (text) => {
-                                inputRemedio = text;
-
-                            }
-
-                            const handleEventUsoContinuo = (text) => {
-                                inputUsoContinuo = text;
-
-                            }
-
-                            const handleEventReceita = (text) => {
-                                inputReceita = text;
-
-                            }
-
-                            const handleHorarioChange = (index, newHora) => {
-                                // Atualiza o valor diretamente no array
-                                horarios[index] = { hora: newHora };
-                                // Remove valores vazios ou inválidos
-                                horarios = horarios.filter((hor) => hor.hora);
-                                console.log(horarios); // Apenas para verificar as mudanças
-                            };
-
-                            if (item.nome) {
-                                return <div style={{ borderBottom: 1, borderColor: 'blak', marginTop: 10 }} >
-                                    <ContainerEdit >
-                                        <ContainerEditIn>
-                                            Nome: {item.nome}
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`editar Nome`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventTargert(text.target.value)}
-
-                                            />
-
-                                        </ContainerEditIn>
-                                        <ContainerEditIn>
-                                            Remédio:{item.remedio}
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`Editar Remedio`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventRemedio(text.target.value)}
-
-                                            />
-                                        </ContainerEditIn>
-                                        <ContainerEditIn>
-                                            Contato:{item.contato}
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`Editar Contato`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventContato(text.target.value)}
-
-                                            />
-                                        </ContainerEditIn>
-
-                                        {Object.values(item.horario || []).map((hor, index) => (
-                                            <ContainerEditIn key={index}>
-                                                Horário: {hor.hora}
-                                                <TextField
-                                                    id={`outlined-basic-${index}`}
-                                                    label="Editar horário"
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    defaultValue={horarios[index]?.hora || ""} // Mostra o valor atual ou vazio
-                                                    onChange={(e) => handleHorarioChange(index, e.target.value)}
-                                                />
-                                            </ContainerEditIn>
-                                        ))}
+              <InputText placeholder='Pesquisar por nome ou contato...' value={filterValue} onChange={e => handleFilterChange(e)} />
+                                 
 
 
-                                        <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
+            {
+                filteredData.length > 0 ? (filteredData.map((item, remedioIndex) => {
+                    console.log(item)
+                    let inputNome = item.nome;
+                    let inputContato = item.contato;
+                    let inputRemedio = item.remedio;
+                    let inputUsoContinuo = item.msgUsoContinuo;
+                    let inputReceita = item.msgReceita;
+                    let inputFoto = item.fotoUrl;
+                    let novaFoto = '';
+                    let horarios = [];
+                    console.log('MSG::::::::', item)
 
+                    const handleEventTargert = (text) => {
+                        inputNome = text;
 
-                                            Envie uma mensagem 72 horas do medicamento ou receita acabar:
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`Envie 36 horas antes - Uso Contínuo`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventUsoContinuo(text.target.value)}
-
-                                            />
-
-                                            Mensagem:{item.msgUsoContinuo}
-
-
-                                            <TextField
-                                                id={`outlined-basic`}
-                                                label={`Envie 36 horas antes para RECEITA`}
-                                                fullWidth
-                                                variant="outlined"
-                                                onChange={text => handleEventReceita(text.target.value)}
-
-                                            />
-                                            Mensagem:{item.msgReceita}
-                                        </div>
-                                        <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita)} variant="contained">Salvar Edição</Button>
-
-                                    </ContainerEdit>
-
-                                </div>
-
-                            } else {
-                                return null
-                            }
-                        })) : (
-                            <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} > Nenhum usuário cadastrado </Typography>
-
-                        )
                     }
 
+                    const handleEventContato = (text) => {
+                        inputContato = text;
+
+                    }
+
+                    const handleEventRemedio = (text) => {
+                        inputRemedio = text;
+
+                    }
+
+                    const handleEventUsoContinuo = (text) => {
+                        inputUsoContinuo = text;
+
+                    }
+
+                    const handleEventReceita = (text) => {
+                        inputReceita = text;
+
+                    }
+
+                    const handleImageChange = (event) => {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                  novaFoto = reader.result
+                            };
+                            reader.readAsDataURL(file); // Converte o arquivo em uma URL Base64
+                        }
+                    };
+                    const handleHorarioChange = (index, newHora) => {
+                        // Atualiza o valor diretamente no array
+                        horarios[index] = { hora: newHora };
+                        // Remove valores vazios ou inválidos
+                        horarios = horarios.filter((hor) => hor.hora);
+                        console.log(horarios); // Apenas para verificar as mudanças
+                    };
+
+                    if (item.nome) {
+                        return <div style={{ borderBottom: 1, borderColor: 'blak', display: 'flex', flexDirection: 'column', padding: 8 }} >
+                            <ContainerEdit >
+                                <ContainerEditIn>
+                                    Nome: {item.nome}
+                                    <TextField
+                                        id={`outlined-basic`}
+                                        label={`editar Nome`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={text => handleEventTargert(text.target.value)}
+
+                                    />
+
+                                </ContainerEditIn>
+                                <ContainerEditIn>
+                                    Remédio:{item.remedio}
+                                    <TextField
+                                        id={`outlined-basic`}
+                                        label={`Editar Remedio`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={text => handleEventRemedio(text.target.value)}
+
+                                    />
+                                </ContainerEditIn>
+                                <ContainerEditIn>
+                                    Contato:{item.contato}
+                                    <TextField
+                                        id={`outlined-basic`}
+                                        label={`Editar Contato`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={text => handleEventContato(text.target.value)}
+
+                                    />
+                                </ContainerEditIn>
+
+                                {Object.values(item.horario || []).map((hor, index) => (
+                                    <ContainerEditIn key={index}>
+                                        Horário: {hor.hora}
+                                        <TextField
+                                            id={`outlined-basic-${index}`}
+                                            label="Editar horário"
+                                            fullWidth
+                                            variant="outlined"
+                                            defaultValue={horarios[index]?.hora || ""} // Mostra o valor atual ou vazio
+                                            onChange={(e) => handleHorarioChange(index, e.target.value)}
+                                        />
+                                    </ContainerEditIn>
+                                ))}
+                        
+                                {item.fotoUrl && (
+                                    <>
+                                    <div style={{width:50}} />
+                                     <label >Foto atual:</label>
+                                        <img
+                                            src={item.fotoUrl} // Mostra a nova foto ou a original
+                                            alt="foto remédio"
+                                            style={{ width: 80, height: 80 }}
+                                        />
+                                      
+                                    
+                                            <YourComponent remedioIndex={remedioIndex} setUpdatedPhotosAtual={setUpdatedPhotosAtual}  />
+                                   
+                                    </>
+                                )}
+    <br/>
+                                <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }} >
+
+
+                                    Envie uma mensagem 72 horas do medicamento ou receita acabar:
+                                    <TextField
+                                        id={`outlined-basic`}
+                                        label={`Envie 36 horas antes - Uso Contínuo`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={text => handleEventUsoContinuo(text.target.value)}
+
+                                    />
+
+                                    Mensagem:{item.msgUsoContinuo}
+
+
+                                    <TextField
+                                        id={`outlined-basic`}
+                                        label={`Envie 36 horas antes para RECEITA`}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={text => handleEventReceita(text.target.value)}
+
+                                    />
+                                    Mensagem:{item.msgReceita}
+                                </div>
+                                <Button style={{ alignSelf: 'center' }} onClick={() => writeNewPost(item, inputNome, horarios, inputRemedio, inputContato, inputUsoContinuo, inputReceita, inputFoto)} variant="contained">Salvar Edição</Button>
+
+                            </ContainerEdit>
+
+
+
+                        </div>
+
+                    } else {
+                        return null
+                    }
+                })) : (
+                    <Typography style={{ fontWeight: '600', color: '#999592', fontSize: '14px', alignSelf: 'flex-start' }} > Nenhum usuário cadastrado </Typography>
+
+                )
+            }
 
 
 
 
-       
-            </div>
-     
+
+
+        </div>
+
     );
 }
 

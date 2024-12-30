@@ -16,7 +16,7 @@ import { setItem } from '../../storage/serviceState';
 import { backgroundMenu } from '../../Globals/globals';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Dashboard', 'Validar QRCode','Editar Mensagens','Editar Clientes'];
+const pages = ['Dashboard', 'Validar QRCode','Editar Mensagens','Editar Clientes','Assinar'];
 const settings = ['Perfil','Sair'];
 
 
@@ -53,6 +53,8 @@ const Header = () => {
         }
         else if (page == 'Sair' ){
             navigate('/')
+        } else if (page == 'Assinar' ){
+            navigate('/payment')
         }
 
        

@@ -1,193 +1,144 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { loadMercadoPago } from "@mercadopago/sdk-js";
+import { backgroundColor } from "../../Globals/globals";
+import Header from "../../components/Header";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { createClient } from "../../services";
 
-const Payment = () => {
-  useEffect(() => {
-    const initializeMercadoPago = async () => {
-      const mp = await loadMercadoPago("TEST-7a50d17f-477e-46fc-9155-03f005a2e20f")
-
-    
-
-      const cardForm = mp.cardForm({
-        amount: "100.5",
-        iframe: true,
-        form: {
-          id: "form-checkout",
-          cardNumber: {
-            id: "form-checkout__cardNumber",
-            placeholder: "Número do cartão",
-          },
-          expirationDate: {
-            id: "form-checkout__expirationDate",
-            placeholder: "MM/YY",
-          },
-          securityCode: {
-            id: "form-checkout__securityCode",
-            placeholder: "Código de segurança",
-          },
-          cardholderName: {
-            id: "form-checkout__cardholderName",
-            placeholder: "Titular do cartão",
-          },
-          issuer: {
-            id: "form-checkout__issuer",
-            placeholder: "Banco emissor",
-          },
-          installments: {
-            id: "form-checkout__installments",
-            placeholder: "Parcelas",
-          },
-          identificationType: {
-            id: "form-checkout__identificationType",
-            placeholder: "Tipo de documento",
-          },
-          identificationNumber: {
-            id: "form-checkout__identificationNumber",
-            placeholder: "Número do documento",
-          },
-          cardholderEmail: {
-            id: "form-checkout__cardholderEmail",
-            placeholder: "E-mail",
-          },
-        },
-        callbacks: {
-          onFormMounted: (error) => {
-            if (error) {
-              console.error("Erro ao montar o formulário:", error);
-              return;
-            }
-            console.log("Formulário montado com sucesso!");
-          },
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = cardForm.getCardFormData();
-
-            console.log("Dados do pagamento:", formData);
-
-            fetch("/process_payment", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                token: formData.token,
-                issuer_id: formData.issuerId,
-                payment_method_id: formData.paymentMethodId,
-                transaction_amount: Number(formData.amount),
-                installments: Number(formData.installments),
-                description: "Descrição do produto",
-                payer: {
-                  email: formData.cardholderEmail,
-                  identification: {
-                    type: formData.identificationType,
-                    number: formData.identificationNumber,
-                  },
-                },
-              }),
-            })
-              .then((response) => response.json())
-              .then((data) => console.log("Resposta do servidor:", data))
-              .catch((error) =>
-                console.error("Erro ao processar o pagamento:", error)
-              );
-          },
-        },
-      });
-    };
-
-    initializeMercadoPago();
-  }, []);
-
-  return (
-    <Form id="form-checkout">
-      <Field>
-        <label htmlFor="form-checkout__cardNumber">Número do cartão</label>
-        <input type="text" id="form-checkout__cardNumber" />
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__expirationDate">Data de Expiração (MM/YY)</label>
-        <input type="text" id="form-checkout__expirationDate" />
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__securityCode">Código de Segurança</label>
-        <input type="text" id="form-checkout__securityCode" />
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__cardholderName">Nome do Titular</label>
-        <input type="text" id="form-checkout__cardholderName" />
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__issuer">Banco Emissor</label>
-        <select id="form-checkout__issuer"></select>
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__installments">Parcelas</label>
-        <select id="form-checkout__installments"></select>
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__identificationType">Tipo de Documento</label>
-        <select id="form-checkout__identificationType"></select>
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__identificationNumber">Número do Documento</label>
-        <input type="text" id="form-checkout__identificationNumber" />
-      </Field>
-      <Field>
-        <label htmlFor="form-checkout__cardholderEmail">E-mail</label>
-        <input type="email" id="form-checkout__cardholderEmail" />
-      </Field>
-      <Button type="submit">Pagar</Button>
-    </Form>
-  );
-};
-
-// Styled Components
-const Form = styled.form`
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const Field = styled.div`
-  margin-bottom: 15px;
+const SubscriptionContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${backgroundColor};
+  flex-direction:column;
+`;
 
-  label {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
+const SubscriptionBox = styled.div`
+  background-color: white;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 15px; /* Bordas arredondadas */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
 
-  input,
-  select {
-    padding: 10px;
+const Price = styled.h1`
+  font-size: 24px;
+  margin: 0;
+`;
+
+const BigNumber = styled.span`
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+`;
+
+const SmallNumber = styled.span`
+  font-size: 24px;
+  vertical-align: super;
+  color: #555;
+`;
+
+const BenefitsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  text-align: left;
+
+  li {
+    margin: 10px 0;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    &:focus {
-      border-color: #4caf50;
-      outline: none;
-    }
+    color: #666;
   }
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #4caf50;
+const SubscribeButton = styled.button`
+  background-color: #4caf50;
   color: white;
+  padding: 12px 20px;
+  font-size: 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background: #45a049;
+    background-color: #45a049;
   }
 `;
+
+const Payment = () => {
+  const [user, setUser] = React.useState({ email: 'alo' });
+
+    React.useEffect(() => {
+          const auth = getAuth();
+          onAuthStateChanged(auth, (user) => {
+              if (user) {
+                  // User is signed in, see docs for a list of available properties
+                  // https://firebase.google.com/docs/reference/js/auth.user
+                  setUser(user)
+                  // ...
+              } else {
+                  // User is signed out
+                  // ...
+              }
+          });
+      }, [])
+
+      const handleSubmit = async () => {
+    
+        const options = {
+          method: 'POST',
+          headers: { 
+            accept: 'application/json', 
+            'content-type': 'application/json',
+            Authorization: `Bearer abc_dev_HSqTWMnYzmneM4d2KC1ZdmGt`, // Adiciona o Bearer Token
+          },
+          body: JSON.stringify({ email:"rodrigo@gmail.com" }),
+        };
+    
+        try {
+          const res = await fetch('https://api.abacatepay.com/v1/customer/create', options);
+          const data = await res.json();
+          if (res.ok) {
+            console.log('RESULT:::::',data)
+          } else {
+            console.log('ERRROR:::::',data)
+          }
+        } catch (err) {
+         console.log('ERROR::::',err)
+        }
+      };
+
+  return (
+    <>
+    <Header />
+   
+    <SubscriptionContainer>
+    <div style={{alignSelf:'center',display:'flex',width:'80%',gap:20,alignItems:'center',justifyContent:'center'}} >
+      <img  src="laptop.png" style={{width:120,height:120}} alt="computer" />
+      <img  src="right-arrow.png" style={{width:80,height:80}}  alt="arrow" />
+      <img  src="wpp.png" style={{width:120,height:120}}  alt="wpp" />
+    </div>
+      <SubscriptionBox>
+        <Price>
+          R$<BigNumber>49</BigNumber><SmallNumber>,90</SmallNumber>/mês
+        </Price>
+        <h2>Benefícios da Assinatura</h2>
+        <BenefitsList>
+          <li>Gerenciamento de medicações fácil e prático</li>
+          <li>Lembretes automáticos via WhatsApp</li>
+          <li>Interface intuitiva para controle de horários</li>
+          <li>Suporte especializado em gerenciamento de saúde</li>
+        </BenefitsList>
+        <SubscribeButton onClick={() => handleSubmit()} >Assinar Agora</SubscribeButton>
+      </SubscriptionBox>
+    </SubscriptionContainer>
+    </>
+  );
+};
 
 export default Payment;

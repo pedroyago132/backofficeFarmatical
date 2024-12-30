@@ -68,7 +68,11 @@ const Configuracao = () => {
             const updates = {};
             updates[email64 + '/mensagens'] = postData;
 
-            return update(ref(db), updates).then(log => window.alert('Alterado com sucesso!!')).catch(log => console.log('ERROREDITUSER:::::', log))
+            return update(ref(db), updates).then(log => {
+                window.alert('Alterado com sucesso!!')
+                navigate('/measure')
+
+            }).catch(log => console.log('ERROREDITUSER:::::', log))
 
         }
        

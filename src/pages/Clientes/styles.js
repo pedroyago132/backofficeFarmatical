@@ -23,18 +23,34 @@ display:flex;
 align-items:flex-end;
 justify-content:flex-end;
 `
-export const ContainerEdit = styled(Box)`
-min-width: 100%;
-display:flex;
-flex-direction:row;
-min-height:120px;
-align-items:center;
-justify-content:flex-start;
-gap:25px;
-border-bottom:1px solid black;
-background-color:white;
 
+export const ContainerEditPrincipal = styled(Box)`
+ border-bottom: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
 `
+export const ContainerEdit = styled(Box)`
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+  min-height: 120px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 25px;
+  border-bottom: 1px solid black;
+  background-color: white;
+
+  @media (max-width: 768px) {
+    flex-direction: row; /* Altere para coluna em telas menores */
+    gap: 25px; /* Reduza o espaço entre os elementos */
+    min-height: auto; /* Ajuste a altura mínima */
+    justify-content: center; /* Centralize os itens */
+    padding: 7px; /* Adicione espaçamento interno */
+    flex-wrap:wrap;
+    width:100vw;
+  }
+`;
 
 export const ContainerEditIn = styled(Box)`
 width: 150px;
@@ -103,6 +119,30 @@ export const StyledInput = styled.input`
   border-radius: 4px;
   font-size: 16px;
 `;
+
+export const InputText = styled.input`
+color: black;
+font-size: 14px;
+font-weight: 400;
+width:35%;
+height:40px;
+border-color:#d9ded8;
+border-radius:10px;
+padding:7px;
+background-color:white;
+font-weight:bold;
+border: 2px solid black;
+margin:5px;
+margin-top:10px;
+&::placeholder {
+    font-weight: 500;
+    color:#4f614f; /* ajuste a cor conforme necessário */
+  }
+     @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+     flex-direction:row;
+     width:85%
+  }
+`
 
 // Estilizando o botão
 export const StyledButton = styled.button`

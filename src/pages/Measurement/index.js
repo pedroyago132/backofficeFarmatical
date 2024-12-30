@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Body, ContainerRules, Input, Container2, ContainerEditAccordion, GreenBox, RedBox } from './styles';
+import { Body, ContainerRules, InputText, Container2, ContainerEditAccordion, GreenBox, RedBox } from './styles';
 import { backgroundMenu } from '../../Globals/globals'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -821,7 +821,7 @@ const BotaoAzul = styled.button`
                     </ContainerRules>
                     <div style={{ display: 'flex', flexDirection: 'column', width: '80%' }} >
                         <Typography style={{ fontWeight: 'bold', color: 'white', fontSize: '22px', alignSelf: 'flex-start' }} >Controle de medicações:</Typography>
-                        <Input placeholder='Pesquisar...' value={filterValue} onChange={e => handleFilterChange(e)} />
+                        <InputText placeholder='Pesquisar...' value={filterValue} onChange={e => handleFilterChange(e)} />
                         <Paper sx={{ height: 400, width: '100%', alignSelf: 'flex-start' }}>
                             <DataGrid
 
