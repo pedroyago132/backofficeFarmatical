@@ -60,14 +60,14 @@ const RegisterClient = () => {
 color: black;
 font-size: 14px;
 font-weight: 400;
-width:35%;
+width:100%;
 height:40px;
 border-color:#d9ded8;
 border-radius:10px;
 padding:7px;
 background-color:white;
 font-weight:bold;
-border: 2px solid black;
+border: 1px solid grey;
 margin:5px;
 margin-top:10px;
 &::placeholder {
@@ -76,7 +76,7 @@ margin-top:10px;
   }
      @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
      flex-direction:row;
-     width:85%
+     width:95%
   }
 `
     const UploadButton = styled.label`
