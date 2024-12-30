@@ -28,7 +28,7 @@ const RegisterClient = () => {
     const [messageAll, setMessageAll] = React.useState('');
     const [nomeInput, setNomeInput] = React.useState('');
     const [wppInput, setWppInput] = React.useState('');
-    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [], doses: 0, foto: "" }]);
+    const [remedioInput, setRemedioInput] = React.useState([{ remedio: '', horario: [{ hora: '' }], doses: 0, foto: "" }]);
     const [cpfInput, setCpfInput] = React.useState('');
     const [usoContinuo, setUsoContinuo] = React.useState('');
     const [receita, setReceita] = React.useState('');
@@ -70,10 +70,7 @@ font-weight:bold;
 border: 1px solid grey;
 margin:5px;
 margin-top:10px;
-&::placeholder {
-    font-weight: 500;
-    color:#4f614f; /* ajuste a cor conforme necessário */
-  }
+
      @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
      flex-direction:row;
      width:95%
@@ -457,24 +454,25 @@ margin-top:10px;
             } else return input
         }));
     };
-
-    const handleInputChangehorario = (remedioInput1, indexHorario, newValue) => {
+    const handleInputChangehorario = (remedioIndex, horarioIndex, newValue) => {
+        const horarioFormatado = formatarHorario(newValue);
+    
         setRemedioInput((prevState) =>
-            prevState.map((input) => {
-                if (input.remedio === remedioInput1) {
+            prevState.map((input, index) => {
+                if (index === remedioIndex) {
                     const updatedHorario = input.horario.map((horario, i) =>
-                        i === indexHorario
-                            ? formatarHorario(newValue) // Formatar a hora antes de atualizar
+                        i === horarioIndex
+                            ? { ...horario, hora: horarioFormatado }
                             : horario
                     );
-
+    
                     return { ...input, horario: updatedHorario };
                 }
                 return input;
             })
         );
     };
-
+    
     const scrollToLastItem = () => {
         if (listRef.current) {
             listRef.current.scrollIntoView({ behavior: "smooth" });
@@ -482,20 +480,20 @@ margin-top:10px;
     };
 
     // Função para formatar o horário
-    const formatarHorario = (newValue) => {
-        // Remove qualquer caractere não numérico
-        const valoresNumericos = newValue.replace(/\D/g, "");
-
-        // Se tiver 4 ou mais números, formate como hora:minuto
-        if (valoresNumericos.length >= 4) {
-            // Formata no estilo "HH:MM"
-            return `${valoresNumericos.slice(0, 2)}:${valoresNumericos.slice(2, 4)}`;
+    const formatarHorario = (valor) => {
+        // Remove tudo que não for número
+        const apenasNumeros = valor.replace(/\D/g, "");
+    
+        // Adiciona os dois pontos automaticamente
+        if (apenasNumeros.length <= 2) {
+            return apenasNumeros; // Apenas horas
+        } else if (apenasNumeros.length <= 4) {
+            return `${apenasNumeros.slice(0, 2)}:${apenasNumeros.slice(2)}`; // Horas e minutos
         }
-
-        // Se o valor for menor que 4 caracteres, apenas retorna o que foi digitado
-        return valoresNumericos;
+    
+        // Limita o formato ao padrão HH:mm
+        return `${apenasNumeros.slice(0, 2)}:${apenasNumeros.slice(2, 4)}`;
     };
-
     const removeTask = (index) => {
         const newsInputs = remedioInput.filter((_, i) => i !== index);
         setRemedioInput(newsInputs);
@@ -622,21 +620,21 @@ margin-top:10px;
                             variant="outlined"
                         />
                         {response.horario.map((horario, horarioIndex) => (
-                            <InputText
-                                key={horarioIndex}
-                                id={`outlined-basic-horario-${horarioIndex}`}
-                                label={`Horário ${horarioIndex + 1}`}
-                                fullWidth
-                                variant="outlined"
-                                onChange={(text) =>
-                                    handleInputChangehorario(
-                                        response.remedio,
-                                        horarioIndex,
-                                        text.target.value
-                                    )
-                                }
-                                value={horario.hora}
-                            />
+                           <input
+                           style={{width:'98%',borderColor:'grey', height:40}}
+                           key={horarioIndex}
+                           id={`outlined-basic-horario-${remedioIndex}-${horarioIndex}`}
+                           label={`Horário ${horarioIndex + 1}`}
+                           fullWidth
+                           onChange={(event) =>
+                               handleInputChangehorario(
+                                   remedioIndex,
+                                   horarioIndex,
+                                   event.target.value
+                               )
+                           }
+                           value={horario.hora || ''} // Garante que o valor inicial não seja undefined
+                       />
                         ))}
                         <div style={{ flexDirection: 'row', display: 'flex', gap: 15, alignItems: 'center', justifyContent: 'center', padding: 10 }} >
 
