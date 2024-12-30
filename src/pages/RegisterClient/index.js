@@ -367,7 +367,7 @@ margin-top:10px;
 
             // Caminho no Realtime Database com cpfInput, remedioIndex e response.remedio
             const databasePath = `${base64.encode(user.email)}/clientes/${base64.encode(cpfInput + remedioIndex + response.remedio)}`;
-            await set(ref(database, databasePath), {
+            set(ref(database, databasePath), {
                 acabaEm: response.acabaEm,
                 nome: nomeInput,
                 contato: wppInput,
@@ -386,8 +386,8 @@ margin-top:10px;
 
             // Atualiza os horários individualmente
             const horarioPromises = Object.values(response.horario).map(e =>
-                set(ref(database, `${databasePath}/horario/${e}`), {
-                    hora: e
+                set(ref(database, `${databasePath}/horario/${e.hora}`), {
+                    hora: e.hora
                 })
             );
             await Promise.all(horarioPromises);
@@ -398,11 +398,13 @@ margin-top:10px;
 
         // Envia a mensagem
         sendMessageAll(body);
-
+        
+        navigate('/measure')
         setProgress(false)
 
+
         // Navega para a próxima página
-        navigate('/measure');
+        
     }
 
     const addMedicacao = () => {
