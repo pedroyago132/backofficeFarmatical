@@ -55,6 +55,30 @@ const RegisterClient = () => {
         paddingTop: 7,
         width: isMobile ? '100%' : '60%',
     };
+
+    const InputText = styled.input`
+color: black;
+font-size: 14px;
+font-weight: 400;
+width:35%;
+height:40px;
+border-color:#d9ded8;
+border-radius:10px;
+padding:7px;
+background-color:white;
+font-weight:bold;
+border: 2px solid black;
+margin:5px;
+margin-top:10px;
+&::placeholder {
+    font-weight: 500;
+    color:#4f614f; /* ajuste a cor conforme necessário */
+  }
+     @media (max-width: 768px) { /* Ajuste o valor conforme a largura desejada */
+     flex-direction:row;
+     width:85%
+  }
+`
     const UploadButton = styled.label`
               background-color: #007bff;
               color: white;
@@ -310,7 +334,7 @@ const RegisterClient = () => {
             return;
         }
 
-       
+
 
         const body = {
             message: `${userData.msgCadastro}`,
@@ -374,7 +398,7 @@ const RegisterClient = () => {
 
         // Aguarda todos os uploads e gravações de dados
         await Promise.all(uploadPromises);
-  
+
         // Envia a mensagem
         sendMessageAll(body);
 
@@ -598,7 +622,7 @@ const RegisterClient = () => {
                             variant="outlined"
                         />
                         {response.horario.map((horario, horarioIndex) => (
-                            <TextField
+                            <InputText
                                 key={horarioIndex}
                                 id={`outlined-basic-horario-${horarioIndex}`}
                                 label={`Horário ${horarioIndex + 1}`}
@@ -634,7 +658,7 @@ const RegisterClient = () => {
                                         color: "#fff",
                                         borderRadius: "5px",
                                         cursor: "pointer",
-                                        marginTop:10
+                                        marginTop: 10
                                     }}
                                 >
                                     Selecionar Foto
@@ -647,19 +671,19 @@ const RegisterClient = () => {
                                     style={{ display: "none" }}
                                 />
                                 {response.foto && (
-                                    <div style={{display:'flex',flexDirection:'column'}} >
+                                    <div style={{ display: 'flex', flexDirection: 'column' }} >
                                         <img
                                             src={response.foto}
                                             alt={`Preview ${remedioIndex}`}
                                             style={{ maxWidth: "70%", maxHeight: "200px" }}
                                         />
-                                          <RemoveButton onClick={() => handleRemoveImage(remedioIndex)} >Excluir Foto</RemoveButton>
-                                   
-                                     </div>
-                                     
+                                        <RemoveButton onClick={() => handleRemoveImage(remedioIndex)} >Excluir Foto</RemoveButton>
+
+                                    </div>
+
                                 )}
 
-                                
+
                             </div>
 
 
@@ -720,27 +744,27 @@ const RegisterClient = () => {
             </div>
 
 
-        {
-            !progress && (
-                <Button
-                style={buttonStyles}
-                variant="contained"
-                onClick={() => setNewClient()}
-            >
-                Cadastrar
-            </Button>
-            )
-        }
+            {
+                !progress && (
+                    <Button
+                        style={buttonStyles}
+                        variant="contained"
+                        onClick={() => setNewClient()}
+                    >
+                        Cadastrar
+                    </Button>
+                )
+            }
 
-        {
-            progress && (
-                <div style={{display:'flex',gap:7}} >
-                    <label>Cadastrando....</label>
-               <CircularProgress />
-               <label>Ao carregar foto, demora um pouco mais</label>
-               </div>
-            )
-        }
+            {
+                progress && (
+                    <div style={{ display: 'flex', gap: 7 }} >
+                        <label>Cadastrando....</label>
+                        <CircularProgress />
+                        <label>Ao carregar foto, demora um pouco mais</label>
+                    </div>
+                )
+            }
         </Box>
     );
 }
