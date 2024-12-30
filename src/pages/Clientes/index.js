@@ -393,7 +393,7 @@ const Clientes = () => {
                         }
 
                         const updates = {};
-                        updates[`${email64}/clientes/${item.cpf}/horario/${horarioT.hora}`] = postHorario;
+                        updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}/horario/${horarioT.hora}`] = postHorario;
 
                         return update(ref(db), updates)
                             .then(() => window.alert('Horario alterado com sucesso!!'))
@@ -423,7 +423,7 @@ const Clientes = () => {
 
                         // Atualiza os dados no banco, usando a chave gerada como índice.
                         const updates = {};
-                        updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postNome;
+                        updates[`${email64}/clientes/${base64.encode(item.cpf + item.digit + item.remedio)}`] = postData;
 
                         return update(ref(db), updates)
                             .then(() => window.alert('Alterado com sucesso!!'))
